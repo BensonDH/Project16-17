@@ -1,0 +1,156 @@
+package asteroids.model;
+import be.kuleuven.cs.som.annotate.*;
+
+
+/**
+ * 
+ * @author Benson De Heel, Xander De Jaegere 
+ *  
+ */
+public class Ship {
+	/**
+	 * Variable registering the constant speed of light.
+	 */
+   	static double c = 300000.0;
+	
+   			
+   	// Distance DEFENSIVE
+   	
+   	/**
+   	 * Return the x-component of the position of this spaceship.
+   	 */
+	@Basic
+	public double getPositionX(){
+		return this.x;
+	}
+	
+	@Basic
+	public void setPositionX(double x){ 
+		this.x = x;
+	}
+	
+	/**
+	 * Variable registering the x-component of the position of 
+	 * this spaceship.
+	 */
+	private double x;
+	
+   	/**
+   	 * Return the y-component of the position of this spaceship.
+   	 */
+	@Basic
+	public double getPositionY(){
+		return this.y;
+	}
+	
+	@Basic
+	public void setPositionY(double y){
+		this.y = y;
+	}
+	
+	/**
+	 * Variable registering the y-component of the position of 
+	 * this spaceship.
+	 */
+	private double y;
+
+
+	public void move(double duration){
+		setPositionX(getPositionX()+getVelocityX()*duration);
+		setPositionY(getPositionY()+getVelocityY()*duration);
+	}
+	// Velocity TOTAL
+	
+   	/**
+   	 * Return the x-component of the velocity of this spaceship.
+   	 */
+	@Basic
+	public double getVelocityX(){
+		return this.velocityX;
+	}
+	
+	@Basic
+	public void setVelocityX(double velocityX){
+		if (legitimateVelocity(velocityX, this.velocityY))
+			this.velocityX = velocityX;
+		else
+			this.velocityX = Math.sqrt(Math.pow(c,2.0)-Math.pow(this.velocityY, 2.0));
+		
+	}
+	private double velocityX;
+	
+   	/**
+   	 * Return the y-component of the velocity of this spaceship.
+   	 */
+	@Basic
+	public double getVelocityY(){
+		return this.velocityY;
+	}
+	
+	@Basic
+	public void setVelocityY(double velocityY){
+		if (legitimateVelocity(velocityX, this.velocityY))
+			this.velocityY = velocityY;
+		else
+			this.velocityY = Math.sqrt(Math.pow(c,2.0)-Math.pow(this.velocityX, 2.0));
+	}
+	private double velocityY;
+	
+   	/**
+   	 * Return the total velocity of this spaceship.
+   	 * 
+   	 * @return	The total velocity
+   	 */
+	private double getTotalVelocity(){
+		return Math.sqrt(Math.pow(getVelocityX(), 2.0)+Math.pow(getVelocityY(), 2.0));
+	}
+	
+	/**
+	 * Checks whether the total velocity is smaller then or equal to the speed of light (300 000km/s).
+	 * 
+	 * @param velocityX 
+	 * 		  The x-component of the total velocity.
+	 * @param velocityY
+	 * 		  The y-component of the total velocity.
+	 * @return ...
+	 * 		   | if (sqrt(velocityY^2+velocityX^2) <= 300 000)
+	 * 		   | 	True
+	 * 		   | else
+	 * 		   | 	False
+	 */
+	private boolean legitimateVelocity(double velocityX, double velocityY){
+		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<=300000;
+	}
+	
+	
+	// Orientation NOMINAL
+	
+	@Basic
+	public double getAngle(){
+		return this.angle;
+	}
+	
+	@Basic
+	public void setAngle(double angle){
+		this.angle = angle;
+	}
+	private double angle;
+	
+	public void turn(double angle){
+		setAngle(getAngle()+angle);
+	}
+
+	// Radius DEFENSIVE
+	
+	@Basic
+	public double getRadius(){
+		return this.radius;
+	}
+	
+	@Basic
+	public void setRadius(double radius){
+		
+	}
+	private double radius;
+}
+

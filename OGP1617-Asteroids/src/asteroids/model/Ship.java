@@ -1,6 +1,7 @@
 package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
-
+import java.util.Arrays;
+import java.util.List;;
 
 /**
  * A class of spaceships. Spaceships are represented as circles with radius r. 
@@ -297,13 +298,31 @@ public class Ship {
 	}
 	
 	public double getTimeToCollision(Ship otherShip){
+		double totalRadius = getRadius()+otherShip.getRadius();
 		double deltaPositionX = otherShip.getPositionX()-getPositionX();
 		double deltaPositionY = otherShip.getPositionY()-getPositionY();
 		
 		double deltaVelocityX = otherShip.getVelocityX()-getVelocityX();
 		double deltaVelocityY = otherShip.getVelocityY()-getVelocityY();
 		
-		double d = 
+		double VTimesR = deltaPositionX*deltaVelocityX+deltaPositionY*deltaVelocityY;
+		double Vquad = Math.pow(deltaVelocityX, 2.0)+Math.pow(deltaVelocityY, 2.0); 
+		double Rquad = Math.pow(deltaPositionX, 2.0)+Math.pow(deltaPositionY, 2.0);
+		
+		double d = Math.pow(VTimesR, 2.0)- Vquad*(Rquad-Math.pow(totalRadius, 2.0));
+		
+		if (VTimesR >= 0 || d <= 0)
+			return Double.POSITIVE_INFINITY;
+		
+		return -(VTimesR+Math.sqrt(d))/Vquad;
+	}
+	
+	public List<Double> getCollisionPosition(Ship otherShip){
+		double deltaT = getTimeToCollision(otherShip);
+		double x = getPositionX()+ getVelocityX()*deltaT;
+		double y = getPositionY()+ getVelocityY()*deltaT;
+		
+		return Arrays.asList(x,y);
 	}
 }
 
