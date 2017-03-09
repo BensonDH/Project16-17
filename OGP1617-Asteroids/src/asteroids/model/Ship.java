@@ -86,7 +86,7 @@ public class Ship {
 	 */
 	@Basic
 	public void setPositionX(double x) throws IllegalArgumentException{ 
-		if (x == Double.NaN || x == Double.POSITIVE_INFINITY || x == Double.NEGATIVE_INFINITY)
+		if (Double.isNaN(x) || Double.isInfinite(x))
 			throw new IllegalArgumentException("The given value is not valid.");
 		this.x = x;
 	}
@@ -107,7 +107,7 @@ public class Ship {
 	
 	@Basic
 	public void setPositionY(double y) throws IllegalArgumentException {
-		if (y == Double.NaN || y == Double.POSITIVE_INFINITY || y == Double.NEGATIVE_INFINITY)
+		if (Double.isNaN(y) || Double.isInfinite(y))
 			throw new IllegalArgumentException("The given value is not valid.");
 
 		this.y = y;
@@ -136,11 +136,12 @@ public class Ship {
 	
 	@Basic
 	public void setVelocityX(double velocityX){
+		if (Double.isNaN(velocityX) || Double.isInfinite(velocityX))
+			return;
 		if (isValidVelocity(velocityX, getVelocityY()))
 			this.velocityX = velocityX;
 		else
 			this.velocityX = Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityY(), 2.0));
-		
 	}
 	
 	/**
@@ -163,8 +164,12 @@ public class Ship {
 	 */
 	@Basic
 	public void setVelocityY(double velocityY){
+		if (Double.isNaN(velocityY) || Double.isInfinite(velocityY))
+			return;
 		if (isValidVelocity(getVelocityX(), velocityY))
 			this.velocityY = velocityY;
+		else
+			this.velocityY = Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityX(), 2.0));
 	}
 	
 	/**
@@ -279,7 +284,7 @@ public class Ship {
 	
 	@Basic
 	public void setRadius(double radius) throws IllegalArgumentException {
-		if (radius == Double.NaN || radius == Double.POSITIVE_INFINITY || radius == Double.NEGATIVE_INFINITY)
+		if (Double.isNaN(radius) || Double.isInfinite(radius))
 			throw new IllegalArgumentException("The given value is not valid.");
 		else if (radius < 10)
 			throw new IllegalArgumentException("The given value must be larger than 10 km.");
@@ -335,12 +340,12 @@ public class Ship {
 		return -(VTimesR+Math.sqrt(d))/Vquad;
 	}
 	
-	public List<Double> getCollisionPosition(Ship otherShip){
+	public double[] getCollisionPosition(Ship otherShip){
 		double deltaT = getTimeToCollision(otherShip);
 		double x = getPositionX()+ getVelocityX()*deltaT;
 		double y = getPositionY()+ getVelocityY()*deltaT;
 		
-		return Arrays.asList(x,y);
+		return new double[]{x,y};
 	}
 }
 
