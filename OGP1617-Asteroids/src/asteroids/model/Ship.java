@@ -136,11 +136,13 @@ public class Ship {
 	
 	@Basic
 	public void setVelocityX(double velocityX){
-		if (Double.isNaN(velocityX) || Double.isInfinite(velocityX))
+		if (Double.isNaN(velocityX))
 			return;
 		if (isValidVelocity(velocityX, getVelocityY()))
 			this.velocityX = velocityX;
-		else
+		else if (Double.isInfinite(velocityX) && velocityX < 0)
+			this.velocityX = -Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityY(), 2.0));
+		else 
 			this.velocityX = Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityY(), 2.0));
 	}
 	
@@ -164,11 +166,13 @@ public class Ship {
 	 */
 	@Basic
 	public void setVelocityY(double velocityY){
-		if (Double.isNaN(velocityY) || Double.isInfinite(velocityY))
+		if (Double.isNaN(velocityY))
 			return;
 		if (isValidVelocity(getVelocityX(), velocityY))
 			this.velocityY = velocityY;
-		else
+		else if (Double.isInfinite(velocityY) && velocityY < 0)
+			this.velocityY = -Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityX(), 2.0));
+		else 
 			this.velocityY = Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityX(), 2.0));
 	}
 	
