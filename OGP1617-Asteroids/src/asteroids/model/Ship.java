@@ -51,7 +51,25 @@ public class Ship {
    		setAngle(angle);
    	}
 	
-   			
+   	/**
+   	 * the default constructor of the class Ship
+   	 * @post all the parameters of the class ship will be set to their default value
+   	 * 			| new.getPositionX() = 0 
+   	 * 			| new.getPositionY() = 0
+   	 * 			| new.getVelocityX() = 0
+   	 *			| new.getVelocityY() = 0
+   	 *			| new.getAngle() = 0 
+   	 *			| new.getRadius() = 10
+   	 */
+   	public Ship(){
+   		setPositionX(0);
+   		setPositionY(0);
+   		setVelocityX(0);
+   		setVelocityY(0);
+   		setAngle(0);
+   		setRadius(10);
+   	}
+   	
    	// Distance DEFENSIVE
    	
    	/**
