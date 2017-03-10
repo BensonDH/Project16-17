@@ -1,9 +1,8 @@
 package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
-import java.util.Arrays;
-import java.util.List;;
 
 /**
+ * TODO
  * A class of spaceships. Spaceships are represented as circles with radius r. 
  * @author Benson De Heel, Xander De Jaegere 
  *  
@@ -15,6 +14,8 @@ public class Ship {
    	static double c = 300000.0;
    	
    	/**
+   	 * TODO: kan het zijn dat er @posts gebruikt moeten worden?
+   	 * 
    	 * Initialize this new spaceship with the given parameters.
    	 * @param positionX
    	 * 			The x-component of the position of the spaceship.
@@ -28,14 +29,10 @@ public class Ship {
    	 * 			The radius of the spaceship.
    	 * @param angle
    	 * 			The orientation angle of the spaceship.
-   	 * @effect 	The x-component of the position of this ship will be set to the given positionX.
-   	 * 			| setPositionX(positionX)
-   	 * @effect	The y-component of the position of this ship will be set to the given positionY.
-   	 * 			| setPositionY(positionY)
-   	 * @effect	The x-component of the velocity of this ship will be set to the given VelocityX.
-   	 * 			| setVelocityX(velocityX)
-   	 * @effect	The y-component of the velocity of this ship will be set to the given VelocityY.
-   	 * 			| setVelocityY(velocityY)
+   	 * @effect 	The position of this ship will be set to the given positionX and positionY.
+   	 * 			| setPosition(positionX, positionY)
+   	 * @effect	The velocity of this ship will be set to the given velocityX and velocityY.
+   	 * 			| setVelocity(velocityX, velocityY)
    	 * @effect	The radius of this ship will be set to the given radius.
    	 * 			| setRadius(radius)
    	 * @effect	The orientation angle of this ship will be set to the given angle.
@@ -43,196 +40,182 @@ public class Ship {
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
    			double velocityY, double radius, double angle) {
-   		setPositionX(positionX);
-   		setPositionY(positionY);
-   		setVelocityX(velocityX);
-   		setVelocityY(velocityY);
+   		setPosition(positionX, positionY);
+   		setVelocity(velocityX, velocityY);
    		setRadius(radius);
    		setAngle(angle);
    	}
 	
    	/**
-   	 * the default constructor of the class Ship
-   	 * @post all the parameters of the class ship will be set to their default value
-   	 * 			| new.getPositionX() = 0 
-   	 * 			| new.getPositionY() = 0
-   	 * 			| new.getVelocityX() = 0
-   	 *			| new.getVelocityY() = 0
+   	 * Initialize this new spaceship with its default values.
+   	 * @post all the parameters of the class ship will be set to their default value.
+   	 * 			| new.getPosition() = [0, 0] 
+   	 * 			| new.getVelocity() = [0, 0]
    	 *			| new.getAngle() = 0 
    	 *			| new.getRadius() = 10
    	 */
    	public Ship(){
-   		setPositionX(0);
-   		setPositionY(0);
-   		setVelocityX(0);
-   		setVelocityY(0);
+   		setPosition(0, 0);
+   		setVelocity(0, 0);
    		setAngle(0);
    		setRadius(10);
    	}
+
    	
    	// Distance DEFENSIVE
-   	
-   	/**
-   	 * Return the x-component of the position of this spaceship.
-   	 */
-	@Basic
-	public double getPositionX() {
-		return this.x;
-	}
-	
 	/**
-	 * Set the x-component of the position to the given value
+	 * Return the position of the spaceship.
+	 * @return
+	 * 		The position of the spaceship represented by a list as [x, y]
+	 */
+	@Basic
+	public double[] getPosition() {
+		return this.position.clone();
+	}
+
+	/**
+	 * Set the position of this spaceship to the given x and y value.
 	 * @param x
+	 * 			The x-component of the position of this spaceship
+	 * @param y
+	 * 			The y-component of the position of this spaceship
+	 * @post 	if x and y are non-infinite numbers the position of this spaceship will
+	 * 			be set to [x, y]
+	 * 		   | new.position = [x, y]
+	 * @throws IllegalArgumentException
+	 * 				The given parameter x or y is infinite or equal to NaN
+	 * 				| x == INFINITE || y == INFINITE
+	 * 				| x == NaN || y == NaN
 	 */
 	@Basic
-	public void setPositionX(double x) throws IllegalArgumentException{ 
+	public void setPosition(double x, double y) throws IllegalArgumentException{
 		if (Double.isNaN(x) || Double.isInfinite(x))
-			throw new IllegalArgumentException("The given value is not valid.");
-		this.x = x;
+			throw new IllegalArgumentException("The given x-value is not valid.");
+		else if (Double.isNaN(y) || Double.isInfinite(y))
+			throw new IllegalArgumentException("The given y-value is not valid.");
+		
+		this.position[0] = x;
+		this.position[1] = y;
 	}
+
+	/**
+	 * Variable registering the position of this spaceship.
+	 */
+	private double[] position = {0, 0};
 	
 	/**
-	 * Variable registering the x-component of the position of 
-	 * this spaceship.
+	 * TODO
+	 * @param duration
 	 */
-	private double x;
-	
-   	/**
-   	 * Return the y-component of the position of this spaceship.
-   	 */
-	@Basic
-	public double getPositionY(){
-		return this.y;
-	}
-	
-	@Basic
-	public void setPositionY(double y) throws IllegalArgumentException {
-		if (Double.isNaN(y) || Double.isInfinite(y))
-			throw new IllegalArgumentException("The given value is not valid.");
-
-		this.y = y;
-	}
-	
-	/**
-	 * Variable registering the y-component of the position of 
-	 * this spaceship.
-	 */
-	private double y;
-
-
 	public void move(double duration){
-		setPositionX(getPositionX()+getVelocityX()*duration);
-		setPositionY(getPositionY()+getVelocityY()*duration);
+		double[] current_pos = getPosition();
+		double[] current_vel = getVelocity();
+		setPosition(current_pos[0]+current_vel[0]*duration, current_pos[1]+current_vel[1]*duration);
 	}
+	
+	
 	// Velocity TOTAL
-	
-   	/**
-   	 * Return the x-component of the velocity of this spaceship.
-   	 */
+	/**
+	 * Return the velocity of this ship.
+	 * @return
+	 * 		A list representing the velocity of this spaceship as [velocityX, velocityY]
+	 */	
 	@Basic
-	public double getVelocityX(){
-		return this.velocityX;
-	}
-	
-	@Basic
-	public void setVelocityX(double velocityX){
-		if (Double.isNaN(velocityX))
-			return;
-		if (isValidVelocity(velocityX, getVelocityY()))
-			this.velocityX = velocityX;
-		else if (Double.isInfinite(velocityX) && velocityX < 0)
-			this.velocityX = -Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityY(), 2.0));
-		else 
-			this.velocityX = Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityY(), 2.0));
+	public double[] getVelocity() {
+		return this.velocity.clone();
 	}
 	
 	/**
-	 * Variable registering the x-component of the speed vector of
-	 * this spaceship.
-	 */
-	private double velocityX;
-	
-   	/**
-   	 * Return the y-component of the velocity of this spaceship.
-   	 */
-	@Basic
-	public double getVelocityY(){
-		return this.velocityY;
-	}
-	
-	/**
-	 * Doet niks als de snelheid te hoog is.
+	 * Set the velocity of this spaceship to the given velocityX and velocityY values.
+	 * 
+	 * @param velocityX
+	 * 			The x-component of the velocity of this spaceship.
 	 * @param velocityY
+	 * 			The y-component of the velocity of this spaceship.
+	 * @post	If the euclidean norm between velocityX and velocityY is smaller than c,
+	 * 			the position of this ship will be set to [velocityX, velocityY].
+	 * 		   | if (isValidVelocity(velocityX, velocityY)
+	 * 		   | 	then new.velocity == [velocityX, velocityY]
+	 * @post	If the euclidean norm between velocityX and velocityY is greater than c,
+	 * 			the vector [velocityX, velocityY] will be rescaled so that the orientation
+	 * 			remains the same and length of the vector is equal to c.
+	 * 		   | if (sqrt(velocityX^2+velocityY^2) > c)
+	 * 		   | 	then new.velocity == [c*cos(theta), c*sin(theta)]
+	 *		   |		with theta = atan(velocityY/velocitX)
 	 */
 	@Basic
-	public void setVelocityY(double velocityY){
-		if (Double.isNaN(velocityY))
+	public void setVelocity(double velocityX, double velocityY){
+		if (Double.isNaN(velocityX) || (Double.isNaN(velocityY)))
 			return;
-		if (isValidVelocity(getVelocityX(), velocityY))
-			this.velocityY = velocityY;
-		else if (Double.isInfinite(velocityY) && velocityY < 0)
-			this.velocityY = -Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityX(), 2.0));
-		else 
-			this.velocityY = Math.sqrt(Math.pow(c,2.0)-Math.pow(getVelocityX(), 2.0));
+		if (isValidVelocity(velocityX, velocityY)){
+			this.velocity[0] = velocityX;
+			this.velocity[1] = velocityY;
+		} else if (Double.isInfinite(velocityX) || Double.isInfinite(velocityY))
+			// Do nothing when one of the two components is infinite.
+			return;
+		else {
+		// If isValidVelocity returns False, it means that the total velocity > c
+		// So we will have to rescale the length of the vector and keep the original orientation.
+		double theta = Math.atan2(velocityY, velocityX);
+		this.velocity[0] = c*Math.cos(theta);
+		this.velocity[1] = c*Math.sin(theta);
+		}
 	}
-	
+
 	/**
-	 * Variable registering the y-component of the speed vector of
-	 * this spaceship.
+	 * Variable registering the velocity of this spaceship.
 	 */
-	private double velocityY;
+	private double[] velocity = {0, 0};
 	
    	/**
    	 * Return length of the velocity vector of this spaceship.
    	 * 
-   	 * @return	The length of the velocity vector which is equal to sqrt(velocityX^2+velocityY^2)
-   	 * 			| sqrt(getVelocityX()^2 + getVelocityY^2)
+   	 * @return	The total velocity of this spaceship which is the length of its velocity vector.
+   	 * 			| sqrt(getVelocityX()^2+getVelocityY()^2)
    	 */
 	public double getTotalVelocity(){
-		return Math.sqrt(Math.pow(getVelocityX(), 2.0)+Math.pow(getVelocityY(), 2.0));
+		double[] vel = getVelocity();
+		return Math.sqrt(Math.pow(vel[0], 2.0)+Math.pow(vel[1], 2.0));
 	}
 	
 	/**
-	 * Checks whether the total velocity is smaller than or equal to the speed of light (300 000km/s).
+	 * Checks whether the total velocity is smaller than or equal to the speed limit of this spaceship.
 	 * 
 	 * @param velocityX 
-	 * 		  The x-component of the velocity vector.
+	 * 		  	The x-component of the velocity vector.
 	 * @param velocityY
-	 * 		  The y-component of the velocity vector.
-	 * @return True if and only if the velocity is smaller than or equal to the speed of light.
-	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= 300 000
+	 * 		  	The y-component of the velocity vector.
+	 * @return 	True if and only if the velocity is smaller than or equal to the speed limit of this ship.
+	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= c
 	 */
 	private boolean isValidVelocity(double velocityX, double velocityY){
 		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<=c;
 	}
 	
 	/**
-	 * this method cancels the ships velocity equalling it to 0
-	 * @effect velocityX will be set to 0
-	 * 			| setVelocityX(0)
-	 * 			| setVelocityY(0)
+	 * Cancels the ship's velocity setting it to 0
+	 * @effect velocity will be set to 0
+	 * 			| setVelocityX(0, 0)
 	 */
 	public void killVelocity(){
-		setVelocityX(0);
-		setVelocityY(0);
+		setVelocity(0, 0);
 	}
 	
+	/**
+	 * TODO
+	 * @param amount
+	 */
 	public void thrust(double amount){
 		if (amount < 0){
 			return;
 		}
-		double newVelocityX = getVelocityX()+amount*Math.cos(getAngle());
-		double newVelocityY = getVelocityY()+amount*Math.sin(getAngle());
-		
-		if (isValidVelocity(newVelocityX, newVelocityY)){
-			setVelocityX(newVelocityX);
-			setVelocityY(newVelocityY);
-		} else {
-			double newTotalVelocity = Math.sqrt(Math.pow(newVelocityX, 2.0)+Math.pow(newVelocityY, 2.0));
-			setVelocityX(c*newVelocityX/newTotalVelocity);
-			setVelocityY(c*newVelocityY/newTotalVelocity);
-		}
+		double[] velocity = getVelocity();
+		velocity[0] = velocity[0] +amount*Math.cos(getAngle());
+		velocity[1] = velocity[1] +amount*Math.sin(getAngle());
+
+		setVelocity(velocity[0], velocity[1]);
 	}
+
 	
 	// Orientation NOMINAL
 	/**
@@ -286,6 +269,7 @@ public class Ship {
 	 */
 	private double angle;
 	
+	
 	// Radius DEFENSIVE
 	/**
 	 * return the radius of this spaceship, expressed in kilometers.
@@ -309,18 +293,23 @@ public class Ship {
 	 */
 	private double radius;
 	
-	
+	/**
+	 * TODO
+	 * @param otherShip
+	 * @return
+	 */
 	public double getDistanceBetween(Ship otherShip){
 		if (this == otherShip)
 			return 0;
 		
-		double deltaX = getPositionX()- otherShip.getPositionX();
-		double deltaY = getPositionY()- otherShip.getPositionY();
-		double distanceBetweenMid = Math.sqrt(Math.pow(deltaX, 2.0)+Math.pow(deltaY, 2.0)); 
+		double[] thisPos = getPosition();
+		double[] otherPos = otherShip.getPosition();
+				
+		double[] deltaPos = {thisPos[0]- otherPos[1], thisPos[1]- otherPos[1]};
+		double distanceBetweenMid = Math.sqrt(Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0)); 
 		double minRadius = Math.min(getRadius(), otherShip.getRadius());
 		
-		// Het middelpunt van een van de twee schepen ligt in de cirkel.
-
+		// The center of a ship is in the others radius.
 		if (distanceBetweenMid < minRadius){
 			return distanceBetweenMid-minRadius;
 		}
@@ -328,22 +317,34 @@ public class Ship {
 		return distanceBetweenMid-(getRadius()+otherShip.getRadius());
 	}
 	
-	
+	/**
+	 * TODO
+	 * @param otherShip
+	 * @return
+	 */
 	public boolean overlap(Ship otherShip){
 		return getDistanceBetween(otherShip) < 0;
 	}
 	
+	/**
+	 * TODO
+	 * @param otherShip
+	 * @return
+	 */
 	public double getTimeToCollision(Ship otherShip){
 		double totalRadius = getRadius()+otherShip.getRadius();
-		double deltaPositionX = otherShip.getPositionX()-getPositionX();
-		double deltaPositionY = otherShip.getPositionY()-getPositionY();
 		
-		double deltaVelocityX = otherShip.getVelocityX()-getVelocityX();
-		double deltaVelocityY = otherShip.getVelocityY()-getVelocityY();
+		double[] thisPos = getPosition();
+		double[] otherPos = otherShip.getPosition();
+		double[] deltaPos = {thisPos[0]-otherPos[0], thisPos[1]-otherPos[1]};
 		
-		double VTimesR = deltaPositionX*deltaVelocityX+deltaPositionY*deltaVelocityY;
-		double Vquad = Math.pow(deltaVelocityX, 2.0)+Math.pow(deltaVelocityY, 2.0); 
-		double Rquad = Math.pow(deltaPositionX, 2.0)+Math.pow(deltaPositionY, 2.0);
+		double[] thisVel = getVelocity();
+		double[] otherVel = otherShip.getVelocity();
+		double[] deltaVel = {thisVel[0]-otherVel[0], thisVel[1]-otherVel[1]};
+		
+		double VTimesR = deltaVel[0]*deltaPos[0]+deltaVel[1]*deltaPos[1];
+		double Vquad = Math.pow(deltaVel[0], 2.0)+Math.pow(deltaVel[1], 2.0); 
+		double Rquad = Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0);
 		
 		double d = Math.pow(VTimesR, 2.0)- Vquad*(Rquad-Math.pow(totalRadius, 2.0));
 		
@@ -353,12 +354,17 @@ public class Ship {
 		return -(VTimesR+Math.sqrt(d))/Vquad;
 	}
 	
+	/**
+	 * TODO
+	 * @param otherShip
+	 * @return
+	 */
 	public double[] getCollisionPosition(Ship otherShip){
 		double deltaT = getTimeToCollision(otherShip);
-		double x = getPositionX()+ getVelocityX()*deltaT;
-		double y = getPositionY()+ getVelocityY()*deltaT;
+		double[] pos = getPosition();
+		double[] vel = getVelocity();
 		
-		return new double[]{x,y};
+		return new double[]{pos[0]+vel[0]*deltaT, pos[1]+vel[1]*deltaT};
 	}
 }
 

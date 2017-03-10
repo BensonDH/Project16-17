@@ -14,7 +14,14 @@ public class Facade implements IFacade{
 	 * speed is zero.
 	 */
 	public Ship createShip() throws ModelException {
+		try{
 		return new Ship();
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
@@ -37,7 +44,13 @@ public class Facade implements IFacade{
 	 * x-coordinate at index 0 and the y-coordinate at index 1.
 	 */
 	public double[] getShipPosition(Ship ship) throws ModelException {
-		return new double[]{ship.getPositionX(), ship.getPositionY()};
+		try {
+		return ship.getPosition();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
@@ -45,21 +58,41 @@ public class Facade implements IFacade{
 	 * along the X-axis at index 0 and the velocity along the Y-axis at index 1.
 	 */
 	public double[] getShipVelocity(Ship ship) throws ModelException {
-		return new double[]{ship.getVelocityX(), ship.getVelocityY()};
+		try {
+		return ship.getVelocity();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
 	 * Return the radius of ship.
 	 */
 	public double getShipRadius(Ship ship) throws ModelException {
+		try {
 		return ship.getRadius();
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
 	 * Return the orientation of ship (in radians).
 	 */
 	public double getShipOrientation(Ship ship) throws ModelException {
+		try {
 		return ship.getAngle();
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
@@ -67,7 +100,14 @@ public class Facade implements IFacade{
 	 * seconds at its current velocity.
 	 */
 	public void move(Ship ship, double dt) throws ModelException {
+		try {
 		ship.move(dt);
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
@@ -75,23 +115,44 @@ public class Facade implements IFacade{
 	 * direction and the given amount.
 	 */
 	public void thrust(Ship ship, double amount) throws ModelException {
+		try {
 		ship.thrust(amount);
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 	
 	/**
 	 * update ship's velocity to cancel all movement, by setting the velocity to zero.
 	 */
 	public void killVelocity(Ship ship) throws ModelException {
+		try {
 		ship.killVelocity();
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
+	
 	/**
 	 * Update the direction of ship by adding angle
 	 * (in radians) to its current direction. angle may be
 	 * negative.
 	 */
 	public void turn(Ship ship, double angle) throws ModelException {
+		try {
 		ship.turn(angle);
 		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}	
 	}
 
 	/**
@@ -103,7 +164,14 @@ public class Facade implements IFacade{
 	 * and itself is 0.
 	 */
 	public double getDistanceBetween(Ship ship1, Ship ship2) throws ModelException {
+		try {
 		return ship1.getDistanceBetween(ship2);
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
@@ -111,7 +179,14 @@ public class Facade implements IFacade{
 	 * always overlaps with itself.
 	 */
 	public boolean overlap(Ship ship1, Ship ship2) throws ModelException {
+		try {
 		return ship1.overlap(ship2);
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
@@ -120,7 +195,14 @@ public class Facade implements IFacade{
 	 * they never collide. A ship never collides with itself.
 	 */
 	public double getTimeToCollision(Ship ship1, Ship ship2) throws ModelException {
+		try {
 		return ship1.getTimeToCollision(ship2);
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 	/**
@@ -133,7 +215,14 @@ public class Facade implements IFacade{
 	 * index 1 represents the y-coordinate.
 	 */
 	public double[] getCollisionPosition(Ship ship1, Ship ship2) throws ModelException {
+		try {
 		return ship1.getCollisionPosition(ship2);
+		
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		}
 	}
 
 }

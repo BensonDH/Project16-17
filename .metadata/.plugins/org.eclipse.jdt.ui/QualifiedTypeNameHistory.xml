@@ -5,4 +5,5 @@
 <fullyQualifiedTypeName name="java.lang.IllegalAccessError"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
 <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
+<fullyQualifiedTypeName name="asteroids.util.ModelException"/>
 </qualifiedTypeNameHistroy>
