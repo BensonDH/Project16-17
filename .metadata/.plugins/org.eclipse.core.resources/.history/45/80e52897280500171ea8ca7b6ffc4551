@@ -24,7 +24,6 @@ public class AsteroidsFrame extends JFrame {
 	private Timer timer;
 	private long lastMove;
 	private boolean thrust;
-	private boolean killVelocity;
 	private double angle;
 	private int width;
 	private int height;
@@ -51,13 +50,6 @@ public class AsteroidsFrame extends JFrame {
 					try {
 						facade.thrust(view.getSelected(), THRUST_PER_SECOND * dt);
 					} catch (ModelException e1) {
-						handleError(e1);
-					}
-				}
-				if (killVelocity){
-					try{
-						facade.killVelocity(view.getSelected());
-					} catch(ModelException e1){
 						handleError(e1);
 					}
 				}
@@ -105,7 +97,6 @@ public class AsteroidsFrame extends JFrame {
 					view.setShowCollisions(!view.getShowCollisions());
 					break;
 				case KeyEvent.VK_K:
-					killVelocity = true;
 					break;
 				case KeyEvent.VK_ESCAPE:
 					System.exit(0);
@@ -129,7 +120,7 @@ public class AsteroidsFrame extends JFrame {
 					angle = 0;
 					break;
 				case KeyEvent.VK_K:
-					killVelocity = false;
+					break;
 				}
 			}
 		});

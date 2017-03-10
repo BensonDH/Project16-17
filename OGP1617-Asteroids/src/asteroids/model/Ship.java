@@ -206,14 +206,23 @@ public class Ship {
 		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<=c;
 	}
 	
-
+	/**
+	 * this method cancels the ships velocity equalling it to 0
+	 * @effect velocityX will be set to 0
+	 * 			| setVelocityX(0)
+	 * 			| setVelocityY(0)
+	 */
+	public void killVelocity(){
+		setVelocityX(0);
+		setVelocityY(0);
+	}
 	
 	public void thrust(double amount){
 		if (amount < 0){
 			return;
 		}
 		double newVelocityX = getVelocityX()+amount*Math.cos(getAngle());
-		double newVelocityY = getVelocityY()+amount*Math.cos(getAngle());
+		double newVelocityY = getVelocityY()+amount*Math.sin(getAngle());
 		
 		if (isValidVelocity(newVelocityX, newVelocityY)){
 			setVelocityX(newVelocityX);
