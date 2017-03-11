@@ -76,7 +76,6 @@ public class ShipTests {
 	@Test
 	public void maxValueVelocityConstructor(){
 		Ship ship1 = new Ship(10, 10, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, Math.PI);
-		Ship ship2 = new Ship(10, 10, 300000, 300000, 10, Math.PI);
 		
 		double[] vel = ship1.getVelocity();
 		assert vel[0] == 0;
@@ -84,14 +83,14 @@ public class ShipTests {
 		
 		ship1.setVelocity(300000, 300000);
 		vel = ship1.getVelocity();
-		assertEquals(150000, vel[0], EPSILON);
-		assertEquals(150000, vel[1], EPSILON);
+		assertEquals(300000*Math.cos(Math.PI/4), vel[0], EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), vel[1], EPSILON);
 		assert ship1.getTotalVelocity() == 300000;
 		
 		ship1.setVelocity(-300000, 300000);
 		vel = ship1.getVelocity();
-		assertEquals(-150000, vel[0], EPSILON);
-		assertEquals(150000, vel[1], EPSILON);
+		assertEquals(-300000*Math.cos(Math.PI/4), vel[0], EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), vel[1], EPSILON);
 		assert ship1.getTotalVelocity() == 300000;
 	}
 	
@@ -105,6 +104,22 @@ public class ShipTests {
 		new Ship(10, 10, 10, 10, 10, -10);
 	}
 	
+	@Test (expected=IllegalArgumentException.class)
+	public void invalidRadiusConstructor(){
+		new Ship(10, 10, 10, 10, -100, 0);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void infiniteRadiusConstructor(){
+		new Ship(10, 10, 10, 10, Double.POSITIVE_INFINITY, 0);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void NaNRadiusConstructor(){
+		new Ship(10, 10, 10, 10, Double.NaN, 0);
+	}
+
+	
 	// GETTERS AND SETTERS VALID VALUES TESTS
 	@Test
 	public void testPosition(){
@@ -116,7 +131,7 @@ public class ShipTests {
 		
 		position = glob_ship1.getPosition();
 		
-		assert position[0] == 10;
+		assert position[0] == 25;
 		assert position[1] == -50;
 		
 		// Back to original state
@@ -149,16 +164,7 @@ public class ShipTests {
 		// Back to original state
 		glob_ship1.setAngle(0);
 	}
-	
-	public void testRadius(){
-		
-		assert glob_ship1.getRadius() == 15;
-		glob_ship1.setRadius(100);
-		assert glob_ship1.getRadius() == 100;
-		
-		// Back to original state
-		glob_ship1.setRadius(15);
-	}
+
 
 	// GETTERS AND SETTERS INVALID VALUES TESTS
 	@Test (expected = IllegalArgumentException.class)
@@ -198,21 +204,6 @@ public class ShipTests {
 	@Test (expected = AssertionError.class)
 	public void testAngleNaNValue(){
 		glob_ship1.setAngle(Double.NaN);
-	}
-
-	@Test (expected = IllegalArgumentException.class)
-	public void testRadiusLowInvalidValue(){
-		glob_ship1.setRadius(-100);
-	}
-	
-	@Test (expected = IllegalArgumentException.class)
-	public void testRadiusInfInvalidValue(){
-		glob_ship1.setRadius(Double.POSITIVE_INFINITY);
-	}
-	
-	@Test (expected = IllegalArgumentException.class)
-	public void testRadiusNaNValue(){
-		glob_ship1.setRadius(Double.NaN);
 	}
 	
 	@Test

@@ -1,21 +1,24 @@
 package asteroids.model;
+import org.hamcrest.core.IsNull;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * TODO
- * A class of spaceships. Spaceships are represented as circles with radius r. 
- * @author Benson De Heel, Xander De Jaegere 
- *  
+ * A class representing spaceships. 
+ * - Spaceships are represented as circles with radius r [km].
+ * - They have a position [km] and velocity [km/s] expressed in a Cartesian coordinate 
+ * 	 system with x- and y-coordinates.
+ * - They also have an orientation angle, expressed in radians. 
+ * 
+ * @invar	The orientation angle of each spaceship must be a valid angle.
+ *  		| isValidAngle(angle)
+ * 
+ * @version	1.0
+ * @author 	De Heel Benson, De Jaegere Xander 
  */
 public class Ship {
-	/**
-	 * Variable registering the constant speed of light.
-	 */
-   	static double c = 300000.0;
-   	
+
    	/**
-   	 * TODO: kan het zijn dat er @posts gebruikt moeten worden?
-   	 * 
    	 * Initialize this new spaceship with the given parameters.
    	 * @param positionX
    	 * 			The x-component of the position of the spaceship.
@@ -37,36 +40,47 @@ public class Ship {
    	 * 			| setRadius(radius)
    	 * @effect	The orientation angle of this ship will be set to the given angle.
    	 * 			| setAngle(angle)
+   	 * @throws	IllegalArgumentException
+   	 * 			The given radius is infinite or smaller than the minimal radius of this spaceship.
+   	 * 			| radius == INFINITE OR radius < minimalRadius
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double angle) {
+   			double velocityY, double radius, double angle) throws IllegalArgumentException {
    		setPosition(positionX, positionY);
    		setVelocity(velocityX, velocityY);
-   		setRadius(radius);
+   		
+   		if (Double.isNaN(radius) || Double.isInfinite(radius))
+			throw new IllegalArgumentException("The given value is not valid.");
+		else if (radius < rMin)
+			throw new IllegalArgumentException("The given value must be larger than "+rMin+" km.");
+   		this.radius = radius;
+   		
    		setAngle(angle);
    	}
 	
    	/**
    	 * Initialize this new spaceship with its default values.
-   	 * @post all the parameters of the class ship will be set to their default value.
-   	 * 			| new.getPosition() = [0, 0] 
-   	 * 			| new.getVelocity() = [0, 0]
-   	 *			| new.getAngle() = 0 
-   	 *			| new.getRadius() = 10
+   	 * @post 	The spaceship will be set in the origin.
+   	 * 		   | new.getPosition() == [0, 0] 
+   	 * @post	The spaceship will have no velocity.
+   	 * 		   | new.getVelocity() == [0, 0]
+   	 * @post	The spaceship will be orientated along the x-axis. 
+   	 *		   | new.getAngle() == 0 
+   	 * @post	The spaceship's radius will be set to the lowest possible radius.
+   	 *		   | new.getRadius() == minimalRadius
    	 */
    	public Ship(){
    		setPosition(0, 0);
    		setVelocity(0, 0);
    		setAngle(0);
-   		setRadius(10);
+   		this.radius = rMin;
    	}
 
    	
    	// Distance DEFENSIVE
 	/**
 	 * Return the position of the spaceship.
-	 * @return
-	 * 		The position of the spaceship represented by a list as [x, y]
+	 * @return	The position of the spaceship represented by an array as [xPosition, yPosition].
 	 */
 	@Basic
 	public double[] getPosition() {
@@ -76,16 +90,14 @@ public class Ship {
 	/**
 	 * Set the position of this spaceship to the given x and y value.
 	 * @param x
-	 * 			The x-component of the position of this spaceship
+	 * 			The x-component of the position of this spaceship.
 	 * @param y
-	 * 			The y-component of the position of this spaceship
-	 * @post 	if x and y are non-infinite numbers the position of this spaceship will
-	 * 			be set to [x, y]
-	 * 		   | new.position = [x, y]
+	 * 			The y-component of the position of this spaceship.
+	 * @post 	The x- and y-component of the position of this spaceship will be set to x respectively y.
+	 * 		   | new.getPosition() == [x, y]
 	 * @throws IllegalArgumentException
 	 * 				The given parameter x or y is infinite or equal to NaN
-	 * 				| x == INFINITE || y == INFINITE
-	 * 				| x == NaN || y == NaN
+	 * 				| x == INFINITE OR y == INFINITE OR x == NaN OR y == NaN
 	 */
 	@Basic
 	public void setPosition(double x, double y) throws IllegalArgumentException{
@@ -97,28 +109,39 @@ public class Ship {
 		this.position[0] = x;
 		this.position[1] = y;
 	}
-
-	/**
-	 * Variable registering the position of this spaceship.
-	 */
-	private double[] position = {0, 0};
 	
 	/**
-	 * TODO
+	 * Change the position of this spaceship based on the current position, velocity 
+	 * and given duration.
 	 * @param duration
+	 * 			The considered duration of the movement.
+	 * @post	The position of this spaceship will be set to the position it has after the
+	 * 			considered amount of time.
+	 * 			| setPosition(getXPosition()+duration*getXVelocity(), 
+	 * 						  getYPosition()+duration*getYVelocity())
+	 * @throws	IllegalArgumentException
+	 * 			The given duration is equal to NaN.
+	 * 			| duration == Double.NaN
 	 */
-	public void move(double duration){
+	public void move(double duration) throws IllegalArgumentException{
+		if (Double.isNaN(duration))
+			throw new IllegalArgumentException("Duration cannot be NaN");
 		double[] current_pos = getPosition();
 		double[] current_vel = getVelocity();
 		setPosition(current_pos[0]+current_vel[0]*duration, current_pos[1]+current_vel[1]*duration);
 	}
+	
+	/**
+	 * Variable registering the position of this spaceship.
+	 */
+	private double[] position = {0, 0};
 	
 	
 	// Velocity TOTAL
 	/**
 	 * Return the velocity of this ship.
 	 * @return
-	 * 		A list representing the velocity of this spaceship as [velocityX, velocityY]
+	 * 		A array representing the velocity of this spaceship as [xVelocity, yVelocity]
 	 */	
 	@Basic
 	public double[] getVelocity() {
@@ -132,15 +155,15 @@ public class Ship {
 	 * 			The x-component of the velocity of this spaceship.
 	 * @param velocityY
 	 * 			The y-component of the velocity of this spaceship.
-	 * @post	If the euclidean norm between velocityX and velocityY is smaller than c,
-	 * 			the position of this ship will be set to [velocityX, velocityY].
+	 * @post	If the euclidean norm between velocityX and velocityY is smaller than the ship's speed limit,
+	 * 			the x- and y-component of the velocity of this ship will be set to velocityX respectively velocityY.
 	 * 		   | if (isValidVelocity(velocityX, velocityY)
 	 * 		   | 	then new.velocity == [velocityX, velocityY]
-	 * @post	If the euclidean norm between velocityX and velocityY is greater than c,
+	 * @post	If the euclidean norm between velocityX and velocityY is greater than the ship's speed limit,
 	 * 			the vector [velocityX, velocityY] will be rescaled so that the orientation
-	 * 			remains the same and length of the vector is equal to c.
-	 * 		   | if (sqrt(velocityX^2+velocityY^2) > c)
-	 * 		   | 	then new.velocity == [c*cos(theta), c*sin(theta)]
+	 * 			remains the same but the length of the vector is equal to its speed limit.
+	 * 		   | if (sqrt(velocityX^2+velocityY^2) > speedLimit)
+	 * 		   | 	then new.velocity == [speedLimit*cos(theta), speedLimit*sin(theta)]
 	 *		   |		with theta = atan(velocityY/velocitX)
 	 */
 	@Basic
@@ -161,14 +184,9 @@ public class Ship {
 		this.velocity[1] = c*Math.sin(theta);
 		}
 	}
-
-	/**
-	 * Variable registering the velocity of this spaceship.
-	 */
-	private double[] velocity = {0, 0};
 	
    	/**
-   	 * Return length of the velocity vector of this spaceship.
+   	 * Return the length of the velocity vector of this spaceship.
    	 * 
    	 * @return	The total velocity of this spaceship which is the length of its velocity vector.
    	 * 			| sqrt(getVelocityX()^2+getVelocityY()^2)
@@ -186,7 +204,7 @@ public class Ship {
 	 * @param velocityY
 	 * 		  	The y-component of the velocity vector.
 	 * @return 	True if and only if the velocity is smaller than or equal to the speed limit of this ship.
-	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= c
+	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= speedLimit
 	 */
 	private boolean isValidVelocity(double velocityX, double velocityY){
 		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<=c;
@@ -194,16 +212,22 @@ public class Ship {
 	
 	/**
 	 * Cancels the ship's velocity setting it to 0
-	 * @effect velocity will be set to 0
-	 * 			| setVelocityX(0, 0)
+	 * @effect The velocity will be set to 0
+	 * 			| setVelocity(0, 0)
 	 */
 	public void killVelocity(){
 		setVelocity(0, 0);
 	}
 	
 	/**
-	 * TODO
+	 * Change the ship's velocity based on the current velocity, orientation and given amount.
 	 * @param amount
+	 * 			The length of the vector which will be incremented to the ship's velocity vector.
+	 * 			This vector will be parallel to the ship's velocity vector.
+	 * TODO - Hier een impiciete uitleg voor zoeken
+	 * @effect	
+	 * 			| new.getVelocity() == [xVelocity+amount*cos(getAngle()),
+	 * 			|					    yVelocity+amount*sin(getAngle())]
 	 */
 	public void thrust(double amount){
 		if (amount < 0){
@@ -216,6 +240,11 @@ public class Ship {
 		setVelocity(velocity[0], velocity[1]);
 	}
 
+	/**
+	 * Variable registering the velocity of this spaceship.
+	 */
+	private double[] velocity = {0, 0};
+	
 	
 	// Orientation NOMINAL
 	/**
@@ -245,7 +274,7 @@ public class Ship {
 	 * Checks whether the given angle is a valid angle.
 	 * @param currentAngle		The current angle of the spaceship.
 	 * @return					True if and only if the given angle is between 0 and 2*PI
-	 * 							| result == (0<= angle) && (angle<=2*PI)
+	 * 							| result == (0 <= angle) AND (angle <= 2*PI)
 	 */
 	public static boolean isValidAngle(double angle){
 		return (0 <= angle) && (angle <= 2*Math.PI);
@@ -253,10 +282,10 @@ public class Ship {
 	
 	/**
 	 * Turn the spaceship with the given angle.
-	 * 	A negative angle will result in an anti-clockwise rotation.
-	 *  A positive angle will result in a clockwise rotation.
 	 * @param angle
-	 * 		  The size of change of rotation the angle.
+	 * 			The size of change of rotation the angle.
+	 * 			A negative angle will result in an anti-clockwise rotation.
+	 *  		A positive angle will result in a clockwise rotation.
 	 * @effect 	The angle of the ship is incremented by the given angle.
 	 * 			|setAngle(getAngle()+angle)
 	 */
@@ -274,38 +303,50 @@ public class Ship {
 	/**
 	 * return the radius of this spaceship, expressed in kilometers.
 	 */
-	@Basic
+	@Basic @Immutable
 	public double getRadius(){
 		return this.radius;
 	}
 	
-	@Basic
-	public void setRadius(double radius) throws IllegalArgumentException {
-		if (Double.isNaN(radius) || Double.isInfinite(radius))
-			throw new IllegalArgumentException("The given value is not valid.");
-		else if (radius < 10)
-			throw new IllegalArgumentException("The given value must be larger than 10 km.");
-		this.radius = radius;
-	}
+//	@Basic
+//	public void setRadius(double radius) throws IllegalArgumentException {
+//		if (Double.isNaN(radius) || Double.isInfinite(radius))
+//			throw new IllegalArgumentException("The given value is not valid.");
+//		else if (radius < 10)
+//			throw new IllegalArgumentException("The given value must be larger than 10 km.");
+//		this.radius = radius;
+//	}
 	
 	/**
 	 * Variable registering the radius of the spaceship, expressed in kilometers.
 	 */
-	private double radius;
+	private final double radius;
 	
+	
+	// otherShip related methods
 	/**
-	 * TODO
+	 * Calculate the distance in between this ship and a given other ship.
 	 * @param otherShip
-	 * @return
+	 * 			The other ship involved in the calculation of the distance in between
+	 * 			both ships.
+	 * @return	The distance between this ship and otherShip. The distance may be
+	 * 			negative if both ships overlap
+	 * TODO - Moet hier een impliciete uitleg bij? Dat zou mij nogal lang lijken
+	 * 
+	 * @throws	NullPointerException
+	 * 			The given otherShip is null.
+	 * 			| otherShip == null
 	 */
-	public double getDistanceBetween(Ship otherShip){
-		if (this == otherShip)
+	public double getDistanceBetween(Ship otherShip) throws NullPointerException{
+		if (otherShip == null)
+			throw new NullPointerException("otherShip is null");
+		else if (otherShip == this)
 			return 0;
 		
 		double[] thisPos = getPosition();
 		double[] otherPos = otherShip.getPosition();
 				
-		double[] deltaPos = {thisPos[0]- otherPos[1], thisPos[1]- otherPos[1]};
+		double[] deltaPos = {thisPos[0]- otherPos[0], thisPos[1]- otherPos[1]};
 		double distanceBetweenMid = Math.sqrt(Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0)); 
 		double minRadius = Math.min(getRadius(), otherShip.getRadius());
 		
@@ -318,20 +359,28 @@ public class Ship {
 	}
 	
 	/**
-	 * TODO
+	 * Checks whether two ships overlap.
 	 * @param otherShip
-	 * @return
+	 * 			The other ship involved in the calculations.
+	 * @return	True if and only if this ship and otherShip overlap.
+	 * 			| this.getDistanceBetween(otherShip) <= 0
 	 */
-	public boolean overlap(Ship otherShip){
-		return getDistanceBetween(otherShip) < 0;
+	public boolean overlap(Ship otherShip) throws NullPointerException{
+		if (otherShip == null)
+			throw new NullPointerException("otherShip is null");
+		return getDistanceBetween(otherShip) <= 0;
 	}
 	
 	/**
-	 * TODO
+	 * TODO - Wat bedoelen ze met die "declarative specification" in de opgave (p.6 bovenaan)
 	 * @param otherShip
+	 * 			The other ship that collides with this ship.
 	 * @return
 	 */
-	public double getTimeToCollision(Ship otherShip){
+	public double getTimeToCollision(Ship otherShip) throws NullPointerException{
+		if (otherShip == null)
+			throw new NullPointerException("otherShip is null");
+			
 		double totalRadius = getRadius()+otherShip.getRadius();
 		
 		double[] thisPos = getPosition();
@@ -355,16 +404,41 @@ public class Ship {
 	}
 	
 	/**
-	 * TODO
+	 * TODO - In opgave staat "This method does not apply to ships that overlap" en het is defensief programmeren -> exception throwen als ze overlappen of gewoon niets doen?
+	 * 
+	 * Return the position of this ship when this ship and the given other ship collide.
+	 * 	This method returns null if this ship and the given other ship never collide.
 	 * @param otherShip
-	 * @return
+	 * 			The other ship that collides with this ship.
+	 * @return 	An array with the x- and y-components of the position where this ship and the given otherShip collide.
+	 * @throws	NullPointerException
+	 * 			The given otherShip is null
+	 * 			| otherShip == null
 	 */
-	public double[] getCollisionPosition(Ship otherShip){
+	public double[] getCollisionPosition(Ship otherShip) throws NullPointerException{
+		if (otherShip == null)
+			throw new NullPointerException("otherShip is null");
+		
 		double deltaT = getTimeToCollision(otherShip);
+		
+		if (Double.isInfinite(deltaT))
+			return null;
+		
 		double[] pos = getPosition();
 		double[] vel = getVelocity();
 		
 		return new double[]{pos[0]+vel[0]*deltaT, pos[1]+vel[1]*deltaT};
 	}
+	
+	
+	/**
+	 * Variable registering the maximal velocity of this spaceship.
+	 */
+   	static double c = 300000.0;
+   	
+   	/**
+   	 * Variable registering the minimal radius of a spaceship
+   	 */
+   	static double rMin = 10;
 }
 
