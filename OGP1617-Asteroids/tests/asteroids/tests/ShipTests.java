@@ -284,33 +284,6 @@ public class ShipTests {
 	} 
 
 	@Test
-	public void symetricalCase(){
-		// SCENARIO: ship1 is moving with velocity [10cos(PI/3), 10sin(PI/3)]
-		//			 ship2 is moving with velocity [-10cos(PI/3), 10sin(PI/3)]
-		// 			 Both ships are moving on an equilateral triangle.
-		Ship ship1 = new Ship(0, 0, 10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
-		Ship ship2 = new Ship(60, 0, -10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
-		
-		// distanceBetween
-		double distanceBetween = ship1.getDistanceBetween(ship2);
-		assertEquals(40, distanceBetween, EPSILON);
-		
-		// overlap
-		assert !ship1.overlap(ship2);
-		assert !ship2.overlap(ship1);
-		assert ship1.overlap(ship1);
-		
-		// timeToCollision
-		double timeToCollision = ship1.getTimeToCollision(ship2);
-		assertEquals(4, timeToCollision, EPSILON);
-		
-		// collisionPosition
-		double[] collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(10+40*Math.cos(Math.PI/3), collisionPosition[0], EPSILON);
-		assertEquals(40*Math.sin(Math.PI/3), collisionPosition[1], EPSILON);
-	}
-
-	@Test
 	public void simpleCase3(){
 		// SCENARIO: ship1 is standing still in the origin	
 		// 		     ship2 is moving right towards ship1 from above
@@ -346,4 +319,33 @@ public class ShipTests {
 		assertEquals(0, collisionPosition[0], EPSILON);
 		assertEquals(10, collisionPosition[1], EPSILON);
 	}
+
+
+	@Test
+	public void symetricalCase(){
+		// SCENARIO: ship1 is moving with velocity [10cos(PI/3), 10sin(PI/3)]
+		//			 ship2 is moving with velocity [-10cos(PI/3), 10sin(PI/3)]
+		// 			 Both ships are moving on an equilateral triangle.
+		Ship ship1 = new Ship(0, 0, 10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
+		Ship ship2 = new Ship(60, 0, -10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
+		
+		// distanceBetween
+		double distanceBetween = ship1.getDistanceBetween(ship2);
+		assertEquals(40, distanceBetween, EPSILON);
+		
+		// overlap
+		assert !ship1.overlap(ship2);
+		assert !ship2.overlap(ship1);
+		assert ship1.overlap(ship1);
+		
+		// timeToCollision
+		double timeToCollision = ship1.getTimeToCollision(ship2);
+		assertEquals(4, timeToCollision, EPSILON);
+		
+		// collisionPosition
+		double[] collisionPosition = ship1.getCollisionPosition(ship2);
+		assertEquals(10+40*Math.cos(Math.PI/3), collisionPosition[0], EPSILON);
+		assertEquals(40*Math.sin(Math.PI/3), collisionPosition[1], EPSILON);
+	}
+
 }

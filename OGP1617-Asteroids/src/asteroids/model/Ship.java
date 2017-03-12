@@ -31,22 +31,44 @@ public class Ship {
    	 * @param radius
    	 * 			The radius of the spaceship.
    	 * @param angle
+   	 * @param speedLimit
+   	 * 			The maximum velocity of the spaceship
+   	 * 
+   	 * @pre		the angle must be between 0 and 2*PI
    	 * 			The orientation angle of the spaceship.
-   	 * @effect 	The position of this ship will be set to the given positionX and positionY.
-   	 * 			| setPosition(positionX, positionY)
-   	 * @effect	The velocity of this ship will be set to the given velocityX and velocityY.
-   	 * 			| setVelocity(velocityX, velocityY)
-   	 * @effect	The radius of this ship will be set to the given radius.
-   	 * 			| setRadius(radius)
-   	 * @effect	The orientation angle of this ship will be set to the given angle.
-   	 * 			| setAngle(angle)
+   	 * @post 	The position of this ship will be set to the given positionX and positionY.
+   	 * 			| new.getPosition() == (positionX, positionY)
+   	 * @post 	the speedLimit will be set to the given speedLimit
+   	 * 			if the speedLimit is not valid the speedLimit will be set to the speed of light
+   	 * 			| if (isValidSpeedLimit(speedLimit)
+   	 * 			|	then new.getSpeedLimit() == speedLimit
+   	 * 			| else
+   	 * 			| 	then new.getSpeedlimit() == c 
+   	 * @effect	The velocity of this ship will be set to the given velocityX and velocityY
+   	 * 			if the total velocity is smaller than the Speed limit of this ship. if it's greater than the speed limit
+   	 * 			it will be set to the speed limit
+   	 * 			| setVelocity(velocityX,velocityY)
+   	 * @post	The radius of this ship will be set to the given radius 
+   	 * 			if the given radius is greater than the minimum radius.
+   	 * 			| if (isValidRadius(radius))
+   	 * 			| 	then new.getRadius() == radius
+   	 * @post	the angle will be set to the given angle
+   	 * 			| new.getAngle() == angle
+   	 * @throws 	IllegalArgumentEception
+   	 * 			the given position is infinite or has Double.Nan as a value 
+   	 * 			| isInfinite(positionX) || isNaN(positionX)
+   	 * 			| isInfinite(positionY) || isNan(positionY)
    	 * @throws	IllegalArgumentException
    	 * 			The given radius is infinite or smaller than the minimal radius of this spaceship.
    	 * 			| radius == INFINITE OR radius < minimalRadius
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double angle) throws IllegalArgumentException {
+   			double velocityY, double radius, double angle,double speedLimit) throws IllegalArgumentException {
    		setPosition(positionX, positionY);
+   		if (isValidSpeedLimit(speedLimit))
+   			this.speedLimit = speedLimit;
+   		else
+   			this.speedLimit = c;
    		setVelocity(velocityX, velocityY);
    		
    		if (Double.isNaN(radius) || Double.isInfinite(radius))
@@ -59,16 +81,23 @@ public class Ship {
    	}
 	
    	/**
-   	 * Initialize this new spaceship with its default values.
-   	 * @post 	The spaceship will be set in the origin.
-   	 * 		   | new.getPosition() == [0, 0] 
-   	 * @post	The spaceship will have no velocity.
-   	 * 		   | new.getVelocity() == [0, 0]
-   	 * @post	The spaceship will be orientated along the x-axis. 
-   	 *		   | new.getAngle() == 0 
-   	 * @post	The spaceship's radius will be set to the lowest possible radius.
-   	 *		   | new.getRadius() == minimalRadius
+   	 * initialize this Ship with the given parameters and the speed limit on its maximum value
+   	 * @effect  this Ship is initialized with it's given parameters
+   	 * 			 and with the Speed limit set to the speed of light
+   	 * 			| this(positionX,positionY,velocityX,velocityY,radius,angle,c)
    	 */
+   	public Ship(double positionX, double positionY, double velocityX, 
+   			double velocityY, double radius, double angle)throws IllegalArgumentException{
+   		this(positionX,positionY,velocityX,velocityY,radius,angle,c);
+   	}
+   	
+   	
+   	/**
+   	 * Initialize this new spaceship with its default values, 
+   	 * the default for the speed limit being the speed of light.
+   	 * @effect 	The spaceship will be set in the origin.
+   	 * 			| this(0,0,0,0,10,0,c)
+   	*/
    	public Ship(){
    		setPosition(0, 0);
    		setVelocity(0, 0);
@@ -77,7 +106,7 @@ public class Ship {
    	}
 
    	
-   	// Distance DEFENSIVE
+   	// Position DEFENSIVE
 	/**
 	 * Return the position of the spaceship.
 	 * @return	The position of the spaceship represented by an array as [xPosition, yPosition].
@@ -138,6 +167,8 @@ public class Ship {
 	
 	
 	// Velocity TOTAL
+	
+	
 	/**
 	 * Return the velocity of this ship.
 	 * @return
@@ -207,7 +238,22 @@ public class Ship {
 	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= speedLimit
 	 */
 	private boolean isValidVelocity(double velocityX, double velocityY){
-		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<=c;
+		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<= this.speedLimit;
+		
+	}
+	
+	/**
+	 * returns the speed limit of this ship
+	 * @return the speed limit of this ship
+	 */
+	@Basic
+	public double getSpeedLimit(){
+		return this.speedLimit;
+	}
+	
+
+	private boolean isValidSpeedLimit(double speedLimit){
+		return ((speedLimit >= 0) && (speedLimit <= c));
 	}
 	
 	/**
@@ -226,8 +272,8 @@ public class Ship {
 	 * 			This vector will be parallel to the ship's velocity vector.
 	 * TODO - Hier een impiciete uitleg voor zoeken
 	 * @effect	
-	 * 			| new.getVelocity() == [xVelocity+amount*cos(getAngle()),
-	 * 			|					    yVelocity+amount*sin(getAngle())]
+	 * 			| new.getVelocity() == setVelocity(this.getVelocity()[0]+amount*cos(getAngle()),
+	 * 			|					    this.getVelocity()[1]+amount*sin(getAngle()))
 	 */
 	public void thrust(double amount){
 		if (amount < 0){
@@ -246,7 +292,15 @@ public class Ship {
 	private double[] velocity = {0, 0};
 	
 	
+	/**
+	 * Variable registering the maximum velocity of this spaceship expressed in kilometers/h
+	 */
+	private double speedLimit;
+	
+	
 	// Orientation NOMINAL
+	
+	
 	/**
 	 * Return the orientation angle of this ship, expressed in radians.
 	 */
@@ -300,6 +354,8 @@ public class Ship {
 	
 	
 	// Radius DEFENSIVE
+	
+	
 	/**
 	 * return the radius of this spaceship, expressed in kilometers.
 	 */
@@ -323,15 +379,27 @@ public class Ship {
 	private final double radius;
 	
 	
+	/**
+   	 * Variable registering the minimal radius of a spaceship
+   	 */
+   	static double rMin = 10;
+	
 	// otherShip related methods
+   	
+   	
 	/**
 	 * Calculate the distance in between this ship and a given other ship.
 	 * @param otherShip
 	 * 			The other ship involved in the calculation of the distance in between
 	 * 			both ships.
 	 * @return	The distance between this ship and otherShip. The distance may be
-	 * 			negative if both ships overlap
-	 * TODO - Moet hier een impliciete uitleg bij? Dat zou mij nogal lang lijken
+	 * 			negative if both ships overlap. if the this == otherShip the distance will be zero
+	 * 			| if(this== otherShip)
+	 * 			| 	then this.getDistanceBetween(otherShip) == 0
+	 * 			| if(this.overlap(otherShip))
+	 * 			|	then this.getDistanceBetween(otherShip) < 0
+	 * 			| else
+	 * 			| 	this.getDistanceBetween(otherShip) > 0
 	 * 
 	 * @throws	NullPointerException
 	 * 			The given otherShip is null.
@@ -351,7 +419,7 @@ public class Ship {
 		double minRadius = Math.min(getRadius(), otherShip.getRadius());
 		double maxRadius = Math.max(getRadius(), otherShip.getRadius());
 		// The center of a ship is in the others radius.
-		if (distanceBetweenMid < minRadius){
+		if ((distanceBetweenMid < minRadius) && (2*minRadius <= maxRadius)){
 			return -(maxRadius -distanceBetweenMid-minRadius);
 		}
 			
@@ -372,14 +440,20 @@ public class Ship {
 	}
 	
 	/**
-	 * TODO - Wat bedoelen ze met die "declarative specification" in de opgave (p.6 bovenaan)
 	 * @param otherShip
 	 * 			The other ship that collides with this ship.
-	 * @return
+	 * @return the resulting double will be the time in seconds that it takes for the two ships to collide.
+	 * 			| let
+	 * 			| 	new = this.move(result)
+	 * 			|   newOtherShip = otherShip.move(result)µ
+	 * 			| in
+	 * 			|	new.getDistanceBetween(newOtherShip) == 0
 	 */
-	public double getTimeToCollision(Ship otherShip) throws NullPointerException{
+	public double getTimeToCollision(Ship otherShip) throws NullPointerException,IllegalArgumentException{
 		if (otherShip == null)
 			throw new NullPointerException("otherShip is null");
+		if(overlap(otherShip))
+			throw new IllegalArgumentException("The ships overlap");
 			
 		double totalRadius = getRadius()+otherShip.getRadius();
 		
@@ -403,9 +477,7 @@ public class Ship {
 		return -(VTimesR+Math.sqrt(d))/Vquad;
 	}
 	
-	/**
-	 * TODO - In opgave staat "This method does not apply to ships that overlap" en het is defensief programmeren -> exception throwen als ze overlappen of gewoon niets doen?
-	 * 
+	/** 
 	 * Return the position of this ship when this ship and the given other ship collide.
 	 * 	This method returns null if this ship and the given other ship never collide.
 	 * @param otherShip
@@ -433,20 +505,20 @@ public class Ship {
 		double[] vel = getVelocity();
 		double[] pos1 = otherShip.getPosition();
 		double[] vel1 = otherShip.getVelocity();
-		double theta = Math.acos(( (pos1[0]+vel1[0]*deltaT) - (pos[0]+vel[0]*deltaT))/(getRadius()+otherShip.getRadius()));
-		return new double[]{pos[0]+vel[0]*deltaT+getRadius()*Math.cos(theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(theta)};
 		
+		double theta = Math.acos(( (pos1[0]+vel1[0]*deltaT) - (pos[0]+vel[0]*deltaT))/(getRadius()+otherShip.getRadius()));
+		if (pos[1] < pos1[1])
+			return new double[]{pos[0]+vel[0]*deltaT+getRadius()*Math.cos(theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(theta)};
+		else
+			return new double[]{pos[0]+vel[0]*deltaT+ getRadius()*Math.cos(-theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(-theta)};
 	}
 	
 	
 	/**
-	 * Variable registering the maximal velocity of this spaceship.
+	 * Variable registering the Speed of light.
 	 */
    	static double c = 300000.0;
    	
-   	/**
-   	 * Variable registering the minimal radius of a spaceship
-   	 */
-   	static double rMin = 10;
+   
 }
 
