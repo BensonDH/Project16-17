@@ -1,7 +1,7 @@
 package asteroids.model;
 import org.hamcrest.core.IsNull;
-
 import be.kuleuven.cs.som.annotate.*;
+
 
 /**
  * A class representing spaceships. 
@@ -31,8 +31,9 @@ public class Ship {
    	 * @param radius
    	 * 			The radius of the spaceship.
    	 * @param angle
+   	 * 			The orientation angle of the spaceship.
    	 * @param speedLimit
-   	 * 			The maximum velocity of the spaceship
+   	 * 			The maximum velocity of the spaceship.
    	 * 
    	 * @pre		the angle must be between 0 and 2*PI
    	 * 			The orientation angle of the spaceship.
@@ -82,6 +83,18 @@ public class Ship {
 	
    	/**
    	 * initialize this Ship with the given parameters and the speed limit on its maximum value
+   	 * @param positionX
+   	 * 			The x-component of the position of the spaceship.
+   	 * @param positionY
+   	 * 			The y-component of the position of the spaceship.
+   	 * @param velocityX
+   	 * 			The x-component of the velocity of the spaceship.
+   	 * @param velocityY
+   	 * 			The y-component of the velocity of the spaceship.
+   	 * @param radius
+   	 * 			The radius of the spaceship.
+   	 * @param angle
+   	 * 			The orientation angle of the spaceship.
    	 * @effect  this Ship is initialized with it's given parameters
    	 * 			 and with the Speed limit set to the speed of light
    	 * 			| this(positionX,positionY,velocityX,velocityY,radius,angle,c)
@@ -178,6 +191,15 @@ public class Ship {
 	public double[] getVelocity() {
 		return this.velocity.clone();
 	}
+
+	/**
+	 * Returns the speed limit of this ship.
+	 * @return The speed limit of this ship.
+	 */
+	@Basic
+	public double getSpeedLimit(){
+		return this.speedLimit;
+	}
 	
 	/**
 	 * Set the velocity of this spaceship to the given velocityX and velocityY values.
@@ -237,22 +259,20 @@ public class Ship {
 	 * @return 	True if and only if the velocity is smaller than or equal to the speed limit of this ship.
 	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= speedLimit
 	 */
-	private boolean isValidVelocity(double velocityX, double velocityY){
-		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<= this.speedLimit;
+	public boolean isValidVelocity(double velocityX, double velocityY){
+		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<= getSpeedLimit();
 		
 	}
 	
 	/**
-	 * returns the speed limit of this ship
-	 * @return the speed limit of this ship
+	 * Checks whether the given speedLimit is a valid speed.
+	 * @param speedLimit
+	 * 			The speed limit that needs to be verified.
+	 * @return 	True if and only if the given speedLimit is positive and smaller 
+	 * 			than or equal to the speed of light.
+	 * 			| (0 <= speedLimit <= c)
 	 */
-	@Basic
-	public double getSpeedLimit(){
-		return this.speedLimit;
-	}
-	
-
-	private boolean isValidSpeedLimit(double speedLimit){
+	public boolean isValidSpeedLimit(double speedLimit){
 		return ((speedLimit >= 0) && (speedLimit <= c));
 	}
 	
@@ -270,7 +290,6 @@ public class Ship {
 	 * @param amount
 	 * 			The length of the vector which will be incremented to the ship's velocity vector.
 	 * 			This vector will be parallel to the ship's velocity vector.
-	 * TODO - Hier een impiciete uitleg voor zoeken
 	 * @effect	
 	 * 			| new.getVelocity() == setVelocity(this.getVelocity()[0]+amount*cos(getAngle()),
 	 * 			|					    this.getVelocity()[1]+amount*sin(getAngle()))
@@ -290,7 +309,6 @@ public class Ship {
 	 * Variable registering the velocity of this spaceship.
 	 */
 	private double[] velocity = {0, 0};
-	
 	
 	/**
 	 * Variable registering the maximum velocity of this spaceship expressed in kilometers/h
@@ -330,7 +348,7 @@ public class Ship {
 	 * @return					True if and only if the given angle is between 0 and 2*PI
 	 * 							| result == (0 <= angle) AND (angle <= 2*PI)
 	 */
-	public static boolean isValidAngle(double angle){
+	public boolean isValidAngle(double angle){
 		return (0 <= angle) && (angle <= 2*Math.PI);
 	}
 	
@@ -362,16 +380,7 @@ public class Ship {
 	@Basic @Immutable
 	public double getRadius(){
 		return this.radius;
-	}
-	
-//	@Basic
-//	public void setRadius(double radius) throws IllegalArgumentException {
-//		if (Double.isNaN(radius) || Double.isInfinite(radius))
-//			throw new IllegalArgumentException("The given value is not valid.");
-//		else if (radius < 10)
-//			throw new IllegalArgumentException("The given value must be larger than 10 km.");
-//		this.radius = radius;
-//	}
+	}	
 	
 	/**
 	 * Variable registering the radius of the spaceship, expressed in kilometers.
@@ -384,6 +393,7 @@ public class Ship {
    	 */
    	static double rMin = 10;
 	
+   	
 	// otherShip related methods
    	
    	
@@ -442,7 +452,7 @@ public class Ship {
 	/**
 	 * @param otherShip
 	 * 			The other ship that collides with this ship.
-	 * @return the resulting double will be the time in seconds that it takes for the two ships to collide.
+	 * @return The resulting double will be the time in seconds that it takes for the two ships to collide.
 	 * 			| let
 	 * 			| 	new = this.move(result)
 	 * 			|   newOtherShip = otherShip.move(result)µ

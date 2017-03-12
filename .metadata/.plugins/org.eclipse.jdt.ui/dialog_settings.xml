@@ -24,6 +24,11 @@
 		<item value="C:\Users\Benson\Desktop\School\OGP 2016-2017\Project16-17\OGP1617-Asteroids\doc" key="destdir"/>
 		<item value="false" key="openinbrowser"/>
 		<section name="projects">
+			<section name="OGP1617-Asteroids">
+				<item value="C:\Users\Benson\Desktop\School\OGP 2016-2017\Project16-17\OGP1617-Asteroids\javadoc.xml" key="antpath"/>
+				<item value="C:\Users\Benson\Desktop\School\OGP 2016-2017\Project16-17\OGP1617-Asteroids\doc" key="destdir"/>
+				<item value="" key="href"/>
+			</section>
 		</section>
 	</section>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
