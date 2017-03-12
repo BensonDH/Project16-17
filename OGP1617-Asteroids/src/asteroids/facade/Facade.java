@@ -171,6 +171,8 @@ public class Facade implements IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		}catch (NullPointerException E){
+			throw new ModelException("NullPointerError");
 		}
 	}
 

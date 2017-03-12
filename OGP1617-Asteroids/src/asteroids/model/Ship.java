@@ -337,10 +337,10 @@ public class Ship {
 	 * 			The given otherShip is null.
 	 * 			| otherShip == null
 	 */
-	public double getDistanceBetween(Ship otherShip) throws NullPointerException{
+	public double getDistanceBetween(Ship otherShip)throws NullPointerException{
 		if (otherShip == null)
-			throw new NullPointerException("otherShip is null");
-		else if (otherShip == this)
+			throw new NullPointerException();
+		if (this == otherShip)
 			return 0;
 		
 		double[] thisPos = getPosition();
@@ -349,10 +349,10 @@ public class Ship {
 		double[] deltaPos = {thisPos[0]- otherPos[0], thisPos[1]- otherPos[1]};
 		double distanceBetweenMid = Math.sqrt(Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0)); 
 		double minRadius = Math.min(getRadius(), otherShip.getRadius());
-		
+		double maxRadius = Math.max(getRadius(), otherShip.getRadius());
 		// The center of a ship is in the others radius.
 		if (distanceBetweenMid < minRadius){
-			return distanceBetweenMid-minRadius;
+			return -(maxRadius -distanceBetweenMid-minRadius);
 		}
 			
 		return distanceBetweenMid-(getRadius()+otherShip.getRadius());
@@ -414,11 +414,15 @@ public class Ship {
 	 * @throws	NullPointerException
 	 * 			The given otherShip is null
 	 * 			| otherShip == null
+	 * @throws IllegalArgumentException
+	 * 			the ship overlaps with the other ship
+	 * 			| this.overlap(otherShip)
 	 */
-	public double[] getCollisionPosition(Ship otherShip) throws NullPointerException{
+	public double[] getCollisionPosition(Ship otherShip) throws NullPointerException,IllegalArgumentException{
 		if (otherShip == null)
 			throw new NullPointerException("otherShip is null");
-		
+		if (overlap(otherShip))
+			throw new IllegalArgumentException("ship overlaps with othership");
 		double deltaT = getTimeToCollision(otherShip);
 		
 		if (Double.isInfinite(deltaT))
@@ -426,8 +430,11 @@ public class Ship {
 		
 		double[] pos = getPosition();
 		double[] vel = getVelocity();
+		double[] pos1 = otherShip.getPosition();
+		double[] vel1 = otherShip.getVelocity();
+		double theta = Math.acos(( (pos1[0]+vel1[0]*deltaT) - (pos[0]+vel[0]*deltaT))/(getRadius()+otherShip.getRadius()));
+		return new double[]{pos[0]+vel[0]*deltaT+getRadius()*Math.cos(theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(theta)};
 		
-		return new double[]{pos[0]+vel[0]*deltaT, pos[1]+vel[1]*deltaT};
 	}
 	
 	
