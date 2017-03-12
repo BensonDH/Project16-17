@@ -423,6 +423,7 @@ public class Ship {
 			throw new NullPointerException("otherShip is null");
 		if (overlap(otherShip))
 			throw new IllegalArgumentException("ship overlaps with othership");
+		
 		double deltaT = getTimeToCollision(otherShip);
 		
 		if (Double.isInfinite(deltaT))

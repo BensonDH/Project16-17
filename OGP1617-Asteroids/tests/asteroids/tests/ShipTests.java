@@ -206,6 +206,8 @@ public class ShipTests {
 		glob_ship1.setAngle(Double.NaN);
 	}
 	
+	
+	// getDistanceBetween, overlap, getTimeToCollision, getCollisionPosition TESTS
 	@Test
 	public void DistanceBetweenTests() {	
 		// create two test ships only used for this experiment
@@ -226,6 +228,7 @@ public class ShipTests {
 		// case 5  get distance between ship 1 and ship1, should return 0
 		assert ship1.getDistanceBetween(ship1) == 0;
 	}	
+	
 	@Test
 	public void simpleCase1(){
 		// SCENARIO: ship1 is moving right towards ship2 with a velocity of [10, 0].
@@ -305,5 +308,42 @@ public class ShipTests {
 		double[] collisionPosition = ship1.getCollisionPosition(ship2);
 		assertEquals(10+40*Math.cos(Math.PI/3), collisionPosition[0], EPSILON);
 		assertEquals(40*Math.sin(Math.PI/3), collisionPosition[1], EPSILON);
+	}
+
+	@Test
+	public void simpleCase3(){
+		// SCENARIO: ship1 is standing still in the origin	
+		// 		     ship2 is moving right towards ship1 from above
+		
+		Ship ship1 = new Ship(0, 0, 0, 0,10, 0);
+		Ship ship2 = new Ship(0, 60, 0, -10, 10, 0);
+		
+		// distanceBetween
+		double distanceBetween = ship1.getDistanceBetween(ship2);
+		assertEquals(40, distanceBetween, EPSILON);
+		
+		distanceBetween = ship2.getDistanceBetween(ship1);
+		assertEquals(40, distanceBetween, EPSILON);
+		
+		// overlap
+		assert !ship1.overlap(ship2);
+		assert !ship2.overlap(ship1);
+		assert ship1.overlap(ship1);
+		
+		// timeToCollision
+		double timeToCollision = ship1.getTimeToCollision(ship2);
+		assertEquals(4, timeToCollision, EPSILON);
+		
+		timeToCollision = ship2.getTimeToCollision(ship1);
+		assertEquals(4, timeToCollision, EPSILON);
+		
+		// collisionPosition
+		double[] collisionPosition = ship1.getCollisionPosition(ship2);
+		assertEquals(0, collisionPosition[0], EPSILON);
+		assertEquals(10, collisionPosition[1], EPSILON);
+		
+		collisionPosition = ship2.getCollisionPosition(ship1);
+		assertEquals(0, collisionPosition[0], EPSILON);
+		assertEquals(10, collisionPosition[1], EPSILON);
 	}
 }
