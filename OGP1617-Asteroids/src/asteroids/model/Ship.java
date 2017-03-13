@@ -2,6 +2,10 @@ package asteroids.model;
 import org.hamcrest.core.IsNull;
 import be.kuleuven.cs.som.annotate.*;
 
+/**
+ * 
+ *  Github repository : https://github.com/BensonDH/Project16-17
+ */
 
 /**
  * A class representing spaceships. 
@@ -14,7 +18,9 @@ import be.kuleuven.cs.som.annotate.*;
  *  		| isValidAngle(angle)
  * 
  * @version	1.0
- * @author 	De Heel Benson, De Jaegere Xander 
+ * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
+ * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek)  
+ * 
  */
 public class Ship {
 
@@ -517,7 +523,7 @@ public class Ship {
 		double[] vel1 = otherShip.getVelocity();
 		
 		double theta = Math.acos(( (pos1[0]+vel1[0]*deltaT) - (pos[0]+vel[0]*deltaT))/(getRadius()+otherShip.getRadius()));
-		if (pos[1] < pos1[1])
+		if (pos[1] +vel[1]*deltaT < pos1[1] + vel1[1]*deltaT)
 			return new double[]{pos[0]+vel[0]*deltaT+getRadius()*Math.cos(theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(theta)};
 		else
 			return new double[]{pos[0]+vel[0]*deltaT+ getRadius()*Math.cos(-theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(-theta)};
