@@ -22,7 +22,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek)  
  * 
  */
-public class Ship {
+public class Ship extends Entity {
 
    	/**
    	 * Initialize this new spaceship with the given parameters.
@@ -399,6 +399,12 @@ public class Ship {
    	 */
    	static double rMin = 10;
 	
+   	
+   	// Mass [TOTAL]
+   	// TODO: dit uitwerken
+   	public double getMass(){
+   		return 1.0;
+   	}
    	
 	// otherShip related methods
    	
