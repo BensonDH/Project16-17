@@ -200,16 +200,13 @@ public abstract class Entity {
 	
    	
    	// World-Entity Relation
-   	/**
-   	 * TODO: Documentation
-   	 * @param world
-   	 * @throws IllegalStateException
-   	 */
-   	public void setWorld(World world) throws IllegalStateException {
-   		if (!(getWorld() == null))
-   			throw new IllegalStateException("This entity already has a world.");
+   	public void setWorld(World world){
    		if (canHaveAsWorld(world))
    			this.world = world;
+   		
+   		else
+   			throw Illegal
+   			
    	}
    	
    	public World getWorld(){

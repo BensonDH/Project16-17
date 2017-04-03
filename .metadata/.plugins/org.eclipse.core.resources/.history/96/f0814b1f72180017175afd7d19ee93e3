@@ -14,14 +14,14 @@ public class Bullet extends Entity {
 	 *  @return The minimal radius of this bullet.
 	 */
 	@Override
-	public double getRadiusLimit(){
-		return this.rLimit;
+	public double getMinimalRadius(){
+		return this.rMin;
 	}
 	
 	/*
 	 * Variable registering the minimal radius of this bullet.
 	 */
-	private double rLimit = 1;
+	private double rMin = 1;
 	
 	// Mass [TOTAL]
 	public double getMass(){

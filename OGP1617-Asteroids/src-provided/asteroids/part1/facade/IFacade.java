@@ -119,6 +119,11 @@ public interface IFacade {
 	 */
 	public void thrust(Ship ship, double amount) throws ModelException;
 
+	
+	/**
+	 * 
+	 */
+	public void killVelocity(Ship ship) throws ModelException;
 	/**
 	 * Update the direction of <code>ship</code> by adding <code>angle</code>
 	 * (in radians) to its current direction. <code>angle</code> may be

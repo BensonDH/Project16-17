@@ -198,58 +198,58 @@ public abstract class Entity {
    	// Mass [TOTAL]
    	public abstract double getMass();
 	
-   	
-   	// World-Entity Relation
-   	/**
-   	 * TODO: Documentation
-   	 * @param world
-   	 * @throws IllegalStateException
-   	 */
-   	public void setWorld(World world) throws IllegalStateException {
-   		if (!(getWorld() == null))
-   			throw new IllegalStateException("This entity already has a world.");
-   		if (canHaveAsWorld(world))
-   			this.world = world;
-   	}
-   	
-   	public World getWorld(){
-   		return this.world;
-   	}
-   	
-   	public boolean canHaveAsWorld(World world){
-   		return world.canHaveAsEntity(this);
-   	}
-   	/**
-   	 * Variable registering the world where this entity is in contained.
-   	 */
-   	private World world;
-   	
-   	
    	// ------- Other functions --------
-   	/**
-   	 * Get the distance between this Entity and the other Entity
-   	 * TODO: documentatie
-   	 * @param otherEntity
-   	 * @return
-   	 */
-   	public double getDistanceBetweenCenters(Entity otherEntity){
-   		double[]  thisPosition = getPosition();
-   		double[] otherPosition = otherEntity.getPosition();
-   		
-   		return Math.sqrt(Math.pow(thisPosition[0]-otherPosition[1],2.0)+Math.pow(thisPosition[1]-otherPosition[1], 2.0));
-   		
-   	}
-   	/**
-   	 * TODO: Documentation
-   	 * @param otherEntity
-   	 * @return
-   	 */
-   	public boolean overlapSignificantly(Entity otherEntity){
-   		double distance = getDistanceBetweenCenters(otherEntity);
-   		double totalRadius =getRadius() + otherEntity.getRadius();
-   		
-   		return distance <= 0.99*totalRadius;
-   	}
+	/**
+	 * Calculate the distance in between this entity and a given other entity.
+	 * @param otherEntity
+	 * 			The other ship involved in the calculation of the distance in between
+	 * 			both ships.
+	 * @return	The distance between this entity and otherEntity. The distance may be
+	 * 			negative if both entities overlap. if the this == otherEntity the distance will be zero
+	 * 			| if(this== otherShip)
+	 * 			| 	then this.getDistanceBetween(otherShip) == 0
+	 * 			| if(this.overlap(otherShip))
+	 * 			|	then this.getDistanceBetween(otherShip) < 0
+	 * 			| else
+	 * 			| 	this.getDistanceBetween(otherShip) > 0
+	 * 
+	 * @throws	NullPointerException
+	 * 			The given otherEntity is null.
+	 * 			| otherShip == null
+	 */
+	public double getDistanceBetween(Entity otherEntity)throws NullPointerException{
+		if (otherEntity == null)
+			throw new NullPointerException();
+		if (this == otherEntity)
+			return 0;
+		
+		double[] thisPos = getPosition();
+		double[] otherPos = otherEntity.getPosition();
+				
+		double[] deltaPos = {thisPos[0]- otherPos[0], thisPos[1]- otherPos[1]};
+		double distanceBetweenMid = Math.sqrt(Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0)); 
+		double minRadius = Math.min(getRadius(), otherEntity.getRadius());
+		double maxRadius = Math.max(getRadius(), otherEntity.getRadius());
+		// The center of a ship is in the others radius.
+		if ((distanceBetweenMid < minRadius) && (2*minRadius <= maxRadius)){
+			return -(maxRadius -distanceBetweenMid-minRadius);
+		}
+			
+		return distanceBetweenMid-(getRadius()+otherEntity.getRadius());
+	}
+	
+	/**
+	 * Checks whether two ships overlap.
+	 * @param otherShip
+	 * 			The other ship involved in the calculations.
+	 * @return	True if and only if this ship and otherShip overlap.
+	 * 			| this.getDistanceBetween(otherShip) <= 0
+	 */
+	public boolean overlap(Ship otherShip) throws NullPointerException{
+		if (otherShip == null)
+			throw new NullPointerException("otherShip is null");
+		return getDistanceBetween(otherShip) <= 0;
+	}
 
 
 

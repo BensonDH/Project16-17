@@ -171,7 +171,7 @@ public abstract class Entity {
 	 * 			| False otherwise
 	 */		
 	public boolean isValidRadius(double radius){
-		return radius > getRadiusLimit();
+		return radius > getMinimalRadius();
 	}
 	
 	/**
@@ -183,14 +183,14 @@ public abstract class Entity {
 	 * Get the minimal radius of this entity.
 	 *  @return The minimal radius of this entity.
 	 */
-	public double getRadiusLimit(){
-		return this.rLimit;
+	public double getMinimalRadius(){
+		return this.rMin;
 	}
 	
 	/**
    	 * Variable registering the minimal radius of a spaceship
    	 */
-   	private double rLimit = 10;
+   	private double rMin = 10;
    	
    	// Orientation [NOMINAL]
    	// TODO: hebben bullets ook een orientation?
@@ -198,85 +198,8 @@ public abstract class Entity {
    	// Mass [TOTAL]
    	public abstract double getMass();
 	
-   	
-   	// World-Entity Relation
-   	/**
-   	 * TODO: Documentation
-   	 * @param world
-   	 * @throws IllegalStateException
-   	 */
-   	public void setWorld(World world) throws IllegalStateException {
-   		if (!(getWorld() == null))
-   			throw new IllegalStateException("This entity already has a world.");
-   		if (canHaveAsWorld(world))
-   			this.world = world;
-   	}
-   	
-   	public World getWorld(){
-   		return this.world;
-   	}
-   	
-   	public boolean canHaveAsWorld(World world){
-   		return world.canHaveAsEntity(this);
-   	}
-   	/**
-   	 * Variable registering the world where this entity is in contained.
-   	 */
-   	private World world;
-   	
-   	
-   	// ------- Other functions --------
-   	/**
-   	 * Get the distance between this Entity and the other Entity
-   	 * TODO: documentatie
-   	 * @param otherEntity
-   	 * @return
-   	 */
-   	public double getDistanceBetweenCenters(Entity otherEntity){
-   		double[]  thisPosition = getPosition();
-   		double[] otherPosition = otherEntity.getPosition();
-   		
-   		return Math.sqrt(Math.pow(thisPosition[0]-otherPosition[1],2.0)+Math.pow(thisPosition[1]-otherPosition[1], 2.0));
-   		
-   	}
-   	/**
-   	 * TODO: Documentation
-   	 * @param otherEntity
-   	 * @return
-   	 */
-   	public boolean overlapSignificantly(Entity otherEntity){
-   		double distance = getDistanceBetweenCenters(otherEntity);
-   		double totalRadius =getRadius() + otherEntity.getRadius();
-   		
-   		return distance <= 0.99*totalRadius;
-   	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 * Variable registering the Speed of light [km/s].
 	 */
    	private static double c = 300000.0;
-
 }
- 
