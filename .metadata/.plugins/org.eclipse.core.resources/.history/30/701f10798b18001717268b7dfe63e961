@@ -44,9 +44,7 @@ public class World {
 	 * @param entity
 	 * @return
 	 */
-	public boolean canHaveAsEntity(Entity entity) throws IllegalArgumentException{
-		if (entity == null)
-			throw new IllegalArgumentException("Entity cannot be null.");
+	private boolean canHaveAsEntity(Entity entity){
 		double[] pos = entity.getPosition();
 		if (!contains(entity) || !(entity.getWorld() == null))
 			return false;

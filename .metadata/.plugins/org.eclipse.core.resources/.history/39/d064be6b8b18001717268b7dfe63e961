@@ -4,56 +4,8 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
 public abstract class Entity {
-	/**
-	 * TODO: Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @param speedLimit
-	 */
-	public Entity(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double speedLimit) throws IllegalArgumentException{
-		setPosition(positionX, positionY);
-   		if (isValidSpeedLimit(speedLimit))
-   			this.speedLimit = speedLimit;
-   		else
-   			this.speedLimit = c;
-   		setVelocity(velocityX, velocityY);
-   		
-   		if (Double.isNaN(radius) || Double.isInfinite(radius))
-			throw new IllegalArgumentException("The given value is not valid.");
-		else if (radius < getRadiusLimit())
-			throw new IllegalArgumentException("The given value must be larger than "+getRadiusLimit()+" km.");
-   		this.radius = radius;	
-	}
+	// TODO: Constructor
 	
-	/**
-	 * TODO: Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @throws IllegalArgumentException
-	 */
-   	public Entity(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius) throws IllegalArgumentException{
-   		this(positionX, positionY, velocityX, velocityY, radius, c);
-   		
-   	}
-	/**
-	 * DEFAULT CONSTRUCTOR
-	 * TODO: Documentation
-	 */
-   	public Entity() {
-   		setPosition(0, 0);
-   		setVelocity(0, 0);
-   		this.speedLimit = c;
-   		this.radius = getRadiusLimit();
-   		
-	}
 	
 	// Position [DEFENSIVE]
 	

@@ -70,20 +70,8 @@ public class Ship extends Entity {
    	 * 			| radius == INFINITE OR radius < minimalRadius
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double angle,double speedLimit) throws IllegalArgumentException {
-   		setPosition(positionX, positionY);
-   		if (isValidSpeedLimit(speedLimit))
-   			this.speedLimit = speedLimit;
-   		else
-   			this.speedLimit = c;
-   		setVelocity(velocityX, velocityY);
-   		
-   		if (Double.isNaN(radius) || Double.isInfinite(radius))
-			throw new IllegalArgumentException("The given value is not valid.");
-		else if (radius < rMin)
-			throw new IllegalArgumentException("The given value must be larger than "+rMin+" km.");
-   		this.radius = radius;
-   		
+   			double velocityY, double radius, double angle, double speedLimit) throws IllegalArgumentException {
+   		super(positionX, positionY, velocityX, velocityY, radius, speedLimit);
    		setAngle(angle);
    	}
 	
@@ -107,7 +95,8 @@ public class Ship extends Entity {
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
    			double velocityY, double radius, double angle)throws IllegalArgumentException{
-   		this(positionX,positionY,velocityX,velocityY,radius,angle,c);
+   		super(positionX,positionY,velocityX,velocityY,radius);
+   		setAngle(angle);
    	}
    	
    	
@@ -118,10 +107,8 @@ public class Ship extends Entity {
    	 * 			| this(0,0,0,0,10,0,c)
    	*/
    	public Ship(){
-   		setPosition(0, 0);
-   		setVelocity(0, 0);
+   		super();
    		setAngle(0);
-   		this.radius = rMin;
    	}
 
    	
@@ -234,27 +221,7 @@ public class Ship extends Entity {
 	
 	
 	// Radius DEFENSIVE
-	
-	
-	/**
-	 * return the radius of this spaceship, expressed in kilometers.
-	 */
-	@Basic @Immutable
-	public double getRadius(){
-		return this.radius;
-	}	
-	
-	/**
-	 * Variable registering the radius of the spaceship, expressed in kilometers.
-	 */
-	private final double radius;
-	
-	
-	/**
-   	 * Variable registering the minimal radius of a spaceship
-   	 */
-   	static double rMin = 10;
-	
+
    	
    	// Mass [TOTAL]
    	// TODO: dit uitwerken
