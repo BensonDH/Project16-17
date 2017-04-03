@@ -57,7 +57,7 @@ public class AsteroidsFrame extends JFrame {
 				if (killVelocity){
 					try{
 						facade.killVelocity(view.getSelected());
-					} catch(ModelException e1){
+					} catch (ModelException e1) {
 						handleError(e1);
 					}
 				}
@@ -109,6 +109,7 @@ public class AsteroidsFrame extends JFrame {
 					break;
 				case KeyEvent.VK_ESCAPE:
 					System.exit(0);
+					
 				}
 			}
 
@@ -129,7 +130,7 @@ public class AsteroidsFrame extends JFrame {
 					angle = 0;
 					break;
 				case KeyEvent.VK_K:
-					killVelocity = false;
+					killVelocity= false;
 				}
 			}
 		});
@@ -156,10 +157,9 @@ public class AsteroidsFrame extends JFrame {
 	private Set<Ship> initModel(IFacade facade) {
 		Set<Ship> ships = new HashSet<>();
 		try {
-	//		ships.add(facade.createShip(200, 400, 10, 0, 50, 0));
+			ships.add(facade.createShip(200, 400, 10, 0, 50, 0));
 			ships.add(facade.createShip(700, 400, 0, 0, 50, Math.PI));
-			ships.add(facade.createShip(450, 600, 0, -10, 50, 3 * Math.PI / 2));
-			ships.add(facade.createShip(450, 300, 0, 0, 60, Math.PI / 2));
+			ships.add(facade.createShip(450, 600, 0, 0, 75, 3 * Math.PI / 2));
 		} catch (ModelException e) {
 			handleError(e);
 		}

@@ -118,13 +118,12 @@ public interface IFacade {
 	 * direction and the given <code>amount</code>.
 	 */
 	public void thrust(Ship ship, double amount) throws ModelException;
+
 	
 	/**
-	 * update <code>ship</code>'s velocity to cancel all movement, by setting the velocity to zero.
 	 * 
 	 */
 	public void killVelocity(Ship ship) throws ModelException;
-	
 	/**
 	 * Update the direction of <code>ship</code> by adding <code>angle</code>
 	 * (in radians) to its current direction. <code>angle</code> may be

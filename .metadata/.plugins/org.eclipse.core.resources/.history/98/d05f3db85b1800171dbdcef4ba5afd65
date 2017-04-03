@@ -1,0 +1,10 @@
+package asteroids.model;
+
+import org.hamcrest.core.IsNull;
+import be.kuleuven.cs.som.annotate.*;
+
+public class Bullet {
+
+	
+	
+}

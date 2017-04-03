@@ -22,7 +22,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek)  
  * 
  */
-public class Ship {
+public class Ship extends Entity {
 
    	/**
    	 * Initialize this new spaceship with the given parameters.
@@ -127,38 +127,6 @@ public class Ship {
    	
    	// Position DEFENSIVE
 	/**
-	 * Return the position of the spaceship.
-	 * @return	The position of the spaceship represented by an array as [xPosition, yPosition].
-	 */
-	@Basic
-	public double[] getPosition() {
-		return this.position.clone();
-	}
-
-	/**
-	 * Set the position of this spaceship to the given x and y value.
-	 * @param x
-	 * 			The x-component of the position of this spaceship.
-	 * @param y
-	 * 			The y-component of the position of this spaceship.
-	 * @post 	The x- and y-component of the position of this spaceship will be set to x respectively y.
-	 * 		   | new.getPosition() == [x, y]
-	 * @throws IllegalArgumentException
-	 * 				The given parameter x or y is infinite or equal to NaN
-	 * 				| x == INFINITE OR y == INFINITE OR x == NaN OR y == NaN
-	 */
-	@Basic
-	public void setPosition(double x, double y) throws IllegalArgumentException{
-		if (Double.isNaN(x) || Double.isInfinite(x))
-			throw new IllegalArgumentException("The given x-value is not valid.");
-		else if (Double.isNaN(y) || Double.isInfinite(y))
-			throw new IllegalArgumentException("The given y-value is not valid.");
-		
-		this.position[0] = x;
-		this.position[1] = y;
-	}
-	
-	/**
 	 * Change the position of this spaceship based on the current position, velocity 
 	 * and given duration.
 	 * @param duration
@@ -179,109 +147,8 @@ public class Ship {
 		setPosition(current_pos[0]+current_vel[0]*duration, current_pos[1]+current_vel[1]*duration);
 	}
 	
-	/**
-	 * Variable registering the position of this spaceship.
-	 */
-	private double[] position = {0, 0};
-	
-	
-	// Velocity TOTAL
-	
-	
-	/**
-	 * Return the velocity of this ship.
-	 * @return
-	 * 		A array representing the velocity of this spaceship as [xVelocity, yVelocity]
-	 */	
-	@Basic
-	public double[] getVelocity() {
-		return this.velocity.clone();
-	}
 
-	/**
-	 * Returns the speed limit of this ship.
-	 * @return The speed limit of this ship.
-	 */
-	@Basic
-	public double getSpeedLimit(){
-		return this.speedLimit;
-	}
-	
-	/**
-	 * Set the velocity of this spaceship to the given velocityX and velocityY values.
-	 * 
-	 * @param velocityX
-	 * 			The x-component of the velocity of this spaceship.
-	 * @param velocityY
-	 * 			The y-component of the velocity of this spaceship.
-	 * @post	If the euclidean norm between velocityX and velocityY is smaller than the ship's speed limit,
-	 * 			the x- and y-component of the velocity of this ship will be set to velocityX respectively velocityY.
-	 * 		   | if (isValidVelocity(velocityX, velocityY)
-	 * 		   | 	then new.velocity == [velocityX, velocityY]
-	 * @post	If the euclidean norm between velocityX and velocityY is greater than the ship's speed limit,
-	 * 			the vector [velocityX, velocityY] will be rescaled so that the orientation
-	 * 			remains the same but the length of the vector is equal to its speed limit.
-	 * 		   | if (sqrt(velocityX^2+velocityY^2) > speedLimit)
-	 * 		   | 	then new.velocity == [speedLimit*cos(theta), speedLimit*sin(theta)]
-	 *		   |		with theta = atan(velocityY/velocitX)
-	 */
-	@Basic
-	public void setVelocity(double velocityX, double velocityY){
-		if (Double.isNaN(velocityX) || (Double.isNaN(velocityY)))
-			return;
-		if (isValidVelocity(velocityX, velocityY)){
-			this.velocity[0] = velocityX;
-			this.velocity[1] = velocityY;
-		} else if (Double.isInfinite(velocityX) || Double.isInfinite(velocityY))
-			// Do nothing when one of the two components is infinite.
-			return;
-		else {
-		// If isValidVelocity returns False, it means that the total velocity > c
-		// So we will have to rescale the length of the vector and keep the original orientation.
-		double theta = Math.atan2(velocityY, velocityX);
-		this.velocity[0] = c*Math.cos(theta);
-		this.velocity[1] = c*Math.sin(theta);
-		}
-	}
-	
-   	/**
-   	 * Return the length of the velocity vector of this spaceship.
-   	 * 
-   	 * @return	The total velocity of this spaceship which is the length of its velocity vector.
-   	 * 			| sqrt(getVelocityX()^2+getVelocityY()^2)
-   	 */
-	public double getTotalVelocity(){
-		double[] vel = getVelocity();
-		return Math.sqrt(Math.pow(vel[0], 2.0)+Math.pow(vel[1], 2.0));
-	}
-	
-	/**
-	 * Checks whether the total velocity is smaller than or equal to the speed limit of this spaceship.
-	 * 
-	 * @param velocityX 
-	 * 		  	The x-component of the velocity vector.
-	 * @param velocityY
-	 * 		  	The y-component of the velocity vector.
-	 * @return 	True if and only if the velocity is smaller than or equal to the speed limit of this ship.
-	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= speedLimit
-	 */
-	public boolean isValidVelocity(double velocityX, double velocityY){
-		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<= getSpeedLimit();
-		
-	}
-	
-	/**
-	 * Checks whether the given speedLimit is a valid speed.
-	 * @param speedLimit
-	 * 			The speed limit that needs to be verified.
-	 * @return 	True if and only if the given speedLimit is positive and smaller 
-	 * 			than or equal to the speed of light.
-	 * 			| (0 <= speedLimit <= c)
-	 */
-	public boolean isValidSpeedLimit(double speedLimit){
-		return ((speedLimit >= 0) && (speedLimit <= c));
-	}
-	
+	// Velocity TOTAL
 	/**
 	 * Cancels the ship's velocity setting it to 0
 	 * @effect The velocity will be set to 0
@@ -310,17 +177,6 @@ public class Ship {
 
 		setVelocity(velocity[0], velocity[1]);
 	}
-
-	/**
-	 * Variable registering the velocity of this spaceship.
-	 */
-	private double[] velocity = {0, 0};
-	
-	/**
-	 * Variable registering the maximum velocity of this spaceship expressed in kilometers/h
-	 */
-	private double speedLimit;
-	
 	
 	// Orientation NOMINAL
 	
@@ -399,6 +255,12 @@ public class Ship {
    	 */
    	static double rMin = 10;
 	
+   	
+   	// Mass [TOTAL]
+   	// TODO: dit uitwerken
+   	public double getMass(){
+   		return 1.0;
+   	}
    	
 	// otherShip related methods
    	
