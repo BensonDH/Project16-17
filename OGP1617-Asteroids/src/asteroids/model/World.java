@@ -47,22 +47,58 @@ public class World {
 	public boolean canHaveAsEntity(Entity entity) throws IllegalArgumentException{
 		if (entity == null)
 			throw new IllegalArgumentException("Entity cannot be null.");
-		double[] pos = entity.getPosition();
+
 		if (!contains(entity) || !(entity.getWorld() == null))
 			return false;
 		
 		return true;
 		
 	}
+	
 	/**
-	 * TODO: Documentation
+	 * Return the set of all the ships that lie in this game world.
+	 * @return	A HashSet containing all ships that lie in this world.
+	 */
+	public Set<Entity> queryShips(){
+		Set<Entity> result = new HashSet<Entity>();
+		for (Entity entity: linkedEntities)
+			if (entity instanceof Ship)
+				result.add(entity);
+		
+		return result;
+	}
+	
+	/**
+	 * Return the set of all the bullets that lie in this game world.
+	 * @return A HashSet containing all the bullets that lie in this world.
+	 */
+	public Set<Entity> queryBullets(){
+		Set<Entity> result = new HashSet<Entity>();
+		for (Entity entity: linkedEntities)
+			if (entity instanceof Bullet)
+				result.add(entity);
+		
+		return result;
+	}
+	
+	/**
+	 * Return the set of all entities that lie in this world.
+	 *
+	 * TODO: moet documentatie zoals in Hoorcollege 7 -> Class Person -> Method getAllOwnings()?
+	 * 
 	 * @return
 	 */
-	public Set<Entity> query(){
-		// TODO: Implementation
-		return null;
+	public Set<Entity> queryEntities(){
+		return new HashSet<Entity>(linkedEntities);
 	}
+	
+	/**
+	 * A set registering all the entities that lie in this world.
+	 */
 	private Set<Entity> linkedEntities = new HashSet<Entity>();
+	
+	
+	
 	// other methods
 	/**
 	 * TODO: Documentation
