@@ -176,11 +176,7 @@ public class World {
 		
 		return true;
 	}
-	/**
-	 * TODO: Documentation
-	 * @param entity
-	 * @return
-	 */
+	
 	public double getTimeToCollisionWithBoundaries(Entity entity){
 		double radius = entity.getRadius();
 		double[] current_pos = entity.getPosition();
@@ -212,8 +208,8 @@ public class World {
 		}
 		// Lower-Left Quadrant
 		else if (current_vel[0] < 0 && current_vel[1] < 0){
-			double x_time = (-(current_pos[0]-radius))/current_vel[0];
-			double y_time = (-(current_pos[1]-radius))/current_vel[1];
+			double x_time = (-radius-current_pos[0])/current_vel[0];
+			double y_time = (-radius-current_pos[1])/current_vel[1];
 			
 			if (x_time <= y_time)
 				return x_time;
@@ -223,7 +219,7 @@ public class World {
 		// Lower-Right Quadrant
 		else if (current_vel[0] > 0 && current_vel[1] < 0){
 			double x_time = (getWidth()-(radius+current_pos[0]))/current_vel[0];
-			double y_time = (-(current_pos[1]-radius))/current_vel[1];
+			double y_time = (-radius-current_pos[1])/current_vel[1];
 			
 			if (x_time <= y_time)
 				return x_time;
@@ -233,24 +229,11 @@ public class World {
 		return 0;
 	}
 	
-	/**
-	 * TODO: Documentation
-	 * @param entity
-	 * @return
-	 */
-	public double[] getPositionToCollisionWithBoundaries(Entity entity){
-		double time = getTimeToCollisionWithBoundaries(entity);
-		
-		if (Double.isInfinite(time))
-			return null;
-		
-		double[] vel = entity.getVelocity();
-		double[] pos = entity.getPosition();
+	public double getPositionToCollisionWithBoundaries(Entity entity){
 		
 		
-		return new double[]{pos[0]+vel[0]*time, pos[1]+vel[1]*time};
+		return 0;
 	}
-	
 	
 	// Destroy/Terminate methods
 	/**

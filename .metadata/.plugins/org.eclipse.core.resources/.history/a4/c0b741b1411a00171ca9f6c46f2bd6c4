@@ -105,16 +105,6 @@ public class World {
 		return result;
 	}
 	
-	/**
-	 * Check whether the given entity lies in this world
-	 * @param entity	
-	 * 				The entity that has to be verified
-	 * @return 		true if the given entity lies in this world
-	 * 				false otherwise
-	 */
-	public boolean isInWorld(Entity entity){
-		return linkedEntities.contains(entity);
-	}
 	
 	// Queries
 	
@@ -176,24 +166,17 @@ public class World {
 		
 		return true;
 	}
-	/**
-	 * TODO: Documentation
-	 * @param entity
-	 * @return
-	 */
+	
 	public double getTimeToCollisionWithBoundaries(Entity entity){
-		double radius = entity.getRadius();
 		double[] current_pos = entity.getPosition();
 		double[] current_vel = entity.getVelocity();
 		
-		// If the given entity is not moving or does not lie in this world,
-		// it will never collide with the boundaries.
-		if (!isInWorld(entity) || current_vel[0] == 0 || current_vel[1] == 0)
+		if (current_vel[0] == 0 || current_vel[1] == 0)
 			return Double.POSITIVE_INFINITY;
 		// Upper-Right Quadrant
 		else if (current_vel[0] > 0 && current_vel[1] > 0){
-			double x_time = (getWidth()-(radius+current_pos[0]))/current_vel[0];
-			double y_time = (getHeight()-(radius+current_pos[1]))/current_vel[1];
+			double x_time = (getWidth()-current_pos[0])/current_vel[0];
+			double y_time = (getHeight()-current_pos[1])/current_vel[1];
 			
 			if (x_time <= y_time)
 				return x_time;
@@ -202,8 +185,8 @@ public class World {
 		}
 		// Upper-Left Quadrant
 		else if (current_vel[0] < 0 && current_vel[1] > 0){
-			double x_time = (-radius-current_pos[0])/current_vel[0];
-			double y_time = (getHeight()-(radius+current_pos[1]))/current_vel[1];
+			double x_time = (-current_pos[0])/current_vel[0];
+			double y_time = (getHeight()-current_pos[1])/current_vel[1];
 			
 			if (x_time <= y_time)
 				return x_time;
@@ -212,8 +195,8 @@ public class World {
 		}
 		// Lower-Left Quadrant
 		else if (current_vel[0] < 0 && current_vel[1] < 0){
-			double x_time = (-(current_pos[0]-radius))/current_vel[0];
-			double y_time = (-(current_pos[1]-radius))/current_vel[1];
+			double x_time = (-current_pos[0])/current_vel[0];
+			double y_time = (-current_pos[1])/current_vel[1];
 			
 			if (x_time <= y_time)
 				return x_time;
@@ -222,8 +205,8 @@ public class World {
 		}
 		// Lower-Right Quadrant
 		else if (current_vel[0] > 0 && current_vel[1] < 0){
-			double x_time = (getWidth()-(radius+current_pos[0]))/current_vel[0];
-			double y_time = (-(current_pos[1]-radius))/current_vel[1];
+			double x_time = (getWidth()-current_pos[0])/current_vel[0];
+			double y_time = (-current_pos[1])/current_vel[1];
 			
 			if (x_time <= y_time)
 				return x_time;
@@ -233,24 +216,11 @@ public class World {
 		return 0;
 	}
 	
-	/**
-	 * TODO: Documentation
-	 * @param entity
-	 * @return
-	 */
-	public double[] getPositionToCollisionWithBoundaries(Entity entity){
-		double time = getTimeToCollisionWithBoundaries(entity);
-		
-		if (Double.isInfinite(time))
-			return null;
-		
-		double[] vel = entity.getVelocity();
-		double[] pos = entity.getPosition();
+	public double getPositionToCollisionWithBoundaries(Entity entity){
 		
 		
-		return new double[]{pos[0]+vel[0]*time, pos[1]+vel[1]*time};
+		return 0;
 	}
-	
 	
 	// Destroy/Terminate methods
 	/**

@@ -299,82 +299,11 @@ public abstract class Entity {
    		return distance <= 0.99*totalRadius;
    	}
 
-	/**
-	 * @param otherEntity
-	 * 			The other entity that collides with this entity.
-	 * @return The resulting double will be the time in seconds that it takes for the two entities to collide.
-	 * 			| let
-	 * 			| 	new = this.move(result)
-	 * 			|   newOtherEntity = otherEntity.move(result)
-	 * 			| in
-	 * 			|	new.getDistanceBetween(newOtherEntity) == 0
-	 */
-	public double getTimeToCollision(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
-		if (otherEntity == null)
-			throw new NullPointerException("otherEntity is null");
-		if(overlapSignificantly(otherEntity))
-			throw new IllegalArgumentException("The entites overlap significantly");
-			
-		double totalRadius = getRadius()+otherEntity.getRadius();
-		
-		double[] thisPos = getPosition();
-		double[] otherPos = otherEntity.getPosition();
-		double[] deltaPos = {thisPos[0]-otherPos[0], thisPos[1]-otherPos[1]};
-		
-		double[] thisVel = getVelocity();
-		double[] otherVel = otherEntity.getVelocity();
-		double[] deltaVel = {thisVel[0]-otherVel[0], thisVel[1]-otherVel[1]};
-		
-		double VTimesR = deltaVel[0]*deltaPos[0]+deltaVel[1]*deltaPos[1];
-		double Vquad = Math.pow(deltaVel[0], 2.0)+Math.pow(deltaVel[1], 2.0); 
-		double Rquad = Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0);
-		
-		double d = Math.pow(VTimesR, 2.0)- Vquad*(Rquad-Math.pow(totalRadius, 2.0));
-		
-		if (VTimesR >= 0 || d <= 0)
-			return Double.POSITIVE_INFINITY;
-		
-		return -(VTimesR+Math.sqrt(d))/Vquad;
-	}
 
 
-	/** 
-	 * Return the position of this entity when this ship and the given other entity collide.
-	 * 	This method returns null if this entity and the given other entity never collide.
-	 * @param otherEntity
-	 * 			The other entity that collides with this entity.
-	 * @return 	An array with the x- and y-components of the position where this entity and the given otherEntity collide.
-	 * @throws	NullPointerException
-	 * 			The given otherEntity is null
-	 * 			| otherEntity == null
-	 * @throws IllegalArgumentException
-	 * 			the entity overlaps with the other entity
-	 * 			| this.overlap(otherEntity)
-	 */
-	public double[] getCollisionPosition(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
-		if (otherEntity == null)
-			throw new NullPointerException("otherEntity is null");
-		if (overlapSignificantly(otherEntity))
-			throw new IllegalArgumentException("Entity overlaps with otherEntity");
-		
-		double deltaT = getTimeToCollision(otherEntity);
-		
-		if (Double.isInfinite(deltaT))
-			return null;
-		
-		double[] pos = getPosition();
-		double[] vel = getVelocity();
-		double[] pos1 = otherEntity.getPosition();
-		double[] vel1 = otherEntity.getVelocity();
-		
-		double theta = Math.acos(( (pos1[0]+vel1[0]*deltaT) - (pos[0]+vel[0]*deltaT))/(getRadius()+otherEntity.getRadius()));
-		if (pos[1] +vel[1]*deltaT < pos1[1] + vel1[1]*deltaT)
-			return new double[]{pos[0]+vel[0]*deltaT+getRadius()*Math.cos(theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(theta)};
-		else
-			return new double[]{pos[0]+vel[0]*deltaT+ getRadius()*Math.cos(-theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(-theta)};
-	}
 
-	
+
+
 
 
 
