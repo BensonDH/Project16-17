@@ -11,60 +11,25 @@ import org.hamcrest.core.IsNull;
 import be.kuleuven.cs.som.annotate.*;
 
 public class World {
-	
-	/**
-	 * Initialize this new world with the given width and height.
-	 * @param width
-	 * 		  The width of this new world.
-	 * @param height
-	 * 		  The height of this new world.
-	 * @post 
-	 * 		  | if (!isValidBorderDistance(width)
-	 * 		  | then new.getWidth() == getDefaultWidth()
-	 * 		  | else new.getWidth() == width
-	 * @post
-	 * 		  | if (!isValidBorderDistance(height)
-	 * 		  | then new.getHeight() == getDefaultHeight()
-	 * 		  | else new.getHeight() == height	
-	 */
+
 	public World(double width, double height){
-		if (isValidBorderDistance(width))
+		if (width >= 0 && width < Double.MAX_VALUE)
 			this.width = width;
 		else
-			this.width = getDefaultWidth();
+			this.width = 0;
 		
-		if (isValidBorderDistance(height))
+		if (height >= 0 && height < Double.MAX_VALUE)
 			this.height = height;
 		else
-			this.height = getDefaultHeight();
+			this.height = 0;
+		
 	}
 	
 	/**
-	 * Initialize this new world with its default values.
-	 * 
-	 * @effect 	
-	 * 			| World(getDefaultWidth(), getDefaultHeight())
+	 * TODO: Documentation
+	 * @return
 	 */
-	public World(){
-		this(World.getDefaultWidth(), World.getDefaultHeight());
-	}
-	
-	/**
-	 * Check whether the given value is a valid border Height or width.
-	 * 
-	 * @param value
-	 * 		   	The value that needs to be verified.
-	 * @see implementation
-	 * 			
-	 */
-	public static boolean isValidBorderDistance(double value){
-		return (value > 0 && value < Double.MAX_VALUE);
-	}
-	
-	/**
-	 * Return the width of this world.
-	 */
-	@Basic @Immutable
+	@Basic
 	public double getWidth(){
 		return this.width;	
 	}
@@ -75,9 +40,10 @@ public class World {
 	private final double width;
 	
 	/**
-	 * Return the height of this world.
+	 * TODO: Documentation
+	 * @return
 	 */
-	@Basic @Immutable
+	@Basic
 	public double getHeight(){
 		return this.height;
 	}
@@ -87,46 +53,11 @@ public class World {
 	 */
 	private final double height;
 	
-	/**
-	 * Return the default width of this world.
-	 */
-	@Basic @Immutable
-	public static double getDefaultWidth(){
-		return World.defaultWidth;
-	}
-	
-	/**
-	 * Variable registering the default width of this world
-	 */
-	private static double defaultWidth = 1;
-	
-	/**
-	 * Return the default height of this world.
-	 */
-	@Basic @Immutable
-	public static double getDefaultHeight(){
-		return World.defaultHeight;
-	}
-	
-	/**
-	 * Variable registering the default height of this world
-	 */
-	private static double defaultHeight = 1;
-
 	
 	// Relation World-Entity
 	/**
-	 * Add a given entity to this world.
-	 * 
+	 * TODO: Documentation
 	 * @param entity
-	 * 		 	The entity that has to be added.
-	 * @post	
-	 * 		  	| new.isInWorld(entity) == true
-	 * 			| new.entity.getWorld() == this
-	 * @throws	NullPointerException
-	 * 			| entity == null
-	 * @throws	IllegalArgumentException
-	 * 			| !canHaveAsEntity(entity)
 	 */
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException{
 		if (!canHaveAsEntity(entity))
@@ -136,66 +67,37 @@ public class World {
 	}
 	
 	/**
-	 * Remove a given entity from this world.
-	 * 
+	 * TODO: Documentation
 	 * @param entity
-	 * 			The entity that has to be removed.
-	 * @post
-	 * 			| new.isInWorld(entity) == false
-	 * 			| new.entity.getWorld() == null
 	 * @throws NullPointerException
-	 * 			| entity == null
 	 * @throws IllegalArgumentException
-	 * 			| !isInWorld(entity)
 	 */
 	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException{
 		if (entity == null)
 			throw new NullPointerException("entity cannot be null.");
-		else if (!isInWorld(entity))
+		else if (!linkedEntities.contains(entity))
 			throw new IllegalArgumentException("The given enitity is not in this world.");
 		else
 			linkedEntities.remove(entity);
 	}
 	
 	/**
-	 * Check whether the given entity can be added to this world.
-	 * An entity can be added to a world if the following conditions are fulfilled:
-	 * 1. The given entity is not null
-	 * 2. The given entity does not lie any world
-	 * 3. The given entity does not overlap with any of the entities in this world
-	 * 
+	 * TODO: Documentation
 	 * @param entity
-	 * 			The entity that has to be verified.
 	 * @return
-	 * 			| true if (entity != null) &&
-	 * 			|		  (!isInWorld(entity) && entity.getWorld() == null) &&
-	 * 			|		  (for each entity in this world: 
-	 * 			|				!entity.overlapSignificantly(anyEntity))
-	 * 			| false otherwise
-	 * @throws	NullPointerException
-	 * 			| entity == null
 	 */
-	public boolean canHaveAsEntity(Entity entity) throws NullPointerException{
+	public boolean canHaveAsEntity(Entity entity) throws IllegalArgumentException{
 		if (entity == null)
-			throw new NullPointerException("Entity cannot be null.");
-		
-		// Check whether entity fully lies between the borders of this world
-		// and whether entity does not have a world yet.
+			throw new IllegalArgumentException("Entity cannot be null.");
+
 		if (!contains(entity) || !(entity.getWorld() == null))
 			return false;
-		
-		// Check whether entity does not overlap with any of the existing entities in this world
-		for (Entity existingEntity: linkedEntities){
-			if (entity.overlapSignificantly(existingEntity))
-				return false;
-		}
 		
 		return true;
 	}
 	
 	/**
 	 * Return the set of all the ships that lie in this game world.
-	 * 
 	 * @return	A HashSet containing all ships that lie in this world.
 	 */
 	public Set<Entity> queryShips(){
@@ -209,10 +111,10 @@ public class World {
 	
 	/**
 	 * Check whether the given entity lies in this world
-	 * 
 	 * @param entity	
 	 * 				The entity that has to be verified
-	 * @see implementation
+	 * @return 		true if the given entity lies in this world
+	 * 				false otherwise
 	 */
 	public boolean isInWorld(Entity entity){
 		return linkedEntities.contains(entity);
@@ -222,7 +124,6 @@ public class World {
 	
 	/**
 	 * Return the set of all the bullets that lie in this game world.
-	 * 
 	 * @return A HashSet containing all the bullets that lie in this world.
 	 */
 	public Set<Entity> queryBullets(){
@@ -236,8 +137,10 @@ public class World {
 	
 	/**
 	 * Return the set of all entities that lie in this world.
+	 *
+	 * TODO: moet documentatie zoals in Hoorcollege 7 -> Class Person -> Method getAllOwnings()?
 	 * 
-	 * @return A HashSet which contains all the entities that lie in this world.
+	 * @return
 	 */
 	public Set<Entity> queryEntities(){
 		return new HashSet<Entity>(linkedEntities);
@@ -251,16 +154,9 @@ public class World {
 	
 	// other methods
 	/**
-	 * Return the entity, if any, whose center coincidences with the given position.
-	 * 
+	 * TODO: Documentation
 	 * @param position
-	 * 			The position of the returned entity, expressed as [X_component, Y_component]
 	 * @return
-	 * 		 	| for entity in queryEntities():
-	 * 			| 	if (entity.getPosition() == position)
-	 * 			| 		result == entity
-	 * 			| if no such entity exists:
-	 * 			|		result == null
 	 */
 	public Entity getEntityAtPosition(double[] position){
 		// TODO: Implementation -> Posities in EnumSet stoppen
@@ -268,16 +164,9 @@ public class World {
 	}
 	
 	/**
-	 * Check whether the position of the given entity is apparently within the boundaries of this world.
-	 * 
-	 * An entity is apparently within the boundaries if the distance between each boundary of this world
-	 * and the center of the given entity >= 99% of the given entity's radius.
-	 * 
+	 * TODO: Documentation
 	 * @param entity
-	 * 			The entity that has to be verified.
 	 * @return
-	 * 			| false if (getDistanceToClosestBorder(entity) < 0.99*entity.getRadius())
-	 * 			| true otherwise
 	 */
 	public boolean contains(Entity entity){
 		double[] entityPos = entity.getPosition();
@@ -292,12 +181,9 @@ public class World {
 		return true;
 	}
 	/**
-	 * Calculate the time it takes for the given entity to reach the boundary it is heading to.
-	 * 
+	 * TODO: Documentation
 	 * @param entity
-	 * 			The entity whose time to collision with a boundary has to be calculated.
 	 * @return
-	 * 			TODO: find something for this.
 	 */
 	public double getTimeToCollisionWithBoundaries(Entity entity){
 		double radius = entity.getRadius();
@@ -352,12 +238,9 @@ public class World {
 	}
 	
 	/**
-	 * Return the coordinates where the given entity will collide with a boundary.
-	 * 
+	 * TODO: Documentation
 	 * @param entity
-	 * 			The entity involved in the collision with a boundary.
 	 * @return
-	 * 			| result == getTimeToCollisionWithBoundaries(entity)*entity.getVelocity()
 	 */
 	public double[] getPositionToCollisionWithBoundaries(Entity entity){
 		double time = getTimeToCollisionWithBoundaries(entity);
@@ -475,7 +358,7 @@ public class World {
 		if (!this.isTerminated()){
 
 			for (Entity entity: linkedEntities){
-				//entity.removeWorld();
+				entity.removeWorld();
 			}
 			linkedEntities.clear();
 			this.isTerminated=true;

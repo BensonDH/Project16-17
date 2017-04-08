@@ -357,7 +357,7 @@ public class World {
 	 * @param entity
 	 * 			The entity involved in the collision with a boundary.
 	 * @return
-	 * 			| result == getTimeToCollisionWithBoundaries(entity)*entity.getVelocity()
+	 * 			| result == getTimeToCollisionWithBoundaries(entity)*entity.getVelocity()S
 	 */
 	public double[] getPositionToCollisionWithBoundaries(Entity entity){
 		double time = getTimeToCollisionWithBoundaries(entity);

@@ -1,6 +1,6 @@
 package asteroids.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.*;
 import org.junit.Test;
@@ -22,17 +22,17 @@ public class ShipTests {
 	@Test
 	public void constructorNormalCase(){
 		Ship ship = new Ship(10, -10, 500, -500, 20, Math.PI);
-		
+
 		double[] pos = ship.getPosition();
-		assert pos[0] == 10;
-		assert pos[1] == -10;
+		assertEquals(10, pos[0], EPSILON);
+		assertEquals(-10, pos[1], EPSILON);
 		
 		double[] vel = ship.getVelocity();
-		assert vel[0] == 500;
-		assert vel[1] == -500;
+		assertEquals(500, vel[0], EPSILON);
+		assertEquals(-500, vel[1], EPSILON);
 		
-		assert ship.getRadius() == 20;
-		assert ship.getAngle() == Math.PI;
+		assertEquals(20, ship.getRadius(), EPSILON);
+		assertEquals(Math.PI, ship.getAngle(), EPSILON);
 	}
 
 	@Test
@@ -40,16 +40,16 @@ public class ShipTests {
 		Ship ship = new Ship(10, 10, 50, 100, 20, 0, 200000);
 		
 		double[] pos = ship.getPosition();
-		assert pos[0] == 10;
-		assert pos[1] == 10;
+		assertEquals(10, pos[0], EPSILON);
+		assertEquals(10, pos[1], EPSILON);
 		
 		double[] vel = ship.getVelocity();
-		assert vel[0] == 50;
-		assert vel[1] == 100;
+		assertEquals(50, vel[0], EPSILON);
+		assertEquals(100, vel[1], EPSILON);
 		
-		assert ship.getRadius() == 20;
-		assert ship.getAngle() == 0;
-		assert ship.getSpeedLimit() == 200000;
+		assertEquals(20, ship.getRadius(), EPSILON);
+		assertEquals(0, ship.getAngle(), EPSILON);
+		assertEquals(200000, ship.getSpeedLimit(), EPSILON);
 	}
 	
 	@Test
@@ -57,14 +57,14 @@ public class ShipTests {
 		Ship ship = new Ship();
 		
 		double[] pos = ship.getPosition();
-		assert pos[0] == 0;
-		assert pos[1] == 0;
+		assertEquals(0, pos[0], EPSILON);
+		assertEquals(0, pos[1], EPSILON);
 		
 		double[] vel = ship.getVelocity();
-		assert vel[0] == 0;
-		assert vel[1] == 0;
-		assert ship.getRadius() == 10;
-		assert ship.getAngle() == 0;
+		assertEquals(0, vel[0], EPSILON);
+		assertEquals(0, vel[1], EPSILON);
+		assertEquals(10, ship.getRadius(), EPSILON);
+		assertEquals(0, ship.getAngle(), EPSILON);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
@@ -81,13 +81,13 @@ public class ShipTests {
 	public void invalidVelocityXConstructor() {
 		Ship ship1 = new Ship(10, 10, Double.NaN, 10, 10, Math.PI);
 
-		assert ship1.getVelocity()[0] == 0;
+		assertEquals(0, ship1.getVelocity()[0], EPSILON);
 	}
 	
 	@Test
 	public void invalidVelocityYConstructor() {
 		Ship ship1 = new Ship(10, 10, 10, Double.NaN, 10, Math.PI);
-		assert ship1.getVelocity()[1] == 0;
+		assertEquals(0, ship1.getVelocity()[1], EPSILON);
 	}
 	
 	@Test
@@ -95,20 +95,20 @@ public class ShipTests {
 		Ship ship1 = new Ship(10, 10, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, Math.PI);
 		
 		double[] vel = ship1.getVelocity();
-		assert vel[0] == 0;
-		assert vel[1] == 0;
+		assertEquals(0, vel[0], EPSILON);
+		assertEquals(0, vel[1], EPSILON);
 		
 		ship1.setVelocity(300000, 300000);
 		vel = ship1.getVelocity();
 		assertEquals(300000*Math.cos(Math.PI/4), vel[0], EPSILON);
 		assertEquals(300000*Math.sin(Math.PI/4), vel[1], EPSILON);
-		assert ship1.getTotalVelocity() == 300000;
+		assertEquals(300000, ship1.getTotalVelocity(), EPSILON);
 		
 		ship1.setVelocity(-300000, 300000);
 		vel = ship1.getVelocity();
 		assertEquals(-300000*Math.cos(Math.PI/4), vel[0], EPSILON);
 		assertEquals(300000*Math.sin(Math.PI/4), vel[1], EPSILON);
-		assert ship1.getTotalVelocity() == 300000;
+		assertEquals(300000, ship1.getTotalVelocity(), EPSILON);
 	}
 	
 	@Test (expected = AssertionError.class)
@@ -142,14 +142,14 @@ public class ShipTests {
 	public void testPosition(){
 		double[] position = glob_ship1.getPosition();
 		
-		assert position[0] == -5;
-		assert position[1] == 10;
+		assertEquals(-5, position[0], EPSILON);
+		assertEquals(10, position[1], EPSILON);
 		glob_ship1.setPosition(25, -50);
 		
 		position = glob_ship1.getPosition();
 		
-		assert position[0] == 25;
-		assert position[1] == -50;
+		assertEquals(25, position[0], EPSILON);
+		assertEquals(-50, position[1], EPSILON);
 		
 		// Back to original state
 		glob_ship1.setPosition(-5, 10);
@@ -159,14 +159,14 @@ public class ShipTests {
 	public void testVelocity(){
 		double[] velocity = glob_ship1.getVelocity();
 		
-		assert velocity[0] == -5;
-		assert velocity[1] == 10;
+		assertEquals(-5, velocity[0], EPSILON);
+		assertEquals(10, velocity[1], EPSILON);
 		assertEquals(Math.sqrt(Math.pow(5, 2.0)+Math.pow(10, 2.0)), glob_ship1.getTotalVelocity(), EPSILON);
 		glob_ship1.setVelocity(30, -50);
 		
 		velocity = glob_ship1.getVelocity();
-		assert velocity[0] == 30;
-		assert velocity[1] == -50;
+		assertEquals(30, velocity[0], EPSILON);
+		assertEquals(-50, velocity[1], EPSILON);
 		assertEquals(Math.sqrt(Math.pow(30, 2.0)+Math.pow(50, 2.0)), glob_ship1.getTotalVelocity(), EPSILON);
 		//Back to original state
 		glob_ship1.setVelocity(-5, 10);
@@ -175,9 +175,9 @@ public class ShipTests {
 	@Test
 	public void testAngle(){
 		
-		assert glob_ship1.getAngle() == 0;
+		assertEquals(0, glob_ship1.getAngle(), EPSILON);
 		glob_ship1.setAngle(2*Math.PI);
-		assert glob_ship1.getAngle() == 2*Math.PI;
+		assertEquals(2*Math.PI, glob_ship1.getAngle(), EPSILON);
 		
 		// Back to original state
 		glob_ship1.setAngle(0);
@@ -200,13 +200,13 @@ public class ShipTests {
 		
 		glob_ship1.setVelocity(Double.NaN, 0);
 		double[] velocity = glob_ship1.getVelocity();
-		assert velocity[0] == -5;
-		assert velocity[1] == 10;
+		assertEquals(-5, velocity[0], EPSILON);
+		assertEquals(10, velocity[1], EPSILON);
 		
 		glob_ship1.setVelocity(0, Double.NaN);
 		velocity = glob_ship1.getVelocity();
-		assert velocity[0] == -5;
-		assert velocity[1] == 10;
+		assertEquals(-5, velocity[0], EPSILON);
+		assertEquals(10, velocity[1], EPSILON);
 	}
 
 	@Test (expected = AssertionError.class)
@@ -237,16 +237,19 @@ public class ShipTests {
 		
 		// Back to original state
 		ship.setPosition(0, 0);
+		
 		// thrust
 		ship.thrust(100);
 		double[] newVel = ship.getVelocity();
 		assertEquals(50*Math.cos(Math.PI/4), newVel[0], EPSILON);
 		assertEquals(50*Math.sin(Math.PI/4), newVel[0], EPSILON);
+		
 		// killVelocity
 		ship.killVelocity();
 		newVel = ship.getVelocity();
-		assert newVel[0] == 0;
-		assert newVel[1] == 0;
+		assertEquals(0, newVel[0], EPSILON);
+		assertEquals(0, newVel[1], EPSILON);
+		
 		// turn
 		ship.turn(Math.PI);
 		assertEquals(5*Math.PI/4, ship.getAngle(), EPSILON);
@@ -267,8 +270,8 @@ public class ShipTests {
 		Ship ship = new Ship();
 		ship.thrust(Double.POSITIVE_INFINITY);
 		double[] vel = ship.getVelocity();
-		assert vel[0] == 0;
-		assert vel[1] == 0;
+		assertEquals(0, vel[0], EPSILON);
+		assertEquals(0, vel[1], EPSILON);
 		
 		ship.thrust(450000);
 		vel = ship.getVelocity();
@@ -287,53 +290,58 @@ public class ShipTests {
 		
 		ship.killVelocity();
 		double[] vel = ship.getVelocity();
-		assert vel[0] == 0;
-		assert vel[1] == 0;
+		assertEquals(0, vel[0], EPSILON);
+		assertEquals(0, vel[1], EPSILON);
 	}
 
 	
 	// Checkers
 	@Test
 	public void testIsValidVelocity(){
-		assert glob_ship1.isValidVelocity(10, 10);
-		assert !glob_ship1.isValidVelocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+		assertTrue(glob_ship1.isValidVelocity(10, 10));
+		assertFalse(glob_ship1.isValidVelocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+		
 	}
 	
 	@Test
 	public void testIsValidSpeedLimit(){
-		assert glob_ship1.isValidSpeedLimit(150000);
-		assert !glob_ship1.isValidSpeedLimit(300001);
-		assert !glob_ship1.isValidSpeedLimit(-150000);
+		assertTrue(glob_ship1.isValidSpeedLimit(150000));
+		assertFalse(glob_ship1.isValidSpeedLimit(300001));
+		assertFalse(glob_ship1.isValidSpeedLimit(-150000));
 	}
 	
 	@Test
 	public void testIsValidAngle(){
-		assert glob_ship1.isValidAngle(Math.PI/2);
-		assert !glob_ship1.isValidAngle(-10);
-		assert !glob_ship1.isValidAngle(100);
+		assertTrue(glob_ship1.isValidAngle(Math.PI/2));
+		assertFalse(glob_ship1.isValidAngle(-10));
+		assertFalse(glob_ship1.isValidAngle(100));
 	}
 	
 
 	// getDistanceBetween, overlap, getTimeToCollision, getCollisionPosition TESTS
 	@Test
 	public void DistanceBetweenTests() {	
-		// create two test ships only used for this experiment
+		// create two test ships that will only be used for this experiment
 		// case 1 ships are not overlapping
 		Ship ship1 = new Ship();
 		Ship ship2 = new Ship(40, 0, 0, 0, 10, 0);
-		assert ship1.getDistanceBetween(ship2) == 20;
+		assertEquals(20, ship1.getDistanceBetween(ship2), EPSILON);
+		
 		//case 2 ships are touching
 		ship2.setPosition(20, 0);
-		assert ship1.getDistanceBetween(ship2) == 0;
+		assertEquals(0, ship1.getDistanceBetween(ship2), EPSILON);
+		
 		//case 3 ships are overlapping negative value expected
 		ship2.setPosition(15, 0);
-		assert ship1.getDistanceBetween(ship2) == -5;
+		assertEquals(-5, ship1.getDistanceBetween(ship2), EPSILON);
+		
 		// Case 4 one ship is completely in the other ship
 		ship2.setPosition(0.75, 0);
 		Ship ship3 = new Ship(0, 0, 0, 0, 30, 0);
-		assertEquals(ship2.getDistanceBetween(ship3), -19.25, EPSILON); 
+		assertEquals(ship2.getDistanceBetween(ship3), -19.25, EPSILON);
+		
 		// case 5  get distance between ship 1 and ship1, should return 0
-		assert ship1.getDistanceBetween(ship1) == 0;
+		assertEquals(0, ship1.getDistanceBetween(ship1), EPSILON);
 	}	
 	
 	@Test
@@ -349,9 +357,9 @@ public class ShipTests {
 		assertEquals(50, distanceBetween, EPSILON);
 		
 		// overlap
-		assert !ship1.overlap(ship2);
-		assert !ship2.overlap(ship1);
-		assert ship1.overlap(ship1);
+		assertFalse(ship1.overlap(ship2));
+		assertFalse(ship2.overlap(ship1));
+		assertTrue(ship1.overlap(ship1));
 		
 		// timeToCollision
 		double timeToCollision = ship1.getTimeToCollision(ship2);
@@ -376,9 +384,9 @@ public class ShipTests {
 		assertEquals(50, distanceBetween, EPSILON);
 		
 		// overlap
-		assert !ship1.overlap(ship2);
-		assert !ship2.overlap(ship1);
-		assert ship1.overlap(ship1);
+		assertFalse(ship1.overlap(ship2));
+		assertFalse(ship2.overlap(ship1));
+		assertTrue(ship1.overlap(ship1));
 		
 		// timeToCollision
 		double timeToCollision = ship1.getTimeToCollision(ship2);
@@ -406,9 +414,9 @@ public class ShipTests {
 		assertEquals(40, distanceBetween, EPSILON);
 		
 		// overlap
-		assert !ship1.overlap(ship2);
-		assert !ship2.overlap(ship1);
-		assert ship1.overlap(ship1);
+		assertFalse(ship1.overlap(ship2));
+		assertFalse(ship2.overlap(ship1));
+		assertTrue(ship1.overlap(ship1));
 		
 		// timeToCollision
 		double timeToCollision = ship1.getTimeToCollision(ship2);
@@ -440,9 +448,9 @@ public class ShipTests {
 		assertEquals(40, distanceBetween, EPSILON);
 		
 		// overlap
-		assert !ship1.overlap(ship2);
-		assert !ship2.overlap(ship1);
-		assert ship1.overlap(ship1);
+		assertFalse(ship1.overlap(ship2));
+		assertFalse(ship2.overlap(ship1));
+		assertTrue(ship1.overlap(ship1));
 		
 		// timeToCollision
 		double timeToCollision = ship1.getTimeToCollision(ship2);

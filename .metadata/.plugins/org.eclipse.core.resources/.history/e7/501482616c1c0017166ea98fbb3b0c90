@@ -352,12 +352,9 @@ public class World {
 	}
 	
 	/**
-	 * Return the coordinates where the given entity will collide with a boundary.
-	 * 
+	 * TODO: Documentation
 	 * @param entity
-	 * 			The entity involved in the collision with a boundary.
 	 * @return
-	 * 			| result == getTimeToCollisionWithBoundaries(entity)*entity.getVelocity()
 	 */
 	public double[] getPositionToCollisionWithBoundaries(Entity entity){
 		double time = getTimeToCollisionWithBoundaries(entity);
