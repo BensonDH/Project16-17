@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<item value="C:\Users\Benson\Dropbox\Groepswerk\Asteroids" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item value="false" key="delegateUpdating"/>
 	<item value="C:\Users\Benson\Dropbox\Unief\2 Ba\Semester 4\Object gericht programmeren\Hoorcolleges\Hoorcollege 1" key="org.eclipse.jdt.ui.last.external.project"/>
 	<section name="org.eclipse.ltk.ui.refactoring.settings">
 	</section>

@@ -463,7 +463,7 @@ public class World {
 	
 	// Destroy/Terminate methods
 	/**
-	 * Destroy this world by removing all the entities and terminating the world.
+	 * Destroy this world by removing all the entities.
 	 * 
 	 * @post	This world is terminated
 	 * 			| new.isTerminated()

@@ -300,7 +300,6 @@ public class World {
 	 * 			TODO: find something for this.
 	 */
 	public double getTimeToCollisionWithBoundaries(Entity entity){
-		//TODO: IMPORTANT: Nog checken of entity in world ligt of moet dat niet?
 		double radius = entity.getRadius();
 		double[] current_pos = entity.getPosition();
 		double[] current_vel = entity.getVelocity();
@@ -463,7 +462,7 @@ public class World {
 	
 	// Destroy/Terminate methods
 	/**
-	 * Destroy this world by removing all the entities and terminating the world.
+	 * Destroy this world by removing all the entities.
 	 * 
 	 * @post	This world is terminated
 	 * 			| new.isTerminated()

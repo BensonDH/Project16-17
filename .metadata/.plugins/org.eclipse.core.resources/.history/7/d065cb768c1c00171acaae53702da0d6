@@ -5,10 +5,7 @@ import be.kuleuven.cs.som.annotate.*;
 
 public class Bullet extends Entity {
 	// TODO: constructor
-	public Bullet(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius) throws IllegalArgumentException{
-		super(positionX, positionY, velocityX, velocityY, radius);
-	}
+	
 	
 	// Radius [DEFENSIVE]
 	

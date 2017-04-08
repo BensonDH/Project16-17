@@ -245,74 +245,42 @@ public class WorldTests {
 
 	// -*-*- getTimeToCollisionWithBoundaries + getPositionToCollisionWithBoundaries tests -*-*-
 	@Test
-	public void getTimeAndPositionToCollisionWithBoundariesTests(){
-		World testWorld = new World(150, 50);
-		// Test 1: Collision in Upper-Right Quadrant
-		Entity ship1 = new Ship(30, 15, 15, 20, 10, 0);
-		
-		assertEquals(1.25, testWorld.getTimeToCollisionWithBoundaries(ship1), EPSILON);
-		
-		double[] resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship1);
-		assertEquals(48.75, resultPosition[0], EPSILON);
-		assertEquals(40, resultPosition[1], EPSILON);
-		
-		// Test 2: Collision in Upper-Left Quadrant
-		Entity ship2 = new Ship(30, 15, -7, 10, 10, 0);
-		assertEquals(2.5,testWorld.getTimeToCollisionWithBoundaries(ship2), EPSILON);
-		 
-		resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship2);
-		assertEquals(12.5, resultPosition[0], EPSILON);
-		assertEquals(40, resultPosition[1], EPSILON);
-		 
-		// Test 3: Collision in Lower-Left Quadrant
-		Entity bullet1 = new Bullet(70, 30, -12,-5, 10);
-		assertEquals(4, testWorld.getTimeToCollisionWithBoundaries(bullet1), EPSILON);
-		
-		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet1);
-		assertEquals(22, resultPosition[0], EPSILON);
-		assertEquals(10, resultPosition[1], EPSILON);
-		
-		// Test 4: Collision in the Lower-Right Quadrant
-		Entity bullet2 = new Bullet(90, 20, 15, -5, 10);
-		assertEquals(2, testWorld.getTimeToCollisionWithBoundaries(bullet2), EPSILON);
-		
-		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet2);
-		assertEquals(120, resultPosition[0], EPSILON);
-		assertEquals(10, resultPosition[1], EPSILON);
+	public void getTimeToCollisionWithBoundariesTests(){
 		
 	}
-	
-	// -*-*- evolve tests -*-*-
-	@Test
-	public void evolveTest(){
-		//TODO: implementation
-	}
-	
-	// -*-*- Termination tests -*-*-
-	@Test
-	public void terminationTests(){
-		assertFalse(globWorld.isTerminated());
-		
-		// Create a testWorld with 3 random entities
-		World testWorld = new World(150, 150);
-		Entity testEntity1 = new Ship(10,10, 0, 0, 10, 0);
-		testWorld.addEntity(testEntity1);
-		Entity testEntity2 = new Bullet(20, 10, 0, 0, 10);
-		testWorld.addEntity(testEntity2);
-		Entity testEntity3 = new Bullet(30, 10, 0, 0, 10);
-		testWorld.addEntity(testEntity3);
-		
-		// terminate the world
-		testWorld.destroy();
-		
-		// Check whether testWorld is well terminated
-		Set<Entity> entities = testWorld.queryEntities();
-		assertTrue(entities.size() == 0);
-		
-		assertTrue(testEntity1.getWorld() == null);
-		assertTrue(testEntity2.getWorld() == null);
-		assertTrue(testEntity3.getWorld() == null);
-		
-		assertTrue(testWorld.isTerminated());
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
