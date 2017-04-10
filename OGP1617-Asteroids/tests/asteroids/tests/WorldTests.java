@@ -9,6 +9,7 @@ import asteroids.model.World;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
 import asteroids.model.Ship;
+import asteroids.model.Vector;
 
 
 public class WorldTests {
@@ -252,33 +253,33 @@ public class WorldTests {
 		
 		assertEquals(1.25, testWorld.getTimeToCollisionWithBoundaries(ship1), EPSILON);
 		
-		double[] resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship1);
-		assertEquals(48.75, resultPosition[0], EPSILON);
-		assertEquals(40, resultPosition[1], EPSILON);
+		Vector resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship1);
+		assertEquals(48.75, resultPosition.getX(), EPSILON);
+		assertEquals(40, resultPosition.getY(), EPSILON);
 		
 		// Test 2: Collision in Upper-Left Quadrant
 		Entity ship2 = new Ship(30, 15, -7, 10, 10, 0);
 		assertEquals(2.5,testWorld.getTimeToCollisionWithBoundaries(ship2), EPSILON);
 		 
 		resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship2);
-		assertEquals(12.5, resultPosition[0], EPSILON);
-		assertEquals(40, resultPosition[1], EPSILON);
+		assertEquals(12.5, resultPosition.getX(), EPSILON);
+		assertEquals(40, resultPosition.getY(), EPSILON);
 		 
 		// Test 3: Collision in Lower-Left Quadrant
 		Entity bullet1 = new Bullet(70, 30, -12,-5, 10);
 		assertEquals(4, testWorld.getTimeToCollisionWithBoundaries(bullet1), EPSILON);
 		
 		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet1);
-		assertEquals(22, resultPosition[0], EPSILON);
-		assertEquals(10, resultPosition[1], EPSILON);
+		assertEquals(22, resultPosition.getX(), EPSILON);
+		assertEquals(10, resultPosition.getY(), EPSILON);
 		
 		// Test 4: Collision in the Lower-Right Quadrant
 		Entity bullet2 = new Bullet(90, 20, 15, -5, 10);
 		assertEquals(2, testWorld.getTimeToCollisionWithBoundaries(bullet2), EPSILON);
 		
 		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet2);
-		assertEquals(120, resultPosition[0], EPSILON);
-		assertEquals(10, resultPosition[1], EPSILON);
+		assertEquals(120, resultPosition.getX(), EPSILON);
+		assertEquals(10, resultPosition.getY(), EPSILON);
 		
 	}
 	

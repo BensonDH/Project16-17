@@ -4,29 +4,50 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
 public abstract class Entity {
+	
 	/**
-	 * TODO: Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @param speedLimit
-	 */
+   	 * Initialize this new entity with the given parameters.
+   	 * 
+   	 * @param positionX
+   	 * 			The x-component of the position of the entity.
+   	 * @param positionY
+   	 * 			The y-component of the position of the entity.
+   	 * @param velocityX
+   	 * 			The x-component of the velocity of the entity.
+   	 * @param velocityY
+   	 * 			The y-component of the velocity of the entity.
+   	 * @param radius
+   	 * 			The radius of the entity.
+   	 * @param speedLimit
+   	 * 			The maximum speed that this entity can reach.
+   	 * @post    If the given speedLimit is a valid speed limit,
+   	 * 			the maximum speed of this entity will be equal to
+   	 * 			the given speedLimit. If not, the maximum speed limit
+   	 * 			of this entity will be equal to the constant speed of light c.
+   	 * 			| if (isValidSpeedLimit(speedLimit)
+   	 * 			|	then new.getSpeedLimit() == speedLimit
+   	 * 			| else
+   	 * 			| 	then new.getSpeedlimit() == c 
+   	 * @effect	The position of this entity will be equal to the given
+   	 * 			X- and Y-component (positonX and positionY).
+   	 * 			| setPosition(positionX, positionY)
+   	 * @effect	The velocity of this entity will be equal to the given
+   	 * 			X- and Y-component (velocityX and velocityY)
+   	 * 			| setVelocity(velocityX,velocityY)
+   	 * @throws 	IllegalArgumentException
+   	 * 			The given position is infinite or has Double.Nan as a value 
+   	 * 			| isInfinite(positionX) || isNaN(positionX)
+   	 * 			| isInfinite(positionY) || isNan(positionY)
+   	 */
 	public Entity(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double speedLimit) throws IllegalArgumentException{
+   			double velocityY, double speedLimit) throws IllegalArgumentException{
 		setPosition(positionX, positionY);
+ 		setVelocity(velocityX, velocityY);
+ 		
    		if (isValidSpeedLimit(speedLimit))
    			this.speedLimit = speedLimit;
    		else
-   			this.speedLimit = c;
-   		setVelocity(velocityX, velocityY);
-   		
-   		if (Double.isNaN(radius) || Double.isInfinite(radius))
-			throw new IllegalArgumentException("The given value is not valid.");
-		else if (radius < getRadiusLimit())
-			throw new IllegalArgumentException("The given value must be larger than "+getRadiusLimit()+" km.");
-   		this.radius = radius;	
+   			this.speedLimit = c;	
 	}
 	
 	/**
@@ -35,23 +56,23 @@ public abstract class Entity {
 	 * @param positionY
 	 * @param velocityX
 	 * @param velocityY
-	 * @param radius
 	 * @throws IllegalArgumentException
 	 */
    	public Entity(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius) throws IllegalArgumentException{
-   		this(positionX, positionY, velocityX, velocityY, radius, c);
+   			double velocityY) throws IllegalArgumentException{
+   		this(positionX, positionY, velocityX, velocityY, c);
    		
    	}
 	/**
-	 * DEFAULT CONSTRUCTOR
-	 * TODO: Documentation
+	 * Initialize this new entity with its default values.
+	 * 
+	 * @effect	This entity will be placed in the origin with no speed and
+	 * 			with the speed of light as its speed limit.
+	 * 			|this(0, 0, 0, 0, c)
 	 */
    	public Entity() {
-   		setPosition(0, 0);
-   		setVelocity(0, 0);
-   		this.speedLimit = c;
-   		this.radius = getRadiusLimit();
+   		this(0,0,0,0,c);
+
    		
 	}
 	
@@ -59,10 +80,11 @@ public abstract class Entity {
 	
 	/**
 	 * Return the position of this entity.
-	 * @return	The position of this entity represented by an array as [xPosition, yPosition].
+	 * @return	The position of this entity represented by a Vector as [xPosition, yPosition].
 	 */
 	@Basic
-	public double[] getPosition() {
+	public Vector getPosition() {
+		// TODO: .clone is niet nodig als Vector immutable is
 		return this.position.clone();
 	}
 	
@@ -72,11 +94,12 @@ public abstract class Entity {
 	 * 			The x-component of the position of this entity.
 	 * @param y
 	 * 			The y-component of the position of this entity.
-	 * @post 	
+	 * @post 	The position of this entity will be equal to the given
+	 * 			X-component and Y-component
 	 * 		   | new.getPosition() == [x, y]
 	 * @throws IllegalArgumentException
 	 * 				The given parameter x or y is infinite or equal to NaN
-	 * 				| x == INFINITE OR y == INFINITE OR x == NaN OR y == NaN
+	 * 				| x == INFINITE || y == INFINITE || x == NaN || y == NaN
 	 */
 	@Basic
 	public void setPosition(double x, double y) throws IllegalArgumentException{
@@ -85,14 +108,34 @@ public abstract class Entity {
 		else if (Double.isNaN(y) || Double.isInfinite(y))
 			throw new IllegalArgumentException("The given y-value is not valid.");
 		
-		this.position[0] = x;
-		this.position[1] = y;
+		this.position = new Vector(x, y);
 	}
 		
 	/**
+	 * Change the position of this entity based on the current position, velocity 
+	 * and given duration.
+	 * @param duration
+	 * 			The considered duration of the movement.
+	 * @post	The position of this entity will be set to the position it has after the
+	 * 			considered amount of time.
+	 * 			| setPosition(getPosition().getX()+duration*getVelocity().getX(), 
+	 * 						  getPosition().getY()+duration*getVelocity().getY())
+	 * @throws	IllegalArgumentException
+	 * 			The given duration is equal to NaN.
+	 * 			| duration == Double.NaN
+	 */
+	public void move(double duration) throws IllegalArgumentException{
+		if (Double.isNaN(duration))
+			throw new IllegalArgumentException("Duration cannot be NaN");
+		Vector current_pos = getPosition();
+		Vector current_vel = getVelocity();
+		setPosition(current_pos.getX()+current_vel.getX()*duration, current_pos.getY()+current_vel.getY()*duration);
+	}
+	
+	/**
 	 * Variable registering the position of this entity.
 	 */
-	private double[] position = {0, 0};
+	private Vector position = new Vector(0, 0);
 
 
 	// Velocity [TOTAL]
@@ -100,10 +143,10 @@ public abstract class Entity {
 	/**
 	 * Return the velocity of this entity.
 	 * @return
-	 * 		An array representing the velocity of this entity as [xVelocity, yVelocity]
+	 * 		A Vector representing the velocity of this entity as [xVelocity, yVelocity]
 	 */	
 	@Basic
-	public double[] getVelocity() {
+	public Vector getVelocity() {
 		return this.velocity.clone();
 	}
 
@@ -123,10 +166,13 @@ public abstract class Entity {
 	 * 			The x-component of the velocity of this entity.
 	 * @param velocityY
 	 * 			The y-component of the velocity of this entity.
-	 * @post
+	 * @post	If the X- and Y-components are valid, the velocity will be set to
+	 * 			a vector representing the given velocity.
 	 * 		   | if (isValidVelocity(velocityX, velocityY)
-	 * 		   | 	then new.velocity == [velocityX, velocityY]
-	 * @post	
+	 * 		   | 	then new.velocity == Vector(velocityX, velocityY)
+	 * @post	If the Euclidean norm of velocityX and velocityY is larger than the
+	 * 			Entity's speed limit, velocityX and velocityY will be rescaled such that
+	 * 			the Euclidean norm of velocityX and velocityY is equal to the Entity's speed limit.	
 	 * 		   | if (sqrt(velocityX^2+velocityY^2) > speedLimit)
 	 * 		   | 	then new.velocity == [speedLimit*cos(theta), speedLimit*sin(theta)]
 	 *		   |		with theta = atan(velocityY/velocitX)
@@ -136,8 +182,7 @@ public abstract class Entity {
 		if (Double.isNaN(velocityX) || (Double.isNaN(velocityY)))
 			return;
 		if (isValidVelocity(velocityX, velocityY)){
-			this.velocity[0] = velocityX;
-			this.velocity[1] = velocityY;
+			this.velocity = new Vector(velocityX, velocityY);
 		} else if (Double.isInfinite(velocityX) || Double.isInfinite(velocityY))
 			// Do nothing when one of the two components is infinite.
 			return;
@@ -145,20 +190,19 @@ public abstract class Entity {
 		// If isValidVelocity returns False, it means that the total velocity > c
 		// So we will have to rescale the length of the vector and keep the original orientation.
 		double theta = Math.atan2(velocityY, velocityX);
-		this.velocity[0] = c*Math.cos(theta);
-		this.velocity[1] = c*Math.sin(theta);
+		this.velocity = new Vector(c*Math.cos(theta), c*Math.sin(theta));
 		}
 	}
 	
    	/**
    	 * Return the length of the velocity vector of this entity.
    	 * 
-   	 * @return	
-   	 * 			| sqrt(getVelocityX()^2+getVelocityY()^2)
+   	 * @effect	The length of the velocity vector is equal to the norm
+   	 * 			of the Vector representing this Entity's velocity.
+   	 * 			| this.getVelocity().norm()
    	 */
 	public double getTotalVelocity(){
-		double[] vel = getVelocity();
-		return Math.sqrt(Math.pow(vel[0], 2.0)+Math.pow(vel[1], 2.0));
+		return getVelocity().norm();
 	}
 	
 	/**
@@ -172,15 +216,16 @@ public abstract class Entity {
 	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= speedLimit
 	 */
 	public boolean isValidVelocity(double velocityX, double velocityY){
-		return Math.sqrt(Math.pow(velocityY, 2.0)+Math.pow(velocityX, 2.0))<= getSpeedLimit();
-		
+		Vector velocity = new Vector(velocityX,velocityY);
+		return velocity.norm() <= getSpeedLimit();
 	}
 	
 	/**
 	 * Checks whether the given speedLimit is a valid speed.
 	 * @param speedLimit
 	 * 			The speed limit that needs to be verified.
-	 * @return 	
+	 * @return 	True if and only if the given speed limit is larger than 0 and smaller
+	 * 			than the constant speed of light c (300 000 km/s).
 	 * 			| if (0 <= speedLimit <= c) then true
 	 * 			| false otherwise
 	 */
@@ -191,58 +236,15 @@ public abstract class Entity {
 	/**
 	 * Variable registering the velocity of this entity.
 	 */
-	private double[] velocity = {0, 0};
+	private Vector velocity = new Vector(0, 0);
 	
 	/**
 	 * Variable registering the maximum velocity of this entity expressed in kilometers/s
 	 */
-	private double speedLimit;
+	private final double speedLimit;
 	
-	
-	// radius [DEFENSIVE]
-	// TODO: Hoe gaan we radius doen want rMin is verschillend voor bullet en ship
-	
-	/**
-	 * return the radius of this spaceship, expressed in kilometers.
-	 */
-	@Basic @Immutable
-	public double getRadius(){
-		return this.radius;
-	}	
-	
-	/**
-	 * Check whether the given radius is a valid radius.
-	 * @param radius
-	 * 			The radius that needs to be verified.
-	 * @return
-	 * 			| if (radius < getMinimalRadius()) then True
-	 * 			| False otherwise
-	 */		
-	public boolean isValidRadius(double radius){
-		return radius > getRadiusLimit();
-	}
-	
-	/**
-	 * Variable registering the radius of the spaceship, expressed in kilometers.
-	 */
-	private final double radius;
-	
-	/**
-	 * Get the minimal radius of this entity.
-	 *  @return The minimal radius of this entity.
-	 */
-	public double getRadiusLimit(){
-		return this.rLimit;
-	}
-	
-	/**
-   	 * Variable registering the minimal radius of a spaceship
-   	 */
-   	private double rLimit = 10;
-   	
-   	// Orientation [NOMINAL]
-   	// TODO: hebben bullets ook een orientation?
-   	
+	// Radius [DEFENSIVE]
+	public abstract double getRadius();
    	// Mass [TOTAL]
    	public abstract double getMass();
 	
@@ -260,13 +262,23 @@ public abstract class Entity {
    			this.world = world;
    	}
    	
+   	/**
+   	 * TODO: Documentation
+   	 * @return
+   	 */
    	public World getWorld(){
    		return this.world;
    	}
    	
+   	/**
+   	 * TODO: Documentation
+   	 * @param world
+   	 * @return
+   	 */
    	public boolean canHaveAsWorld(World world){
    		return world.canHaveAsEntity(this);
    	}
+   	
    	/**
    	 * Variable registering the world where this entity is in contained.
    	 */
@@ -276,17 +288,16 @@ public abstract class Entity {
    	// ------- Other functions --------
    	/**
    	 * Get the distance between this Entity and the other Entity
-   	 * TODO: documentatie
+   	 * TODO: Documentation
    	 * @param otherEntity
    	 * @return
    	 */
    	public double getDistanceBetweenCenters(Entity otherEntity){
-   		double[]  thisPosition = getPosition();
-   		double[] otherPosition = otherEntity.getPosition();
-   		
-   		return Math.sqrt(Math.pow(thisPosition[0]-otherPosition[1],2.0)+Math.pow(thisPosition[1]-otherPosition[1], 2.0));
-   		
+ 		Vector differenceBetweenVectors = getPosition().subtract(otherEntity.getPosition());
+ 		
+   		return differenceBetweenVectors.norm(); 
    	}
+   	
    	/**
    	 * TODO: Documentation
    	 * @param otherEntity
@@ -294,11 +305,64 @@ public abstract class Entity {
    	 */
    	public boolean overlapSignificantly(Entity otherEntity){
    		double distance = getDistanceBetweenCenters(otherEntity);
-   		double totalRadius =getRadius() + otherEntity.getRadius();
+   		double totalRadius = getRadius() + otherEntity.getRadius();
    		
    		return distance <= 0.99*totalRadius;
    	}
 
+	/**
+	 * Calculate the distance in between this entity and a given other entity.
+	 * 
+	 * @param otherEntity
+	 * 			The other entity involved in the calculation of the distance in between
+	 * 			both entities.
+	 * @return	The distance between this entity and otherEntity. The distance may be
+	 * 			negative if both entities overlap. if this == otherEntity the distance will be zero
+	 * 			| if(this== otherEntity)
+	 * 			| 	then this.getDistanceBetween(otherEntity) == 0
+	 * 			| if(this.overlap(otherEntity))
+	 * 			|	then this.getDistanceBetween(otherEntity) < 0
+	 * 			| else
+	 * 			| 	this.getDistanceBetween(otherEntity) > 0
+	 * 
+	 * @throws	NullPointerException
+	 * 			The given otherEntity is null.
+	 * 			| otherEntity == null
+	 */
+	public double getDistanceBetween(Entity otherEntity)throws NullPointerException{
+		if (otherEntity == null)
+			throw new NullPointerException();
+		if (this == otherEntity)
+			return 0;
+		
+		Vector thisPos = getPosition();
+		Vector otherPos = otherEntity.getPosition();
+				
+		Vector deltaPos = thisPos.subtract(otherPos);
+		double distanceBetweenMid = deltaPos.norm(); 
+		double minRadius = Math.min(getRadius(), otherEntity.getRadius());
+		double maxRadius = Math.max(getRadius(), otherEntity.getRadius());
+		// The center of a ship is in the others radius.
+		if ((distanceBetweenMid < minRadius) && (2*minRadius <= maxRadius)){
+			return -(maxRadius -distanceBetweenMid-minRadius);
+		}
+			
+		return distanceBetweenMid-(getRadius()+otherEntity.getRadius());
+	}
+   	
+	/**
+	 * Checks whether two entities overlap.
+	 * @param otherENtity
+	 * 			The other entity involved in the calculations.
+	 * @return	True if and only if this entity and otherEntity overlap.
+	 * 			| this.getDistanceBetween(otherEntity) <= 0
+	 */
+	public boolean overlap(Entity otherEntity) throws NullPointerException{
+		if (otherEntity == null)
+			throw new NullPointerException("otherEntity is null");
+		return getDistanceBetween(otherEntity) <= 0;
+	}
+	
 	/**
 	 * @param otherEntity
 	 * 			The other entity that collides with this entity.
@@ -312,22 +376,22 @@ public abstract class Entity {
 	public double getTimeToCollision(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
 			throw new NullPointerException("otherEntity is null");
-		if(overlapSignificantly(otherEntity))
-			throw new IllegalArgumentException("The entites overlap significantly");
+		if(overlap(otherEntity))
+			throw new IllegalArgumentException("The entities overlap");
 			
 		double totalRadius = getRadius()+otherEntity.getRadius();
 		
-		double[] thisPos = getPosition();
-		double[] otherPos = otherEntity.getPosition();
-		double[] deltaPos = {thisPos[0]-otherPos[0], thisPos[1]-otherPos[1]};
+		Vector thisPos = getPosition();
+		Vector otherPos = otherEntity.getPosition();
+		Vector deltaPos = thisPos.subtract(otherPos);
 		
-		double[] thisVel = getVelocity();
-		double[] otherVel = otherEntity.getVelocity();
-		double[] deltaVel = {thisVel[0]-otherVel[0], thisVel[1]-otherVel[1]};
+		Vector thisVel = getVelocity();
+		Vector otherVel = otherEntity.getVelocity();
+		Vector deltaVel = thisVel.subtract(otherVel);
 		
-		double VTimesR = deltaVel[0]*deltaPos[0]+deltaVel[1]*deltaPos[1];
-		double Vquad = Math.pow(deltaVel[0], 2.0)+Math.pow(deltaVel[1], 2.0); 
-		double Rquad = Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0);
+		double VTimesR = deltaPos.dot(deltaVel);
+		double Vquad = deltaVel.norm(); 
+		double Rquad = deltaPos.norm();
 		
 		double d = Math.pow(VTimesR, 2.0)- Vquad*(Rquad-Math.pow(totalRadius, 2.0));
 		
@@ -336,7 +400,6 @@ public abstract class Entity {
 		
 		return -(VTimesR+Math.sqrt(d))/Vquad;
 	}
-
 
 	/** 
 	 * Return the position of this entity when this ship and the given other entity collide.
@@ -353,44 +416,26 @@ public abstract class Entity {
 	 */
 	public double[] getCollisionPosition(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
-			throw new NullPointerException("otherEntity is null");
-		if (overlapSignificantly(otherEntity))
-			throw new IllegalArgumentException("Entity overlaps with otherEntity");
+			throw new NullPointerException("otherShip is null");
+		if (overlap(otherEntity))
+			throw new IllegalArgumentException("ship overlaps with othership");
 		
 		double deltaT = getTimeToCollision(otherEntity);
 		
 		if (Double.isInfinite(deltaT))
 			return null;
 		
-		double[] pos = getPosition();
-		double[] vel = getVelocity();
-		double[] pos1 = otherEntity.getPosition();
-		double[] vel1 = otherEntity.getVelocity();
+		Vector pos = getPosition();
+		Vector vel = getVelocity();
+		Vector pos1 = otherEntity.getPosition();
+		Vector vel1 = otherEntity.getVelocity();
 		
-		double theta = Math.acos(( (pos1[0]+vel1[0]*deltaT) - (pos[0]+vel[0]*deltaT))/(getRadius()+otherEntity.getRadius()));
-		if (pos[1] +vel[1]*deltaT < pos1[1] + vel1[1]*deltaT)
-			return new double[]{pos[0]+vel[0]*deltaT+getRadius()*Math.cos(theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(theta)};
+		double theta = Math.acos(( (pos1.getX()+vel1.getX()*deltaT) - (pos.getX()+vel.getX()*deltaT))/(getRadius()+otherEntity.getRadius()));
+		if (pos.getY() +vel.getY()*deltaT < pos1.getY() + vel1.getY()*deltaT)
+			return new double[]{pos.getX()+vel.getX()*deltaT+getRadius()*Math.cos(theta), pos.getY()+vel.getY()*deltaT+getRadius()*Math.sin(theta)};
 		else
-			return new double[]{pos[0]+vel[0]*deltaT+ getRadius()*Math.cos(-theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(-theta)};
+			return new double[]{pos.getX()+vel.getX()*deltaT+ getRadius()*Math.cos(-theta), pos.getY()+vel.getY()*deltaT+getRadius()*Math.sin(-theta)};
 	}
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/**
 	 * Variable registering the Speed of light [km/s].

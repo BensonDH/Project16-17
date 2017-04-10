@@ -1,0 +1,97 @@
+package asteroids.model;
+
+import be.kuleuven.cs.som.annotate.*;
+
+/**
+ * Class representing a value in a 2 dimensional space.	values returned have to be doubles
+ */
+@Value
+public class Vector {
+	public Vector(double x, double y){
+		setX(x);
+		setY(y);
+		
+	}
+
+	public void setX(double x){
+		this.x = x;
+	}
+	
+	public void setY(double y){
+		this.y = y;
+	}
+	
+	public double getX(){
+		return this.x;
+	}
+	
+	public double getY(){
+		return this.y;
+	}
+	
+	
+	public double[] toDoubleArray(){
+		return new double[]{getX(),getY()};
+
+	}
+	
+	public double norm(){
+		return Math.sqrt(Math.pow(getX(),2)+Math.pow(getY(), 2));
+	}
+	
+	public Vector decrease(Vector other){
+		return new Vector(getX() - other.getX(), getY() -other.getY());
+	}
+	
+	public Vector add(Vector other){
+		return new Vector(getX() + other.getX(), getY() + other.getY());
+	}
+	
+	public Vector multiply(double scalar){
+		return new Vector(getX()*scalar, getY()*scalar);
+		
+	}
+	
+	public double multiply(Vector other){
+		return getX()*other.getX() + getY()*other.getY();
+	}
+	
+	
+	@Override
+	public boolean equals(Object other){
+		if (other == null)
+			return false;
+		if(other == this)
+			return true;
+		if (this.getClass() != other.getClass())
+			return false;
+		Vector o = (Vector)other;
+		if (getX() != o.getX())
+			return false;
+		if (getY() != o.getY())
+			return false;
+		return true;
+}
+	
+	@Override
+	protected Vector clone(){
+		return new Vector(getX(),getY());
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+}	
+
+	@Override
+	public String toString() {
+		return "Vector [x=" + x + ", y=" + y + "]";
+	}
+
+
+	private double x;
+	private double y;
+	
+	
+
+}

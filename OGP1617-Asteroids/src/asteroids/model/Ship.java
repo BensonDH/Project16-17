@@ -1,4 +1,7 @@
 package asteroids.model;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hamcrest.core.IsNull;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -24,7 +27,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public class Ship extends Entity {
 
-   	/**
+	/**
    	 * Initialize this new spaceship with the given parameters.
    	 * @param positionX
    	 * 			The x-component of the position of the spaceship.
@@ -38,45 +41,47 @@ public class Ship extends Entity {
    	 * 			The radius of the spaceship.
    	 * @param angle
    	 * 			The orientation angle of the spaceship.
+   	 * @param density
+   	 * 			The density of the spaceship
    	 * @param speedLimit
    	 * 			The maximum velocity of the spaceship.
-   	 * 
+   	 * @param thrustMode
+   	 * 			The mode of the thrusters when initialized, whether they are on or off
+   	 * @effect 	this constructor will initialize the ship as an entity with given position, velocity and speedLimit
+   	 * 			| super(positionX,positionY,velocityX,velocityY,speedLimit);
    	 * @pre		the angle must be between 0 and 2*PI
-   	 * 			The orientation angle of the spaceship.
-   	 * @post 	The position of this ship will be set to the given positionX and positionY.
-   	 * 			| new.getPosition() == (positionX, positionY)
-   	 * @post 	the speedLimit will be set to the given speedLimit
-   	 * 			if the speedLimit is not valid the speedLimit will be set to the speed of light
-   	 * 			| if (isValidSpeedLimit(speedLimit)
-   	 * 			|	then new.getSpeedLimit() == speedLimit
-   	 * 			| else
-   	 * 			| 	then new.getSpeedlimit() == c 
-   	 * @effect	The velocity of this ship will be set to the given velocityX and velocityY
-   	 * 			if the total velocity is smaller than the Speed limit of this ship. if it's greater than the speed limit
-   	 * 			it will be set to the speed limit
-   	 * 			| setVelocity(velocityX,velocityY)
+   	 * 			| 0 <= angle <= 2*PI
    	 * @post	The radius of this ship will be set to the given radius 
    	 * 			if the given radius is greater than the minimum radius.
    	 * 			| if (isValidRadius(radius))
    	 * 			| 	then new.getRadius() == radius
+   	 * @post	The mode of the thrusters will be set to the given mode
+   	 * 			| new.getThrust() = thrustMode
    	 * @post	the angle will be set to the given angle
    	 * 			| new.getAngle() == angle
-   	 * @throws 	IllegalArgumentEception
-   	 * 			the given position is infinite or has Double.Nan as a value 
-   	 * 			| isInfinite(positionX) || isNaN(positionX)
-   	 * 			| isInfinite(positionY) || isNan(positionY)
    	 * @throws	IllegalArgumentException
    	 * 			The given radius is infinite or smaller than the minimal radius of this spaceship.
    	 * 			| radius == INFINITE OR radius < minimalRadius
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double angle, double speedLimit) throws IllegalArgumentException {
-   		super(positionX, positionY, velocityX, velocityY, radius, speedLimit);
+   			double velocityY, double radius, double angle,double density, double speedLimit, boolean thrustMode) throws IllegalArgumentException {
+   		super(positionX,positionY,velocityX,velocityY,speedLimit);
+   		if (Double.isNaN(radius) || Double.isInfinite(radius))
+			throw new IllegalArgumentException("The given value is not valid.");
+		else if (radius < rMin)
+			throw new IllegalArgumentException("The given value must be larger than "+rMin+" km.");
+
+   		setDensity(density);
+   		this.radius = radius;
+   		this.thrust = thrustMode;
+   		
    		setAngle(angle);
    	}
 	
    	/**
-   	 * initialize this Ship with the given parameters and the speed limit on its maximum value
+   	 * Initialize this new spaceship with the given parameters and the thrustMode set to its default
+   	 * parameter, which is false (off), and its speeldLimit set to the speed of light.
+   	 * 
    	 * @param positionX
    	 * 			The x-component of the position of the spaceship.
    	 * @param positionY
@@ -89,51 +94,55 @@ public class Ship extends Entity {
    	 * 			The radius of the spaceship.
    	 * @param angle
    	 * 			The orientation angle of the spaceship.
-   	 * @effect  this Ship is initialized with it's given parameters
-   	 * 			 and with the Speed limit set to the speed of light
-   	 * 			| this(positionX,positionY,velocityX,velocityY,radius,angle,c)
+   	 * @param density
+   	 * 			The density of this spaceship.
+   	 * @effect 	The Ship is initialized with the given parameters and its default thrustMode
+   	 * 			|this(positionX, positionY, velocityX, velocityY, radius, angle, density, c, false)
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double angle)throws IllegalArgumentException{
-   		super(positionX,positionY,velocityX,velocityY,radius);
-   		setAngle(angle);
+   			double velocityY, double radius, double angle,double density) throws IllegalArgumentException {
+   		this(positionX, positionY, velocityX, velocityY, radius, angle, density, c, false);
    	}
    	
+ 	/**
+   	 * Initialize this new spaceship with the given parameters and the thrustMode set to its default 
+   	 *  parameter which, is off, and the speeldLimit set to the speed of light.
+   	 *  
+   	 * @param positionX
+   	 * 			The x-component of the position of the spaceship.
+   	 * @param positionY
+   	 * 			The y-component of the position of the spaceship.
+   	 * @param velocityX
+   	 * 			The x-component of the velocity of the spaceship.
+   	 * @param velocityY
+   	 * 			The y-component of the velocity of the spaceship.
+   	 * @param radius
+   	 * 			The radius of the spaceship.
+   	 * @param angle
+   	 * 			The orientation angle of the spaceship 
+   	 * @effect 	The Ship is initialized with the given parameters, thrustMode false (off) and a density equal
+   	 * 			to the minimum density.
+   	 * 			|this(positionX, positionY, velocityX, velocityY, radius, angle, minDensity, c, false)
+   	 */
+   	public Ship(double positionX, double positionY, double velocityX, 
+   			double velocityY, double radius, double angle) throws IllegalArgumentException {
+   		this(positionX, positionY, velocityX, velocityY, radius, angle, minDensity, c, false);
+   	}
    	
    	/**
-   	 * Initialize this new spaceship with its default values, 
-   	 * the default for the speed limit being the speed of light.
-   	 * @effect 	The spaceship will be set in the origin.
-   	 * 			| this(0,0,0,0,10,0,c)
+   	 * Initialize this new spaceship by setting it in the origin with no velocity, thrusters on false (off),
+	 * a speed limit equal to the speed of light, a radius equal to the minimal radius,
+	 * an orientation angle of 0 radians and a density equal to the minimal density.
+     *
+   	 * @effect 	The spaceship will be initialized with its default values.
+   	 * 			| this(0,0,0,0,rMin,0,minDensity,c,false)
    	*/
    	public Ship(){
-   		super();
-   		setAngle(0);
+   		this(0, 0, 0, 0, rMin, 0, minDensity, c, false);
    	}
 
    	
    	// Position DEFENSIVE
-	/**
-	 * Change the position of this spaceship based on the current position, velocity 
-	 * and given duration.
-	 * @param duration
-	 * 			The considered duration of the movement.
-	 * @post	The position of this spaceship will be set to the position it has after the
-	 * 			considered amount of time.
-	 * 			| setPosition(getXPosition()+duration*getXVelocity(), 
-	 * 						  getYPosition()+duration*getYVelocity())
-	 * @throws	IllegalArgumentException
-	 * 			The given duration is equal to NaN.
-	 * 			| duration == Double.NaN
-	 */
-	public void move(double duration) throws IllegalArgumentException{
-		if (Double.isNaN(duration))
-			throw new IllegalArgumentException("Duration cannot be NaN");
-		double[] current_pos = getPosition();
-		double[] current_vel = getVelocity();
-		setPosition(current_pos[0]+current_vel[0]*duration, current_pos[1]+current_vel[1]*duration);
-	}
-	
 
 	// Velocity TOTAL
 	/**
@@ -146,24 +155,86 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * Change the ship's velocity based on the current velocity, orientation and given amount.
-	 * @param amount
-	 * 			The length of the vector which will be incremented to the ship's velocity vector.
-	 * 			This vector will be parallel to the ship's velocity vector.
-	 * @effect	
-	 * 			| new.getVelocity() == setVelocity(this.getVelocity()[0]+amount*cos(getAngle()),
-	 * 			|					    this.getVelocity()[1]+amount*sin(getAngle()))
+	 * Change the ship's velocity based on the current acceleration, velocity, orientation and given amount of time.
+	 * 
+	 * @param timeAmount
+	 * 			The amount of time that the ship thrusts.
+	 * @effect 
+	 * 			| new.getVelocity() == setVelocity(getVelocity().getX()+getShipAcceleration()*cos(getAngle())*timeAmount,
+	 * 			|					    		   getVelocity().getY()+getShipAcceleration()*sin(getAngle())*timeAmount)
 	 */
-	public void thrust(double amount){
-		if (amount < 0){
-			return;
-		}
-		double[] velocity = getVelocity();
-		velocity[0] = velocity[0] +amount*Math.cos(getAngle());
-		velocity[1] = velocity[1] +amount*Math.sin(getAngle());
+	public void thrust(double timeAmount){
+		Vector velocity = getVelocity();
 
-		setVelocity(velocity[0], velocity[1]);
+		setVelocity(velocity.getX()+getShipAcceleration()*Math.cos(getAngle())*timeAmount, 
+					velocity.getY()+getShipAcceleration()*Math.sin(getAngle())*timeAmount);
 	}
+	
+	/**
+	 * TODO: Documentation
+	 * @return
+	 */
+	public double getShipAcceleration(){
+		return getThrusterForce()/getMass();
+	}
+	
+	/**
+	 * Return the force generated by this ship's thruster.
+	 */
+	public double getThrusterForce(){
+		return this.force;
+	}
+	
+	/**
+	 * variable registering the force of this ship's thruster
+	 */
+	private double force = 1.1 * Math.pow(10,21);
+	
+	
+	// Thrusters total
+	/**
+	 * TODO: Documentation
+	 * @return
+	 */
+	public boolean isShipThrusterActive(){
+		return getThrust();
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @return
+	 */
+	private boolean getThrust() {
+		return this.thrust;
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @param thrust
+	 */
+	public void setThrust(boolean thrust){
+		this.thrust = thrust;
+	}
+	
+	/**
+	 * TODO: Documentation
+	 */
+	public void thrustOn(){
+		setThrust(true);
+	}
+	
+	/**
+	 * TODO: Documentation
+	 */
+	public void thrustOff(){
+		setThrust(false);
+	}
+	
+	/**
+	 * Variable registering whether the truster is On (true) or Off (false).
+	 */
+	private boolean thrust;
+	
 	
 	// Orientation NOMINAL
 	
@@ -221,149 +292,111 @@ public class Ship extends Entity {
 	
 	
 	// Radius DEFENSIVE
-
+	/**
+	 * return the radius of this spaceship, expressed in kilometers.
+	 */
+	@Basic @Immutable @Override
+	public double getRadius(){
+		return this.radius;
+	}	
+	
+	/**
+	 * Variable registering the radius of the spaceship, expressed in kilometers.
+	 */
+	private final double radius;
+	
+	
+	/**
+   	 * Variable registering the minimal radius of a spaceship
+   	 */
+   	static double rMin = 10;
    	
    	// Mass [TOTAL]
-   	// TODO: dit uitwerken
-   	public double getMass(){
-   		return 1.0;
+    /**
+     * Return the total Mass of this spaceship.
+     * 
+     * @return 	The total mass is equal to the sum of the mass of the ship
+     * 		   	and the mass of all the bullets.
+     * 			| result == (4/3)*getRadius()^3*getDensity()
+     * 			|			+ (for each bullet in this ship:
+     * 			|					+ bullet.getMass)
+     * 
+     */
+    public double getMass(){
+    	double radius = getRadius();
+    	double density = getDensity();
+    	double massOfShip = (4/3)*Math.pow(radius,3)*density;
+    	if (loadedBullets.isEmpty())
+    		return massOfShip;
+    	else{
+    		double massOfAllBullets = loadedBullets.size()*loadedBullets.iterator().next().getMass();
+    		return massOfShip + massOfAllBullets;
+    		}
+    }
+    	
+    public double getDensity(){
+    	return this.density;
+    }
+    	
+    public void setDensity(double density){
+    	this.density =density;
+    }
+    	
+    private double density;
+    	
+    	
+    /**
+     * Variable registering the minimum density of the class ships
+     */
+    private static double minDensity = 1.42 * Math.pow(10,12);   	
+    	
+   	
+  	//-----------ASSOCIATIONS-------------
+   	//--------BUllets-------- [DEFENSIVE] except for method fire()
+    /**
+     * TODO: Documentation
+     * @param bullet
+     * @return
+     */
+   	public boolean canHaveAsBullet(Bullet bullet){
+   		if (bullet == null)
+   				return false;
+   		if (loadedBullets.contains(bullet))
+   			return false;
+   		if (bullet.getShip() != null ||bullet.getWorld() != null)
+   			return false;
+   		if (getDistanceBetweenCenters(bullet) + bullet.getRadius() > getRadius())
+   			return false;
+   		else
+   			return true;	
    	}
    	
-	// otherShip related methods
+   	/**
+   	 * TODO: Documentation
+   	 * @param bullets
+   	 * @throws NullPointerException
+   	 * @throws IllegalArgumentException
+   	 */
+   	public void addBullet(Bullet...bullets)throws NullPointerException,IllegalArgumentException{
+   		for(Bullet bullet:bullets){
+   			if(bullet == null)
+   				throw new NullPointerException();
+   			if (!canHaveAsBullet(bullet) || !bullet.canHaveAsShip(this))
+   				throw new IllegalArgumentException();
+   			else
+   				loadedBullets.add(bullet);
+   		}
+   	}
+	
+   	/**
+   	 * A set registering all the bullet that are loaded in this spaceship.
+   	 */
+   	private Set<Bullet> loadedBullets = new HashSet<Bullet>();
+	
    	
-   	
-	/**
-	 * Calculate the distance in between this ship and a given other ship.
-	 * @param otherShip
-	 * 			The other ship involved in the calculation of the distance in between
-	 * 			both ships.
-	 * @return	The distance between this ship and otherShip. The distance may be
-	 * 			negative if both ships overlap. if the this == otherShip the distance will be zero
-	 * 			| if(this== otherShip)
-	 * 			| 	then this.getDistanceBetween(otherShip) == 0
-	 * 			| if(this.overlap(otherShip))
-	 * 			|	then this.getDistanceBetween(otherShip) < 0
-	 * 			| else
-	 * 			| 	this.getDistanceBetween(otherShip) > 0
-	 * 
-	 * @throws	NullPointerException
-	 * 			The given otherShip is null.
-	 * 			| otherShip == null
-	 */
-	public double getDistanceBetween(Ship otherShip)throws NullPointerException{
-		if (otherShip == null)
-			throw new NullPointerException();
-		if (this == otherShip)
-			return 0;
-		
-		double[] thisPos = getPosition();
-		double[] otherPos = otherShip.getPosition();
-				
-		double[] deltaPos = {thisPos[0]- otherPos[0], thisPos[1]- otherPos[1]};
-		double distanceBetweenMid = Math.sqrt(Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0)); 
-		double minRadius = Math.min(getRadius(), otherShip.getRadius());
-		double maxRadius = Math.max(getRadius(), otherShip.getRadius());
-		// The center of a ship is in the others radius.
-		if ((distanceBetweenMid < minRadius) && (2*minRadius <= maxRadius)){
-			return -(maxRadius -distanceBetweenMid-minRadius);
-		}
-			
-		return distanceBetweenMid-(getRadius()+otherShip.getRadius());
-	}
-	
-	/**
-	 * Checks whether two ships overlap.
-	 * @param otherShip
-	 * 			The other ship involved in the calculations.
-	 * @return	True if and only if this ship and otherShip overlap.
-	 * 			| this.getDistanceBetween(otherShip) <= 0
-	 */
-	public boolean overlap(Ship otherShip) throws NullPointerException{
-		if (otherShip == null)
-			throw new NullPointerException("otherShip is null");
-		return getDistanceBetween(otherShip) <= 0;
-	}
-	
-	/**
-	 * @param otherShip
-	 * 			The other ship that collides with this ship.
-	 * @return The resulting double will be the time in seconds that it takes for the two ships to collide.
-	 * 			| let
-	 * 			| 	new = this.move(result)
-	 * 			|   newOtherShip = otherShip.move(result)µ
-	 * 			| in
-	 * 			|	new.getDistanceBetween(newOtherShip) == 0
-	 */
-	public double getTimeToCollision(Ship otherShip) throws NullPointerException,IllegalArgumentException{
-		if (otherShip == null)
-			throw new NullPointerException("otherShip is null");
-		if(overlap(otherShip))
-			throw new IllegalArgumentException("The ships overlap");
-			
-		double totalRadius = getRadius()+otherShip.getRadius();
-		
-		double[] thisPos = getPosition();
-		double[] otherPos = otherShip.getPosition();
-		double[] deltaPos = {thisPos[0]-otherPos[0], thisPos[1]-otherPos[1]};
-		
-		double[] thisVel = getVelocity();
-		double[] otherVel = otherShip.getVelocity();
-		double[] deltaVel = {thisVel[0]-otherVel[0], thisVel[1]-otherVel[1]};
-		
-		double VTimesR = deltaVel[0]*deltaPos[0]+deltaVel[1]*deltaPos[1];
-		double Vquad = Math.pow(deltaVel[0], 2.0)+Math.pow(deltaVel[1], 2.0); 
-		double Rquad = Math.pow(deltaPos[0], 2.0)+Math.pow(deltaPos[1], 2.0);
-		
-		double d = Math.pow(VTimesR, 2.0)- Vquad*(Rquad-Math.pow(totalRadius, 2.0));
-		
-		if (VTimesR >= 0 || d <= 0)
-			return Double.POSITIVE_INFINITY;
-		
-		return -(VTimesR+Math.sqrt(d))/Vquad;
-	}
-	
-	/** 
-	 * Return the position of this ship when this ship and the given other ship collide.
-	 * 	This method returns null if this ship and the given other ship never collide.
-	 * @param otherShip
-	 * 			The other ship that collides with this ship.
-	 * @return 	An array with the x- and y-components of the position where this ship and the given otherShip collide.
-	 * @throws	NullPointerException
-	 * 			The given otherShip is null
-	 * 			| otherShip == null
-	 * @throws IllegalArgumentException
-	 * 			the ship overlaps with the other ship
-	 * 			| this.overlap(otherShip)
-	 */
-	public double[] getCollisionPosition(Ship otherShip) throws NullPointerException,IllegalArgumentException{
-		if (otherShip == null)
-			throw new NullPointerException("otherShip is null");
-		if (overlap(otherShip))
-			throw new IllegalArgumentException("ship overlaps with othership");
-		
-		double deltaT = getTimeToCollision(otherShip);
-		
-		if (Double.isInfinite(deltaT))
-			return null;
-		
-		double[] pos = getPosition();
-		double[] vel = getVelocity();
-		double[] pos1 = otherShip.getPosition();
-		double[] vel1 = otherShip.getVelocity();
-		
-		double theta = Math.acos(( (pos1[0]+vel1[0]*deltaT) - (pos[0]+vel[0]*deltaT))/(getRadius()+otherShip.getRadius()));
-		if (pos[1] +vel[1]*deltaT < pos1[1] + vel1[1]*deltaT)
-			return new double[]{pos[0]+vel[0]*deltaT+getRadius()*Math.cos(theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(theta)};
-		else
-			return new double[]{pos[0]+vel[0]*deltaT+ getRadius()*Math.cos(-theta), pos[1]+vel[1]*deltaT+getRadius()*Math.sin(-theta)};
-	}
-	
-	
 	/**
 	 * Variable registering the Speed of light.
 	 */
-   	static double c = 300000.0;
-   	
-   
+   	static double c = 300000.0;	 
 }
 

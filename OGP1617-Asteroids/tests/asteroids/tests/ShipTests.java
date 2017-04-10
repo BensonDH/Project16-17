@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.junit.Test;
 import asteroids.model.Ship;
+import asteroids.model.Vector;
 
 
 public class ShipTests {
@@ -23,13 +24,13 @@ public class ShipTests {
 	public void constructorNormalCase(){
 		Ship ship = new Ship(10, -10, 500, -500, 20, Math.PI);
 
-		double[] pos = ship.getPosition();
-		assertEquals(10, pos[0], EPSILON);
-		assertEquals(-10, pos[1], EPSILON);
+		Vector pos = ship.getPosition();
+		assertEquals(10, pos.getX(), EPSILON);
+		assertEquals(-10, pos.getY(), EPSILON);
 		
-		double[] vel = ship.getVelocity();
-		assertEquals(500, vel[0], EPSILON);
-		assertEquals(-500, vel[1], EPSILON);
+		Vector vel = ship.getVelocity();
+		assertEquals(500, vel.getX(), EPSILON);
+		assertEquals(-500, vel.getY(), EPSILON);
 		
 		assertEquals(20, ship.getRadius(), EPSILON);
 		assertEquals(Math.PI, ship.getAngle(), EPSILON);
@@ -39,13 +40,13 @@ public class ShipTests {
 	public void constructorNormalCase2(){
 		Ship ship = new Ship(10, 10, 50, 100, 20, 0, 200000);
 		
-		double[] pos = ship.getPosition();
-		assertEquals(10, pos[0], EPSILON);
-		assertEquals(10, pos[1], EPSILON);
+		Vector pos = ship.getPosition();
+		assertEquals(10, pos.getX(), EPSILON);
+		assertEquals(10, pos.getY(), EPSILON);
 		
-		double[] vel = ship.getVelocity();
-		assertEquals(50, vel[0], EPSILON);
-		assertEquals(100, vel[1], EPSILON);
+		Vector vel = ship.getVelocity();
+		assertEquals(50, vel.getX(), EPSILON);
+		assertEquals(100, vel.getY(), EPSILON);
 		
 		assertEquals(20, ship.getRadius(), EPSILON);
 		assertEquals(0, ship.getAngle(), EPSILON);
@@ -56,13 +57,13 @@ public class ShipTests {
 	public void defaultConstructor(){
 		Ship ship = new Ship();
 		
-		double[] pos = ship.getPosition();
-		assertEquals(0, pos[0], EPSILON);
-		assertEquals(0, pos[1], EPSILON);
+		Vector pos = ship.getPosition();
+		assertEquals(0, pos.getX(), EPSILON);
+		assertEquals(0, pos.getY(), EPSILON);
 		
-		double[] vel = ship.getVelocity();
-		assertEquals(0, vel[0], EPSILON);
-		assertEquals(0, vel[1], EPSILON);
+		Vector vel = ship.getVelocity();
+		assertEquals(0, vel.getX(), EPSILON);
+		assertEquals(0, vel.getY(), EPSILON);
 		assertEquals(10, ship.getRadius(), EPSILON);
 		assertEquals(0, ship.getAngle(), EPSILON);
 	}
@@ -81,33 +82,33 @@ public class ShipTests {
 	public void invalidVelocityXConstructor() {
 		Ship ship1 = new Ship(10, 10, Double.NaN, 10, 10, Math.PI);
 
-		assertEquals(0, ship1.getVelocity()[0], EPSILON);
+		assertEquals(0, ship1.getVelocity().getX(), EPSILON);
 	}
 	
 	@Test
 	public void invalidVelocityYConstructor() {
 		Ship ship1 = new Ship(10, 10, 10, Double.NaN, 10, Math.PI);
-		assertEquals(0, ship1.getVelocity()[1], EPSILON);
+		assertEquals(0, ship1.getVelocity().getY(), EPSILON);
 	}
 	
 	@Test
 	public void maxValueVelocityConstructor(){
 		Ship ship1 = new Ship(10, 10, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, Math.PI);
 		
-		double[] vel = ship1.getVelocity();
-		assertEquals(0, vel[0], EPSILON);
-		assertEquals(0, vel[1], EPSILON);
+		Vector vel = ship1.getVelocity();
+		assertEquals(0, vel.getX(), EPSILON);
+		assertEquals(0, vel.getY(), EPSILON);
 		
 		ship1.setVelocity(300000, 300000);
 		vel = ship1.getVelocity();
-		assertEquals(300000*Math.cos(Math.PI/4), vel[0], EPSILON);
-		assertEquals(300000*Math.sin(Math.PI/4), vel[1], EPSILON);
+		assertEquals(300000*Math.cos(Math.PI/4), vel.getX(), EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), vel.getY(), EPSILON);
 		assertEquals(300000, ship1.getTotalVelocity(), EPSILON);
 		
 		ship1.setVelocity(-300000, 300000);
 		vel = ship1.getVelocity();
-		assertEquals(-300000*Math.cos(Math.PI/4), vel[0], EPSILON);
-		assertEquals(300000*Math.sin(Math.PI/4), vel[1], EPSILON);
+		assertEquals(-300000*Math.cos(Math.PI/4), vel.getX(), EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), vel.getY(), EPSILON);
 		assertEquals(300000, ship1.getTotalVelocity(), EPSILON);
 	}
 	
@@ -140,16 +141,16 @@ public class ShipTests {
 	// GETTERS AND SETTERS VALID VALUES TESTS
 	@Test
 	public void testPosition(){
-		double[] position = glob_ship1.getPosition();
+		Vector position = glob_ship1.getPosition();
 		
-		assertEquals(-5, position[0], EPSILON);
-		assertEquals(10, position[1], EPSILON);
+		assertEquals(-5, position.getX(), EPSILON);
+		assertEquals(10, position.getY(), EPSILON);
 		glob_ship1.setPosition(25, -50);
 		
 		position = glob_ship1.getPosition();
 		
-		assertEquals(25, position[0], EPSILON);
-		assertEquals(-50, position[1], EPSILON);
+		assertEquals(25, position.getX(), EPSILON);
+		assertEquals(-50, position.getY(), EPSILON);
 		
 		// Back to original state
 		glob_ship1.setPosition(-5, 10);
@@ -157,16 +158,16 @@ public class ShipTests {
 	}
 
 	public void testVelocity(){
-		double[] velocity = glob_ship1.getVelocity();
+		Vector velocity = glob_ship1.getVelocity();
 		
-		assertEquals(-5, velocity[0], EPSILON);
-		assertEquals(10, velocity[1], EPSILON);
+		assertEquals(-5, velocity.getX(), EPSILON);
+		assertEquals(10, velocity.getY(), EPSILON);
 		assertEquals(Math.sqrt(Math.pow(5, 2.0)+Math.pow(10, 2.0)), glob_ship1.getTotalVelocity(), EPSILON);
 		glob_ship1.setVelocity(30, -50);
 		
 		velocity = glob_ship1.getVelocity();
-		assertEquals(30, velocity[0], EPSILON);
-		assertEquals(-50, velocity[1], EPSILON);
+		assertEquals(30, velocity.getX(), EPSILON);
+		assertEquals(-50, velocity.getY(), EPSILON);
 		assertEquals(Math.sqrt(Math.pow(30, 2.0)+Math.pow(50, 2.0)), glob_ship1.getTotalVelocity(), EPSILON);
 		//Back to original state
 		glob_ship1.setVelocity(-5, 10);
@@ -199,14 +200,14 @@ public class ShipTests {
 	public void testVelocityInvalidValue(){
 		
 		glob_ship1.setVelocity(Double.NaN, 0);
-		double[] velocity = glob_ship1.getVelocity();
-		assertEquals(-5, velocity[0], EPSILON);
-		assertEquals(10, velocity[1], EPSILON);
+		Vector velocity = glob_ship1.getVelocity();
+		assertEquals(-5, velocity.getX(), EPSILON);
+		assertEquals(10, velocity.getY(), EPSILON);
 		
 		glob_ship1.setVelocity(0, Double.NaN);
 		velocity = glob_ship1.getVelocity();
-		assertEquals(-5, velocity[0], EPSILON);
-		assertEquals(10, velocity[1], EPSILON);
+		assertEquals(-5, velocity.getX(), EPSILON);
+		assertEquals(10, velocity.getY(), EPSILON);
 	}
 
 	@Test (expected = AssertionError.class)
@@ -231,24 +232,24 @@ public class ShipTests {
 		// move
 		ship.move(10);
 		
-		double[] newPos = ship.getPosition();
-		assertEquals(100, newPos[0], EPSILON);
-		assertEquals(100, newPos[1], EPSILON);
+		Vector newPos = ship.getPosition();
+		assertEquals(100, newPos.getX(), EPSILON);
+		assertEquals(100, newPos.getY(), EPSILON);
 		
 		// Back to original state
 		ship.setPosition(0, 0);
 		
 		// thrust
 		ship.thrust(100);
-		double[] newVel = ship.getVelocity();
-		assertEquals(50*Math.cos(Math.PI/4), newVel[0], EPSILON);
-		assertEquals(50*Math.sin(Math.PI/4), newVel[0], EPSILON);
+		Vector newVel = ship.getVelocity();
+		assertEquals(50*Math.cos(Math.PI/4), newVel.getX(), EPSILON);
+		assertEquals(50*Math.sin(Math.PI/4), newVel.getY(), EPSILON);
 		
 		// killVelocity
 		ship.killVelocity();
 		newVel = ship.getVelocity();
-		assertEquals(0, newVel[0], EPSILON);
-		assertEquals(0, newVel[1], EPSILON);
+		assertEquals(0, newVel.getX(), EPSILON);
+		assertEquals(0, newVel.getY(), EPSILON);
 		
 		// turn
 		ship.turn(Math.PI);
@@ -269,14 +270,14 @@ public class ShipTests {
 	public void largeAmount(){
 		Ship ship = new Ship();
 		ship.thrust(Double.POSITIVE_INFINITY);
-		double[] vel = ship.getVelocity();
-		assertEquals(0, vel[0], EPSILON);
-		assertEquals(0, vel[1], EPSILON);
+		Vector vel = ship.getVelocity();
+		assertEquals(0, vel.getX(), EPSILON);
+		assertEquals(0, vel.getY(), EPSILON);
 		
 		ship.thrust(450000);
 		vel = ship.getVelocity();
-		assertEquals(300000, vel[0], EPSILON);
-		assertEquals(0, vel[1], EPSILON);
+		assertEquals(300000, vel.getX(), EPSILON);
+		assertEquals(0, vel.getY(), EPSILON);
 	}
 	
 	@Test (expected=AssertionError.class)
@@ -289,9 +290,9 @@ public class ShipTests {
 		Ship ship = new Ship(0, 0, 100, 100, 20, 0);
 		
 		ship.killVelocity();
-		double[] vel = ship.getVelocity();
-		assertEquals(0, vel[0], EPSILON);
-		assertEquals(0, vel[1], EPSILON);
+		Vector vel = ship.getVelocity();
+		assertEquals(0, vel.getX(), EPSILON);
+		assertEquals(0, vel.getY(), EPSILON);
 	}
 
 	

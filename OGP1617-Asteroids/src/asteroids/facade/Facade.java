@@ -51,7 +51,7 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 	 */
 	public double[] getShipPosition(Ship ship) throws ModelException {
 		try {
-		return ship.getPosition();
+		return ship.getPosition().toDoubleArray();
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
@@ -65,7 +65,7 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 	 */
 	public double[] getShipVelocity(Ship ship) throws ModelException {
 		try {
-		return ship.getVelocity();
+		return ship.getVelocity().toDoubleArray();
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
