@@ -14,8 +14,9 @@ public class Bullet extends Entity {
 	 * @param speedLimit
 	 * @throws IllegalArgumentException
 	 */
-	public Bullet(double positionX, double positionY,double velocityX,double velocityY,double radius,double speedLimit)throws IllegalArgumentException{
-		super(positionX,positionY,velocityX,velocityY,speedLimit);
+	public Bullet(double positionX, double positionY, double velocityX, double velocityY,
+				  double radius, double speedLimit) throws IllegalArgumentException{
+		super(positionX, positionY, velocityX, velocityY, speedLimit);
 		setRadius(radius);
 	}
 	
@@ -111,6 +112,49 @@ public class Bullet extends Entity {
 	 * Variable registering the density of bullets.
 	 */
 	private static double density = 7.12*Math.pow(10.0, 12.0);
+	
+	
+	// Bounce counter
+	/**
+	 * Set the amount of times a bullet has bounced off a world boundary to
+	 * the given times.
+     * 
+     * @see implementation
+	 */
+	public void setNbTimesBounced(int times){
+		if (times <= getMaxTimesBounced())
+			nbTimesBounced = times;
+	}
+	/**
+	 * Get the number of times a bullet has bounced off one of the boundaries of
+	 * a world.
+	 * 
+	 * @see implementation	
+	 */
+	public int getNbTimesBounced(){
+		return nbTimesBounced;
+	}
+	
+	/**
+	 * Get the maximum amount of times a bullet can bounce with a world's boundaries.
+	 */
+	@Immutable
+	public int getMaxTimesBounced(){
+		return maxTimesBounced;
+	}
+	
+	/**
+	 * Variable registering the maximum number of times a bullet can bounce off one of
+	 * it's worlds borders.
+	 */
+	private final int maxTimesBounced = 2; 
+	
+
+	
+	/**
+	 * Variable registering how many times a bullet has bounced with a world's border.
+	 */
+	private int nbTimesBounced=0;
 	
 	
 	//----------------ASSOCIATIONS--------------

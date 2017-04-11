@@ -131,8 +131,10 @@ public class World {
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException{
 		if (!canHaveAsEntity(entity))
 			throw new IllegalArgumentException("This entity cannot be added.");
-		else
+		else {
+			entity.setWorld(this);
 			linkedEntities.add(entity);
+		}
 	}
 	
 	/**
@@ -153,8 +155,10 @@ public class World {
 			throw new NullPointerException("entity cannot be null.");
 		else if (!isInWorld(entity))
 			throw new IllegalArgumentException("The given enitity is not in this world.");
-		else
+		else {
+			entity.removeWorld();
 			linkedEntities.remove(entity);
+		}
 	}
 	
 	/**
@@ -194,20 +198,6 @@ public class World {
 	}
 	
 	/**
-	 * Return the set of all the ships that lie in this game world.
-	 * 
-	 * @return	A HashSet containing all ships that lie in this world.
-	 */
-	public Set<Entity> queryShips(){
-		Set<Entity> result = new HashSet<Entity>();
-		for (Entity entity: linkedEntities)
-			if (entity instanceof Ship)
-				result.add(entity);
-		
-		return result;
-	}
-	
-	/**
 	 * Check whether the given entity lies in this world
 	 * 
 	 * @param entity	
@@ -219,17 +209,30 @@ public class World {
 	}
 	
 	// Queries
+	/**
+	 * Return the set of all the ships that lie in this game world.
+	 * 
+	 * @return	A HashSet containing all ships that lie in this world.
+	 */
+	public Set<Ship> queryShips(){
+		Set<Ship> result = new HashSet<Ship>();
+		for (Entity entity: linkedEntities)
+			if (entity instanceof Ship)
+				result.add((Ship)entity);
+		
+		return result;
+	}
 	
 	/**
 	 * Return the set of all the bullets that lie in this game world.
 	 * 
 	 * @return A HashSet containing all the bullets that lie in this world.
 	 */
-	public Set<Entity> queryBullets(){
-		Set<Entity> result = new HashSet<Entity>();
+	public Set<Bullet> queryBullets(){
+		Set<Bullet> result = new HashSet<Bullet>();
 		for (Entity entity: linkedEntities)
 			if (entity instanceof Bullet)
-				result.add(entity);
+				result.add((Bullet)entity);
 		
 		return result;
 	}
@@ -402,7 +405,8 @@ public class World {
 						firstCollisionTime = collisionTime;
 						firstInvolvedEntity = firstEntity;
 						secondInvolvedEntity = linkedEntities.get(secondIndex);
-			}
+			} // End For
+			
 			// Collision with the world border
 			double borderCollisionTime = getTimeToCollisionWithBoundaries(firstEntity);
 			
@@ -410,22 +414,36 @@ public class World {
 				firstCollisionTime = borderCollisionTime;
 				firstInvolvedEntity = firstEntity;
 				secondInvolvedEntity = null;
-		}
+		} //End For 
 		
 		// -- Step 2: Check if firstCollisionTime is greater than deltaT
 		if (firstCollisionTime > deltaT) {
 			//if it is, advance all the entities deltaT seconds
-			
-			// TODO: for all Entities -> move(deltaT) + change velocity
+			advanceEntities(deltaT);
 			return;
 		} else {
 			// if it is not, advance all the entities to the time of collision and handle the collision.
-			
-			// TODO: for all Entities -> move(firstCollisionTime) + change velocity
+			advanceEntities(firstCollisionTime);
 			handleCollision(firstInvolvedEntity, secondInvolvedEntity);
 		}
 			
 		}
+	
+	/**
+	 * Advance all entities that lie in this world with deltaT seconds.
+	 * TODO: Documentation
+	 * @param deltaT
+	 */
+	private void advanceEntities(double deltaT){
+		
+		for (Entity entity: linkedEntities){
+			// Move the entity.
+			entity.move(deltaT);
+			// If this entity is a Ship and its thruster is active, update its velocity
+			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive())
+				((Ship)entity).thrust(deltaT);
+		}
+	}
 
 	/**
 	 * Handle the collision that will happen in this world.
@@ -438,27 +456,108 @@ public class World {
 	 * This is a helper method for the method evolve.
 	 */
 	private void handleCollision(Entity firstEntity, Entity secondEntity){
-		// Case 1: Ship collides with world border
-		if (secondEntity == null){
-			//PROGRESS 
-		}
-		// Case 2: 2 ships collide
-		else if (firstEntity instanceof Ship && secondEntity instanceof Ship){
-			double firstMass = firstEntity.getMass();
-			double secondMass = secondEntity.getMass();
-
-			Vector deltaPos = firstEntity.getPosition().subtract(secondEntity.getPosition());
-			Vector deltaVel = firstEntity.getVelocity().subtract(secondEntity.getVelocity());
-	
-			// TODO: Implementation, Assignment is unclear about J.
-		}
-		// Case3+4: Collision between bullet and ship
-		else if ((firstEntity instanceof Ship && secondEntity instanceof Bullet) || (firstEntity instanceof Bullet && secondEntity instanceof Ship)) {
-			// TODO: Bullet implementation necessary -> bullet.getShip()
+		// -- Case 1: Ship collides with world border
+		if (secondEntity == null){		
+			// It's a horizontal border
+			if (apparentlyCollidesWithHorizontalBorder(firstEntity)) {
+				Vector velocity = firstEntity.getVelocity();
+				// Flip the Y-Component of the 
+				firstEntity.setVelocity(velocity.getX(), -velocity.getY());
+				
+				// If the entity is a bullet, we have to check how many times the bullet has 
+				// bounced off a boundary
+				if (firstEntity instanceof Bullet) {
+					int nbTimesBounced = ((Bullet)firstEntity).getNbTimesBounced();
+					int maxTimesBounced = ((Bullet)firstEntity).getMaxTimesBounced();
+					
+					if (nbTimesBounced == maxTimesBounced)
+						firstEntity.die();
+					else
+						((Bullet)firstEntity).setNbTimesBounced(((Bullet)firstEntity).getNbTimesBounced()+1);
+				}
+				
+				// We're done, exit the method
+				return;
+			}
+			// It's a vertical border
+			else {
+				Vector velocity = firstEntity.getVelocity();
+				// Flip the X-Component of the 
+				firstEntity.setVelocity(-velocity.getX(), velocity.getY());
+				
+				// If the entity is a bullet, we have to check how many times the bullet has 
+				// bounced off a boundary
+				if (firstEntity instanceof Bullet) {
+					int nbTimesBounced = ((Bullet)firstEntity).getNbTimesBounced();
+					int maxTimesBounced = ((Bullet)firstEntity).getMaxTimesBounced();
+					
+					if (nbTimesBounced == maxTimesBounced)
+						firstEntity.die();
+					else
+						((Bullet)firstEntity).setNbTimesBounced(((Bullet)firstEntity).getNbTimesBounced()+1);
+				}
+				// We're done, exit the method
+				return;
+			}
 			
 		}
+		
+		// Case 2: 2 ships collide
+		else if (firstEntity instanceof Ship && secondEntity instanceof Ship){
+			
+			double mi = firstEntity.getMass();
+			double mj = secondEntity.getMass();
+			Vector firstVel = firstEntity.getVelocity();
+			Vector secondVel = secondEntity.getVelocity();
+			
+			Vector deltaPos = firstEntity.getPosition().subtract(secondEntity.getPosition());
+			Vector deltaVel = firstVel.subtract(secondVel);
+	
+			double Jxi = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getX())/
+						 (Math.pow(firstEntity.getRadius(), 2.0)*(mi+mj));
+			double Jyi = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getY())/
+					 	 (Math.pow(firstEntity.getRadius(), 2.0)*(mi+mj));
+			
+			double Jxj = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getX())/
+					 	 (Math.pow(secondEntity.getRadius(), 2.0)*(mi+mj));
+			double Jyj = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getY())/
+				 	 	 (Math.pow(secondEntity.getRadius(), 2.0)*(mi+mj));
+			
+			firstEntity.setVelocity(firstVel.getX()+Jxi/mi, firstVel.getY()+Jyi/mi);
+			secondEntity.setVelocity(secondVel.getX()+Jxj/mj, secondVel.getY()+Jyj/mj);
+			
+			// All done, exit the method.
+			return;
+		}
+			
+		// Case3+4.a: firstEntity is a Ship and secondEntity is a Bullet
+		else if ((firstEntity instanceof Ship && secondEntity instanceof Bullet) {
+			// Check whether the bullet belongs to the ship
+			if (((Ship)firstEntity).getBullets().contains(secondEntity))
+				// PROGRESS: ADD BULLET TO SHIP
+		}
+		
 	}
 	
+	/**
+	 * Check whether the given entity apparently collides with a horizontal border.
+	 * 
+	 * An entity apparently collides with a border if and only if the distance
+	 * between the border and the center of the entity is between 99% and 101%
+	 * of the entity's radius.
+	 * 
+	 * @param entity
+	 * 			The entity that has to be verified.
+	 */
+	private boolean apparentlyCollidesWithHorizontalBorder(Entity entity){
+		double radius = entity.getRadius();
+		double posY = entity.getPosition().getY();
+		
+		return ((0.99*radius <= posY) && (posY <= 1.01*radius))
+				|| ((0.99*radius <= Math.abs(getHeight()-posY)) && (Math.abs(getHeight())-posY) <= 1.01*radius);
+	}
+	
+
 	// Destroy/Terminate methods
 	/**
 	 * Destroy this world by removing all the entities and terminating the world.
@@ -474,7 +573,7 @@ public class World {
 		if (!this.isTerminated()){
 
 			for (Entity entity: linkedEntities){
-				//entity.removeWorld();
+				entity.removeWorld();
 			}
 			linkedEntities.clear();
 			this.isTerminated=true;

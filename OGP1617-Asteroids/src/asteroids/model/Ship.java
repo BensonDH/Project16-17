@@ -66,6 +66,7 @@ public class Ship extends Entity {
    	public Ship(double positionX, double positionY, double velocityX, 
    			double velocityY, double radius, double angle,double density, double speedLimit, boolean thrustMode) throws IllegalArgumentException {
    		super(positionX,positionY,velocityX,velocityY,speedLimit);
+
    		if (Double.isNaN(radius) || Double.isInfinite(radius))
 			throw new IllegalArgumentException("The given value is not valid.");
 		else if (radius < rMin)
@@ -388,6 +389,13 @@ public class Ship extends Entity {
    		}
    	}
 	
+   	/**
+   	 * TODO: Documentation
+   	 */
+   	public Set<Bullet> getBullets(){
+   		return this.loadedBullets;
+   	}
+   	
    	/**
    	 * A set registering all the bullet that are loaded in this spaceship.
    	 */

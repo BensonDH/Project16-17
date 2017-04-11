@@ -166,15 +166,15 @@ public class WorldTests {
 		// Add 3 Bullets and 3 Ships to the testWorld in a random order
 		Entity testEntity1 = new Bullet(10, 10, 0, 0, 10);
 		testWorld.addEntity(testEntity1);
-		Entity testEntity2 = new Ship(20, 10, 0, 0, 10, 0);
+		Entity testEntity2 = new Ship(30, 30, 0, 0, 10, 0);
 		testWorld.addEntity(testEntity2);
-		Entity testEntity3 = new Ship(30, 10, 0, 0, 10, 0);
+		Entity testEntity3 = new Ship(50, 50, 0, 0, 10, 0);
 		testWorld.addEntity(testEntity3);
-		Entity testEntity4 = new Ship(40, 10, 0, 0, 10, 0);
+		Entity testEntity4 = new Ship(70, 70, 0, 0, 10, 0);
 		testWorld.addEntity(testEntity4);
-		Entity testEntity5 = new Bullet(50, 10, 0, 0, 10);
+		Entity testEntity5 = new Bullet(90, 90, 0, 0, 10);
 		testWorld.addEntity(testEntity5);
-		Entity testEntity6 = new Bullet(60, 10, 0, 0, 10);
+		Entity testEntity6 = new Bullet(110, 110, 0, 0, 10);
 		testWorld.addEntity(testEntity6);
 		
 		// queryEntities
@@ -189,7 +189,7 @@ public class WorldTests {
 		assertTrue(entities.contains(testEntity6));
 		
 		// queryBullets
-		Set<Entity> bullets = testWorld.queryBullets();
+		Set<Bullet> bullets = testWorld.queryBullets();
 		
 		assertTrue(bullets.size() == 3);
 		assertTrue(bullets.contains(testEntity1));
@@ -197,12 +197,12 @@ public class WorldTests {
 		assertTrue(bullets.contains(testEntity6));
 		
 		// queryShips
-		Set<Entity> ships = testWorld.queryShips();
-		
+		Set<Ship> ships = testWorld.queryShips();
+
 		assertTrue(ships.size() == 3);
-		assertTrue(bullets.contains(testEntity2));
-		assertTrue(bullets.contains(testEntity3));
-		assertTrue(bullets.contains(testEntity4));
+		assertTrue(ships.contains(testEntity2));
+		assertTrue(ships.contains(testEntity3));
+		assertTrue(ships.contains(testEntity4));
 	}
 
 	// -*-*- getEntityAtPosition tests -*-*-
@@ -250,6 +250,7 @@ public class WorldTests {
 		World testWorld = new World(150, 50);
 		// Test 1: Collision in Upper-Right Quadrant
 		Entity ship1 = new Ship(30, 15, 15, 20, 10, 0);
+		testWorld.addEntity(ship1);
 		
 		assertEquals(1.25, testWorld.getTimeToCollisionWithBoundaries(ship1), EPSILON);
 		
@@ -257,24 +258,33 @@ public class WorldTests {
 		assertEquals(48.75, resultPosition.getX(), EPSILON);
 		assertEquals(40, resultPosition.getY(), EPSILON);
 		
+		testWorld.removeEntity(ship1);
 		// Test 2: Collision in Upper-Left Quadrant
 		Entity ship2 = new Ship(30, 15, -7, 10, 10, 0);
+		testWorld.addEntity(ship2);
+		
 		assertEquals(2.5,testWorld.getTimeToCollisionWithBoundaries(ship2), EPSILON);
 		 
 		resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship2);
 		assertEquals(12.5, resultPosition.getX(), EPSILON);
 		assertEquals(40, resultPosition.getY(), EPSILON);
 		 
+		testWorld.removeEntity(ship2);
 		// Test 3: Collision in Lower-Left Quadrant
 		Entity bullet1 = new Bullet(70, 30, -12,-5, 10);
+		testWorld.addEntity(bullet1);
+		
 		assertEquals(4, testWorld.getTimeToCollisionWithBoundaries(bullet1), EPSILON);
 		
 		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet1);
 		assertEquals(22, resultPosition.getX(), EPSILON);
 		assertEquals(10, resultPosition.getY(), EPSILON);
 		
+		testWorld.removeEntity(bullet1);
 		// Test 4: Collision in the Lower-Right Quadrant
 		Entity bullet2 = new Bullet(90, 20, 15, -5, 10);
+		testWorld.addEntity(bullet2);
+		
 		assertEquals(2, testWorld.getTimeToCollisionWithBoundaries(bullet2), EPSILON);
 		
 		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet2);
@@ -298,9 +308,9 @@ public class WorldTests {
 		World testWorld = new World(150, 150);
 		Entity testEntity1 = new Ship(10,10, 0, 0, 10, 0);
 		testWorld.addEntity(testEntity1);
-		Entity testEntity2 = new Bullet(20, 10, 0, 0, 10);
+		Entity testEntity2 = new Bullet(30, 30, 0, 0, 10);
 		testWorld.addEntity(testEntity2);
-		Entity testEntity3 = new Bullet(30, 10, 0, 0, 10);
+		Entity testEntity3 = new Bullet(50, 50, 0, 0, 10);
 		testWorld.addEntity(testEntity3);
 		
 		// terminate the world

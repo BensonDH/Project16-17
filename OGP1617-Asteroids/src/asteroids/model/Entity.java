@@ -41,13 +41,15 @@ public abstract class Entity {
    	 */
 	public Entity(double positionX, double positionY, double velocityX, 
    			double velocityY, double speedLimit) throws IllegalArgumentException{
-		setPosition(positionX, positionY);
- 		setVelocity(velocityX, velocityY);
- 		
-   		if (isValidSpeedLimit(speedLimit))
+ 		// !Important the speed limit has to be defined before the assignment of the velocity.
+		if (isValidSpeedLimit(speedLimit))
    			this.speedLimit = speedLimit;
    		else
-   			this.speedLimit = c;	
+   			this.speedLimit = c;
+   		
+		setPosition(positionX, positionY);
+ 		setVelocity(velocityX, velocityY);
+	
 	}
 	
 	/**
@@ -61,8 +63,8 @@ public abstract class Entity {
    	public Entity(double positionX, double positionY, double velocityX, 
    			double velocityY) throws IllegalArgumentException{
    		this(positionX, positionY, velocityX, velocityY, c);
-   		
    	}
+   	
 	/**
 	 * Initialize this new entity with its default values.
 	 * 
@@ -71,13 +73,11 @@ public abstract class Entity {
 	 * 			|this(0, 0, 0, 0, c)
 	 */
    	public Entity() {
-   		this(0,0,0,0,c);
-
-   		
+   		this(0, 0, 0, 0, c);
 	}
 	
+   	
 	// Position [DEFENSIVE]
-	
 	/**
 	 * Return the position of this entity.
 	 * @return	The position of this entity represented by a Vector as [xPosition, yPosition].
@@ -264,6 +264,17 @@ public abstract class Entity {
    	
    	/**
    	 * TODO: Documentation
+   	 * @throws IllegalStateException
+   	 */
+   	public void removeWorld() throws IllegalStateException {
+   		if (getWorld() == null)
+   			throw new IllegalStateException("This entity does not have a world.");
+   		
+   		this.world = null;
+   	}
+   	
+   	/**
+   	 * TODO: Documentation
    	 * @return
    	 */
    	public World getWorld(){
@@ -308,6 +319,17 @@ public abstract class Entity {
    		double totalRadius = getRadius() + otherEntity.getRadius();
    		
    		return distance <= 0.99*totalRadius;
+   	}
+   	/**
+   	 * TODO: Documentation
+   	 * @param otherEntity
+   	 * @return
+   	 */
+   	public boolean apparentlyCollide(Entity otherEntity) {
+   		double distance = getDistanceBetweenCenters(otherEntity);
+   		double totalRadius = getRadius() + otherEntity.getRadius();
+   		
+   		return (0.99*totalRadius <= distance) && (distance <= 1.01*totalRadius);  
    	}
 
 	/**
@@ -437,6 +459,18 @@ public abstract class Entity {
 			return new double[]{pos.getX()+vel.getX()*deltaT+ getRadius()*Math.cos(-theta), pos.getY()+vel.getY()*deltaT+getRadius()*Math.sin(-theta)};
 	}
 
+	// Entity termination
+	/**
+	 * Let the entity die
+	 * When an entity dies, it will be removed from its world (if any).
+	 */
+	public void die(){
+		if (getWorld() != null)
+			getWorld().removeEntity(this);
+		
+		setWorld(null);
+	}
+	
 	/**
 	 * Variable registering the Speed of light [km/s].
 	 */
