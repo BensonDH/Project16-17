@@ -64,7 +64,7 @@ public class Ship extends Entity {
    	 * 			| radius == INFINITE OR radius < minimalRadius
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double angle,double density, double speedLimit, boolean thrustMode) throws IllegalArgumentException {
+   			double velocityY, double radius, double angle,double mass, boolean thrustMode, double speedLimit) throws IllegalArgumentException {
    		super(positionX,positionY,velocityX,velocityY,speedLimit);
 
    		if (Double.isNaN(radius) || Double.isInfinite(radius))
@@ -72,10 +72,9 @@ public class Ship extends Entity {
 		else if (radius < rMin)
 			throw new IllegalArgumentException("The given value must be larger than "+rMin+" km.");
 
-   		setDensity(density);
    		this.radius = radius;
    		this.thrust = thrustMode;
-   		
+   		setBaseMass(mass);
    		setAngle(angle);
    	}
 	
@@ -101,8 +100,8 @@ public class Ship extends Entity {
    	 * 			|this(positionX, positionY, velocityX, velocityY, radius, angle, density, c, false)
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
-   			double velocityY, double radius, double angle,double density) throws IllegalArgumentException {
-   		this(positionX, positionY, velocityX, velocityY, radius, angle, density, c, false);
+   			double velocityY, double radius, double angle,double mass) throws IllegalArgumentException {
+   		this(positionX, positionY, velocityX, velocityY, radius, angle, mass, false, c);
    	}
    	
  	/**
@@ -127,7 +126,7 @@ public class Ship extends Entity {
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
    			double velocityY, double radius, double angle) throws IllegalArgumentException {
-   		this(positionX, positionY, velocityX, velocityY, radius, angle, minDensity, c, false);
+   		this(positionX, positionY, velocityX, velocityY, radius, angle, 0, false, c);
    	}
    	
    	/**
@@ -139,7 +138,7 @@ public class Ship extends Entity {
    	 * 			| this(0,0,0,0,rMin,0,minDensity,c,false)
    	*/
    	public Ship(){
-   		this(0, 0, 0, 0, rMin, 0, minDensity, c, false);
+   		this(0, 0, 0, 0, rMin, 0, 0, false, c);
    	}
 
    	
@@ -176,7 +175,7 @@ public class Ship extends Entity {
 	 * @return
 	 */
 	public double getShipAcceleration(){
-		return getThrusterForce()/getMass();
+		return getThrusterForce()/getTotalMass();
 	}
 	
 	/**
@@ -215,20 +214,6 @@ public class Ship extends Entity {
 	 */
 	public void setThrust(boolean thrust){
 		this.thrust = thrust;
-	}
-	
-	/**
-	 * TODO: Documentation
-	 */
-	public void thrustOn(){
-		setThrust(true);
-	}
-	
-	/**
-	 * TODO: Documentation
-	 */
-	public void thrustOff(){
-		setThrust(false);
 	}
 	
 	/**
@@ -323,33 +308,63 @@ public class Ship extends Entity {
      * 			|					+ bullet.getMass)
      * 
      */
-    public double getMass(){
-    	double radius = getRadius();
-    	double density = getDensity();
-    	double massOfShip = (4/3)*Math.pow(radius,3)*density;
+    public double getTotalMass(){
     	if (loadedBullets.isEmpty())
-    		return massOfShip;
+    		return getBaseMass();
     	else{
-    		double massOfAllBullets = loadedBullets.size()*loadedBullets.iterator().next().getMass();
-    		return massOfShip + massOfAllBullets;
-    		}
+    		double massOfAllBullets = loadedBullets.size()*loadedBullets.iterator().next().getTotalMass();
+    		return getBaseMass() + massOfAllBullets;
+    	}
     }
-    	
+    
+    /**
+     * TODO: Documentation
+     * @param mass
+     * @return
+     */
+    public void setBaseMass(double mass){
+    	if (isValidBaseMass(mass))
+    		this.mass = mass;
+    	else
+    		this.mass = (4/3)*Math.PI*Math.pow(getRadius(), 3.0)*getDensity();
+    }
+    
+    /**
+     * TODO: Documentation
+     * @return
+     */
+    public double getBaseMass(){
+    	return this.mass;
+    }
+    
+    /**
+     * TODO: Documentation
+     * @param mass
+     * @return
+     */
+    public boolean isValidBaseMass(double mass){
+    	return mass >= (4/3)*Math.PI*Math.pow(getRadius(), 3.0)*getDensity();
+    }
+    
+    /**
+     * Variable registering the base mass of the spaceship
+     * this is the mass of the ship without the bullets.
+     */
+    private double mass;
+    
+    /**
+     * TODO: Documentation
+     * @return
+     */
     public double getDensity(){
     	return this.density;
     }
     	
-    public void setDensity(double density){
-    	this.density =density;
-    }
-    	
-    private double density;
-    	
-    	
+    
     /**
-     * Variable registering the minimum density of the class ships
+     * Variable registering the density of this ship.
      */
-    private static double minDensity = 1.42 * Math.pow(10,12);   	
+    private final double density = 1.42 * Math.pow(10,12);	
     	
    	
   	//-----------ASSOCIATIONS-------------
@@ -384,8 +399,15 @@ public class Ship extends Entity {
    				throw new NullPointerException();
    			if (!canHaveAsBullet(bullet) || !bullet.canHaveAsShip(this))
    				throw new IllegalArgumentException();
-   			else
+   			else {
+   				if (bullet.getWorld() != null) {
+   					// Remove the bullet from its current world
+   					bullet.getWorld().removeEntity(bullet);
+   				}
+   				bullet.setSourceShip(null);
+   				bullet.setShip(this);
    				loadedBullets.add(bullet);
+   			}
    		}
    	}
 	

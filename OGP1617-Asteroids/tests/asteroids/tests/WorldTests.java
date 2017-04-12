@@ -213,6 +213,7 @@ public class WorldTests {
 		testWorld.addEntity(testEntity);
 		
 		double[] position = {50, 50};
+
 		Entity resultEntity = testWorld.getEntityAtPosition(position);
 		assertTrue(resultEntity == testEntity);
 		

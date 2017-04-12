@@ -2,6 +2,9 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.*;
 import org.junit.Test;
 
@@ -16,7 +19,10 @@ public class RandomTests {
 	
 	@Test
 	public void randTest(){
-	Entity ship1 = new Ship(30, 15, 15, 20, 10, 0);
-
+		Entity ship = new Ship(0, 0, 0, 0, 10, 0);
+		
+		Map <Vector, Entity> testMap = new HashMap<Vector, Entity>();
+		Vector test = new Vector(0, 0);
+		
 	}
 }

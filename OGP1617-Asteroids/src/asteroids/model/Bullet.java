@@ -96,8 +96,8 @@ public class Bullet extends Entity {
 	 * @see implementation 
 	 *
 	 */
-	public double getMass(){
-		return (4.0/3)* Math.PI* Math.pow(this.getRadius(), 3.0)* getDensity();
+	public double getTotalMass(){
+		return (4.0/3)* Math.PI* Math.pow(this.getRadius(), 3.0)*getDensity();
 	}
 	
 	/**
@@ -159,8 +159,6 @@ public class Bullet extends Entity {
 	
 	//----------------ASSOCIATIONS--------------
 	//---------SHIP---------
-	private Ship ship;
-	
 	/**
 	 * Returns the ship it belongs to. 
 	 * 
@@ -174,13 +172,107 @@ public class Bullet extends Entity {
 	/**
 	 * TODO: Documentation
 	 * @param ship
+	 */
+	public void setShip(Ship ship){
+		if (canHaveAsShip(ship)){
+			setIsFired(false);
+			this.ship = ship;
+		}
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @param ship
 	 * @return
 	 */
 	public boolean canHaveAsShip(Ship ship){
-		if (ship == null)
+		if (ship == null && getShip() != null)
 			return false;
 		return ship.canHaveAsBullet(this);
 	}
+	
+	/**
+	 * Variable registering the ship where this bullet lies in.
+	 */
+	private Ship ship;
+	
+	
+	/**
+	 * Get the ship that fired this bullet (the source ship)
+	 * 
+	 * @return if ifFired() then result == getShip()
+	 * 			else result == null
+	 */
+	public Ship getSourceShip(){
+		return this.sourceShip;
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @param ship
+	 */
+	public void setSourceShip(Ship ship){
+		this.sourceShip = ship;
+	}
+	
+	/**
+	 * Variable registering the source ship when fired.
+	 */
+	private Ship sourceShip;
+	
+	/**
+	 * TODO: Documentation
+	 */
+	public void fire(){
+		if (getShip() == null)
+			return;
+		
+		setWorld(getShip().getWorld());
+		setSourceShip(getShip());
+		setShip(null);
+	}
+	
+	/**
+	 * Set the isFired boolean of this bullet to the given newIsFired.
+	 * 
+	 * @param newIsFired
+	 * 			The new status of this bullet, which is fired (true) or not fired (false)
+	 * 
+	 * @see implementation
+	 */
+	public void setIsFired(boolean newIsFired){
+		this.isFired = newIsFired;
+	}
+	
+	/**
+	 * Check whether this bullet is fired.
+	 * 
+	 * @see implementation
+	 */
+	public boolean isFired(){
+		return this.isFired;
+	}
+	
+	/**
+	 * Variable registering whether this bullet is fired or not.
+	 */
+	private boolean isFired;
+	
+
+	/**
+	 * Let the entity die
+	 * When an entity dies, it will be removed from its world (if any).
+	 */
+	@Override
+	public void die(){
+		if (getWorld() != null)
+			getWorld().removeEntity(this);
+
+		setShip(null);
+		setSourceShip(null);
+		this.isTerminated = true;
+	}
+	
 	
 	/**
 	 * Variable registering the Speed of light.

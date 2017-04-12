@@ -134,6 +134,7 @@ public class World {
 		else {
 			entity.setWorld(this);
 			linkedEntities.add(entity);
+			coordEntities.put(entity.getPosition(), entity);
 		}
 	}
 	
@@ -158,6 +159,7 @@ public class World {
 		else {
 			entity.removeWorld();
 			linkedEntities.remove(entity);
+			coordEntities.remove(entity.getPosition());
 		}
 	}
 	
@@ -266,8 +268,9 @@ public class World {
 	 * 			|		result == null
 	 */
 	public Entity getEntityAtPosition(double[] position){
-		// TODO: Implementation -> Posities in EnumSet stoppen
-		return null;
+		Vector convertedPos = new Vector(position[0], position[1]);
+
+		return coordEntities.get(convertedPos);
 	}
 	
 	/**
@@ -386,6 +389,9 @@ public class World {
 			throw new IllegalStateException("This world has been terminated.");
 		if (Double.isNaN(deltaT) || Double.isInfinite(deltaT))
 			throw new IllegalArgumentException("The given deltaT is not valid.");
+		// if there are no entities in this world, we have to do nothing.
+		if (linkedEntities.size() == 0)
+			return;
 		
 		// -- Step 1: predict the first collision
 		double firstCollisionTime = Double.POSITIVE_INFINITY;
@@ -393,18 +399,19 @@ public class World {
 		// secondInvolvedEntity is null if the first collision is with a border.
 		Entity secondInvolvedEntity=null;
 		
-		// first entity
 		for (int firstIndex=0; firstIndex < linkedEntities.size(); firstIndex++){
-			// Collision with another entity
+			// first entity
 			Entity firstEntity = linkedEntities.get(firstIndex);
 			
 			for (int secondIndex= firstIndex+1; secondIndex < linkedEntities.size(); secondIndex++){
-					double collisionTime = firstEntity.getTimeToCollision(linkedEntities.get(secondIndex));
+				Entity secondEntity = linkedEntities.get(secondIndex);
+				double collisionTime = firstEntity.getTimeToCollision(secondEntity);
 					
-					if (collisionTime < firstCollisionTime)
-						firstCollisionTime = collisionTime;
-						firstInvolvedEntity = firstEntity;
-						secondInvolvedEntity = linkedEntities.get(secondIndex);
+				if (collisionTime < firstCollisionTime)
+					firstCollisionTime = collisionTime;
+					firstInvolvedEntity = firstEntity;
+					secondInvolvedEntity = secondEntity;
+					
 			} // End For
 			
 			// Collision with the world border
@@ -415,7 +422,7 @@ public class World {
 				firstInvolvedEntity = firstEntity;
 				secondInvolvedEntity = null;
 		} //End For 
-		
+
 		// -- Step 2: Check if firstCollisionTime is greater than deltaT
 		if (firstCollisionTime > deltaT) {
 			//if it is, advance all the entities deltaT seconds
@@ -426,7 +433,8 @@ public class World {
 			advanceEntities(firstCollisionTime);
 			handleCollision(firstInvolvedEntity, secondInvolvedEntity);
 		}
-			
+		// -- Step 3: recursive call
+		evolve(firstCollisionTime-deltaT);
 		}
 	
 	/**
@@ -442,9 +450,28 @@ public class World {
 			// If this entity is a Ship and its thruster is active, update its velocity
 			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive())
 				((Ship)entity).thrust(deltaT);
+			// Update the coordEntities map
+			updateCoordMap();
 		}
 	}
-
+	
+	/**
+	 * Update the coordinate map that holds all entities in this world,
+	 * with their position as key.
+	 */
+	private void updateCoordMap(){
+		for (Vector key: coordEntities.keySet()){
+			// Remove the outdated coordinate-Entity pair and save the entity
+			Entity currentEntity = coordEntities.remove(key);
+			
+			// Add the Entity again, with updated coordinates
+			coordEntities.put(currentEntity.getPosition(), currentEntity);
+		}
+	}
+	
+	
+	private Map<Vector, Entity> coordEntities = new HashMap<Vector, Entity>();
+	
 	/**
 	 * Handle the collision that will happen in this world.
 	 * 
@@ -505,38 +532,48 @@ public class World {
 		// Case 2: 2 ships collide
 		else if (firstEntity instanceof Ship && secondEntity instanceof Ship){
 			
-			double mi = firstEntity.getMass();
-			double mj = secondEntity.getMass();
+			double mi = firstEntity.getTotalMass();
+			double mj = secondEntity.getTotalMass();
+			double sigma = firstEntity.getRadius()+secondEntity.getRadius();
+			
 			Vector firstVel = firstEntity.getVelocity();
 			Vector secondVel = secondEntity.getVelocity();
 			
 			Vector deltaPos = firstEntity.getPosition().subtract(secondEntity.getPosition());
 			Vector deltaVel = firstVel.subtract(secondVel);
 	
-			double Jxi = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getX())/
-						 (Math.pow(firstEntity.getRadius(), 2.0)*(mi+mj));
-			double Jyi = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getY())/
-					 	 (Math.pow(firstEntity.getRadius(), 2.0)*(mi+mj));
+			double J = (2*mi*mj*deltaVel.dot(deltaPos))/ (sigma*(mi+mj));
 			
-			double Jxj = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getX())/
-					 	 (Math.pow(secondEntity.getRadius(), 2.0)*(mi+mj));
-			double Jyj = (2*mi*mj*(deltaVel.dot(deltaPos))*deltaPos.getY())/
-				 	 	 (Math.pow(secondEntity.getRadius(), 2.0)*(mi+mj));
+			firstEntity.setVelocity(firstVel.getX()+(J*deltaPos.getX())/(sigma*mi),
+									firstVel.getY()+(J*deltaPos.getY())/(sigma*mi));
 			
-			firstEntity.setVelocity(firstVel.getX()+Jxi/mi, firstVel.getY()+Jyi/mi);
-			secondEntity.setVelocity(secondVel.getX()+Jxj/mj, secondVel.getY()+Jyj/mj);
+			secondEntity.setVelocity(secondVel.getX()+(J*deltaPos.getX())/(sigma*mj),
+									 secondVel.getX()+(J*deltaPos.getY())/(sigma*mj));
 			
 			// All done, exit the method.
 			return;
 		}
 			
 		// Case3+4.a: firstEntity is a Ship and secondEntity is a Bullet
-		else if ((firstEntity instanceof Ship && secondEntity instanceof Bullet) {
+		else if (firstEntity instanceof Ship && secondEntity instanceof Bullet){
 			// Check whether the bullet belongs to the ship
-			if (((Ship)firstEntity).getBullets().contains(secondEntity))
-				// PROGRESS: ADD BULLET TO SHIP
+			if (((Bullet)secondEntity).getSourceShip() == firstEntity)
+				((Ship)firstEntity).addBullet((Bullet)secondEntity);
+			// If the bullet does not belong to the ship, both ship and bullet die
+			else 
+				firstEntity.die();
+				secondEntity.die();
 		}
-		
+		// Case3+4.b: firstEntity is a Bullet and secondEntity is a Ship
+		else if (firstEntity instanceof Bullet && secondEntity instanceof Ship) {
+			// Check whether the bullet belongs to the ship
+			if (((Bullet)firstEntity).getSourceShip() == secondEntity)
+				((Ship)secondEntity).addBullet((Bullet)firstEntity);
+			// If the bullet does not belong to the ship, both ship and bullet die
+			else 
+				firstEntity.die();
+				secondEntity.die();
+		}
 	}
 	
 	/**
@@ -587,6 +624,7 @@ public class World {
 	public boolean isTerminated(){
 		return isTerminated;
 	}
+	
 	
 	/**
 	 * Variable registering whether this world is terminated.

@@ -246,7 +246,7 @@ public abstract class Entity {
 	// Radius [DEFENSIVE]
 	public abstract double getRadius();
    	// Mass [TOTAL]
-   	public abstract double getMass();
+   	public abstract double getTotalMass();
 	
    	
    	// World-Entity Relation
@@ -400,6 +400,9 @@ public abstract class Entity {
 			throw new NullPointerException("otherEntity is null");
 		if(overlap(otherEntity))
 			throw new IllegalArgumentException("The entities overlap");
+		// if one of the two entities is not in a world, the two entities will never collide
+		if (getWorld() == null || otherEntity.getWorld() == null)
+			return Double.POSITIVE_INFINITY;
 			
 		double totalRadius = getRadius()+otherEntity.getRadius();
 		
@@ -436,11 +439,14 @@ public abstract class Entity {
 	 * 			the entity overlaps with the other entity
 	 * 			| this.overlap(otherEntity)
 	 */
-	public double[] getCollisionPosition(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
+	public Vector getCollisionPosition(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
 			throw new NullPointerException("otherShip is null");
 		if (overlap(otherEntity))
 			throw new IllegalArgumentException("ship overlaps with othership");
+		// if one of the two entities is not in a world, the two entities will never collide
+		if (getWorld() == null || otherEntity.getWorld() == null)
+			return null;
 		
 		double deltaT = getTimeToCollision(otherEntity);
 		
@@ -454,9 +460,9 @@ public abstract class Entity {
 		
 		double theta = Math.acos(( (pos1.getX()+vel1.getX()*deltaT) - (pos.getX()+vel.getX()*deltaT))/(getRadius()+otherEntity.getRadius()));
 		if (pos.getY() +vel.getY()*deltaT < pos1.getY() + vel1.getY()*deltaT)
-			return new double[]{pos.getX()+vel.getX()*deltaT+getRadius()*Math.cos(theta), pos.getY()+vel.getY()*deltaT+getRadius()*Math.sin(theta)};
+			return new Vector(pos.getX()+vel.getX()*deltaT+getRadius()*Math.cos(theta), pos.getY()+vel.getY()*deltaT+getRadius()*Math.sin(theta));
 		else
-			return new double[]{pos.getX()+vel.getX()*deltaT+ getRadius()*Math.cos(-theta), pos.getY()+vel.getY()*deltaT+getRadius()*Math.sin(-theta)};
+			return new Vector(pos.getX()+vel.getX()*deltaT+ getRadius()*Math.cos(-theta), pos.getY()+vel.getY()*deltaT+getRadius()*Math.sin(-theta));
 	}
 
 	// Entity termination
@@ -469,7 +475,20 @@ public abstract class Entity {
 			getWorld().removeEntity(this);
 		
 		setWorld(null);
+		this.isTerminated=true;
 	}
+	
+	/**
+	 * Check whether this entity is dead (terminated) or not.
+	 */
+	public boolean isDead(){
+		return this.isTerminated;
+	}
+	
+	/**
+	 * Variable registering whether the entity has died.
+	 */
+	protected boolean isTerminated=false;
 	
 	/**
 	 * Variable registering the Speed of light [km/s].
