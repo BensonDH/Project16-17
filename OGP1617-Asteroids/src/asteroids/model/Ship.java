@@ -60,17 +60,15 @@ public class Ship extends Entity {
    	 * @post	the angle will be set to the given angle
    	 * 			| new.getAngle() == angle
    	 * @throws	IllegalArgumentException
-   	 * 			The given radius is infinite or smaller than the minimal radius of this spaceship.
-   	 * 			| radius == INFINITE OR radius < minimalRadius
+   	 * 			The given radius is infinite, NaN or smaller than the minimal radius of this spaceship.
+   	 * 			| radius == INFINITE || radius == Double.isNaN() || radius < getMinimalRadius()
    	 */
    	public Ship(double positionX, double positionY, double velocityX, 
    			double velocityY, double radius, double angle,double mass, boolean thrustMode, double speedLimit) throws IllegalArgumentException {
    		super(positionX,positionY,velocityX,velocityY,speedLimit);
 
-   		if (Double.isNaN(radius) || Double.isInfinite(radius))
-			throw new IllegalArgumentException("The given value is not valid.");
-		else if (radius < rMin)
-			throw new IllegalArgumentException("The given value must be larger than "+rMin+" km.");
+   		if (!isValidRadius(radius))
+			throw new IllegalArgumentException("The given radius is not valid.");
 
    		this.radius = radius;
    		this.thrust = thrustMode;
@@ -135,10 +133,10 @@ public class Ship extends Entity {
 	 * an orientation angle of 0 radians and a density equal to the minimal density.
      *
    	 * @effect 	The spaceship will be initialized with its default values.
-   	 * 			| this(0,0,0,0,rMin,0,minDensity,c,false)
+   	 * 			| this(0, 0, 0, 0, Ship.getMinimalRadius(), 0, minDensity, c, false)
    	*/
    	public Ship(){
-   		this(0, 0, 0, 0, rMin, 0, 0, false, c);
+   		this(0, 0, 0, 0, getMinimumRadius(), 0, 0, false, c);
    	}
 
    	
@@ -164,17 +162,29 @@ public class Ship extends Entity {
 	 * 			|					    		   getVelocity().getY()+getShipAcceleration()*sin(getAngle())*timeAmount)
 	 */
 	public void thrust(double timeAmount){
-		Vector velocity = getVelocity();
+		Vector newVelocity = getVelocity().add(getShipAcceleration().multiply(timeAmount));
 
-		setVelocity(velocity.getX()+getShipAcceleration()*Math.cos(getAngle())*timeAmount, 
-					velocity.getY()+getShipAcceleration()*Math.sin(getAngle())*timeAmount);
+		setVelocity(newVelocity.getX(), newVelocity.getY());
 	}
 	
 	/**
 	 * TODO: Documentation
 	 * @return
 	 */
-	public double getShipAcceleration(){
+	public Vector getShipAcceleration(){
+		double a = getTotalAcceleration(); 
+		
+		return new Vector(a*Math.cos(getAngle()), a*Math.sin(getAngle()));
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @return
+	 */
+	public double getTotalAcceleration(){
+		if (isShipThrusterActive())
+			return 0;
+		
 		return getThrusterForce()/getTotalMass();
 	}
 	
@@ -287,10 +297,26 @@ public class Ship extends Entity {
 	}	
 	
 	/**
+	 * TODO: Documentation
+	 * @param radius
+	 * @return
+	 */
+	public boolean isValidRadius(double radius){
+		return (Double.isNaN(radius) || Double.isInfinite(radius) || radius > getMinimumRadius());
+	}
+	
+	/**
 	 * Variable registering the radius of the spaceship, expressed in kilometers.
 	 */
 	private final double radius;
 	
+	/**
+	 * Return the minimal radius that a Ship has to have.
+	 * @see implementation
+	 */
+	public static double getMinimumRadius(){
+		return Ship.rMin;
+	}
 	
 	/**
    	 * Variable registering the minimal radius of a spaceship
@@ -301,9 +327,9 @@ public class Ship extends Entity {
     /**
      * Return the total Mass of this spaceship.
      * 
-     * @return 	The total mass is equal to the sum of the mass of the ship
-     * 		   	and the mass of all the bullets.
-     * 			| result == (4/3)*getRadius()^3*getDensity()
+     * @return 	The total mass is equal to the mass of the ship plus
+     * 		   	the sum masses of all the loaded bullets.
+     * 			| result == getBaseMass()
      * 			|			+ (for each bullet in this ship:
      * 			|					+ bullet.getMass)
      * 
@@ -326,7 +352,15 @@ public class Ship extends Entity {
     	if (isValidBaseMass(mass))
     		this.mass = mass;
     	else
-    		this.mass = (4/3)*Math.PI*Math.pow(getRadius(), 3.0)*getDensity();
+    		this.mass = getMinimalMass();
+    }
+    
+    /**
+     * TODO: Documentation
+     * @return
+     */
+    public double getMinimalMass(){
+    	return (4/3)*Math.PI*Math.pow(getRadius(), 3.0)*getDensity();
     }
     
     /**
@@ -372,6 +406,43 @@ public class Ship extends Entity {
     /**
      * TODO: Documentation
      * @param bullet
+     */
+    public void fireBullet(Bullet bullet){
+    	if (bullet == null || getWorld() == null || !(loadedBullets.contains(bullet)))
+    		return;
+    	
+    	loadedBullets.remove(bullet);
+    	bullet.setShip(null);
+    	bullet.setSourceShip(this);
+    		
+    	// Update the bullets's velocity
+    	bullet.setVelocity(getFireSpeed()*Math.cos(getAngle()),
+    					   getFireSpeed()*Math.sin(getAngle()));
+    	// Place the bullet right next to the ship
+    	double totalRadius = getRadius() + bullet.getRadius();
+    	Vector curPos = getPosition();
+    	bullet.setPosition(curPos.getX()+totalRadius*Math.cos(getAngle()),
+    					   curPos.getY()+totalRadius*Math.sin(getAngle()));
+    	// Check whether the bullet collides with something
+    	if (!getWorld().contains(bullet))
+    		bullet.die();
+    	else {
+    		Set<Entity> worldEntities = getWorld().queryEntities();
+    		for (Entity entity: worldEntities){
+    			if (bullet.apparentlyCollide(entity)) {
+    				bullet.die();
+    				entity.die();
+    				return;
+    			}
+    		} // end for
+    		bullet.setWorld(getWorld());
+    	}
+    
+    }
+    
+    /**
+     * TODO: Documentation
+     * @param bullet
      * @return
      */
    	public boolean canHaveAsBullet(Bullet bullet){
@@ -399,17 +470,22 @@ public class Ship extends Entity {
    				throw new NullPointerException();
    			if (!canHaveAsBullet(bullet) || !bullet.canHaveAsShip(this))
    				throw new IllegalArgumentException();
+//   			if (bullet.getRadius() >= getRadius())
+//   				throw new IllegalArgumentException("The bullet is too large for this ship!");
    			else {
    				if (bullet.getWorld() != null) {
    					// Remove the bullet from its current world
    					bullet.getWorld().removeEntity(bullet);
    				}
+   				// Update the bullets's position so that it's center coincides with the ship's center
+   				bullet.setPosition(getPosition().getX(), getPosition().getY());
    				bullet.setSourceShip(null);
    				bullet.setShip(this);
    				loadedBullets.add(bullet);
    			}
    		}
    	}
+   	
 	
    	/**
    	 * TODO: Documentation
@@ -423,6 +499,19 @@ public class Ship extends Entity {
    	 */
    	private Set<Bullet> loadedBullets = new HashSet<Bullet>();
 	
+   	/**
+   	 * Get the initial speed of a bullet when fired from this ship.
+   	 * @see implementation
+   	 */
+   	public double getFireSpeed(){
+   		return this.fireSpeed;
+   	}
+   	
+   	/**
+   	 * A variable registering the initial speed of a bullet when fired from this ship.
+   	 */
+   	private double fireSpeed = 250;
+   	
    	
 	/**
 	 * Variable registering the Speed of light.

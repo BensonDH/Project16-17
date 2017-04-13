@@ -2,3 +2,6 @@
 1491848283123	Delete element
 1491941359823	Delete element
 1492023214641	Rename method 'getMass'
+1492113975925	Rename method 'getRadiusMinimum'
+1492113997375	Rename field 'radiusMinimum'
+1492114405578	Rename method 'getMinimalRadius'

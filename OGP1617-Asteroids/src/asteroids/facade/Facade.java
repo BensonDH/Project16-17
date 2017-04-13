@@ -319,7 +319,7 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 	@Override
 	public double getShipAcceleration(Ship ship) throws ModelException {
 		try {
-			return ship.getShipAcceleration();
+			return ship.getTotalAcceleration();
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){

@@ -17,7 +17,11 @@ public class Bullet extends Entity {
 	public Bullet(double positionX, double positionY, double velocityX, double velocityY,
 				  double radius, double speedLimit) throws IllegalArgumentException{
 		super(positionX, positionY, velocityX, velocityY, speedLimit);
-		setRadius(radius);
+		
+		if (isValidRadius(radius))
+			this.radius = radius;
+		else
+			throw new IllegalArgumentException("The given radius is not valid.");
 	}
 	
 	/**
@@ -50,58 +54,44 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * TODO: documentation
-	 * @param radius
-	 * @throws IllegalArgumentException
-	 */
-	private void setRadius(double radius)throws IllegalArgumentException {
-		if (isValidRadius(radius))
-			this.radius = radius;
-		else
-			throw new IllegalArgumentException("The given radius is not valid for this Bullet");
-		
-	}
-	
-	/**
 	 * TODO: Documentation
 	 * @param radius
 	 * @return
 	 */
 	@Basic
-	private boolean isValidRadius(double radius) {
-		return getRadiusMinimum() <= radius;
-	}
-	
-	/**
-	 * Return the minimal radius of this bullet.
-	 */
-	public double getRadiusMinimum(){
-		return this.radiusMinimum;
+	public boolean isValidRadius(double radius) {
+		return (Double.isNaN(radius) || Double.isInfinite(radius) || getMinimumRadius() <= radius);
 	}
 	
 	/**
 	 * variable registering the radius of this bullet
 	 */
-	private double radius;
+	private final double radius;
+	
+	/**
+	 * Return the minimal radius of this bullet.
+	 */
+	public double getMinimumRadius(){
+		return Bullet.minimumRadius;
+	}
 	
 	/**
 	 * Variable registering the minimal radius of this bullet.
 	 */
-	private static double radiusMinimum = 1;
+	private static double minimumRadius = 1;
 	
 	
 	// Mass [TOTAL]
 	/**
-	 * returns the mass of a bullet.
+	 * returns the mass of this bullet.
 	 * @see implementation 
-	 *
 	 */
 	public double getTotalMass(){
 		return (4.0/3)* Math.PI* Math.pow(this.getRadius(), 3.0)*getDensity();
 	}
 	
 	/**
-	 * TODO: documentation + implementation of total programming
+	 * TODO: documentation
 	 */
 	@Basic
 	public double getDensity(){
@@ -116,6 +106,21 @@ public class Bullet extends Entity {
 	
 	// Bounce counter
 	/**
+	 * Get the number of times a bullet has bounced off one of the boundaries of
+	 * a world.
+	 * 
+	 * @see implementation	
+	 */
+	public int getNbTimesBounced(){
+		return nbTimesBounced;
+	}
+	
+	/**
+	 * Variable registering how many times a bullet has bounced with a world's border.
+	 */
+	private int nbTimesBounced=0;
+	
+	/**
 	 * Set the amount of times a bullet has bounced off a world boundary to
 	 * the given times.
      * 
@@ -124,15 +129,6 @@ public class Bullet extends Entity {
 	public void setNbTimesBounced(int times){
 		if (times <= getMaxTimesBounced())
 			nbTimesBounced = times;
-	}
-	/**
-	 * Get the number of times a bullet has bounced off one of the boundaries of
-	 * a world.
-	 * 
-	 * @see implementation	
-	 */
-	public int getNbTimesBounced(){
-		return nbTimesBounced;
 	}
 	
 	/**
@@ -148,13 +144,6 @@ public class Bullet extends Entity {
 	 * it's worlds borders.
 	 */
 	private final int maxTimesBounced = 2; 
-	
-
-	
-	/**
-	 * Variable registering how many times a bullet has bounced with a world's border.
-	 */
-	private int nbTimesBounced=0;
 	
 	
 	//----------------ASSOCIATIONS--------------
@@ -175,7 +164,6 @@ public class Bullet extends Entity {
 	 */
 	public void setShip(Ship ship){
 		if (canHaveAsShip(ship)){
-			setIsFired(false);
 			this.ship = ship;
 		}
 	}
@@ -219,44 +207,6 @@ public class Bullet extends Entity {
 	 * Variable registering the source ship when fired.
 	 */
 	private Ship sourceShip;
-	
-	/**
-	 * TODO: Documentation
-	 */
-	public void fire(){
-		if (getShip() == null)
-			return;
-		
-		setWorld(getShip().getWorld());
-		setSourceShip(getShip());
-		setShip(null);
-	}
-	
-	/**
-	 * Set the isFired boolean of this bullet to the given newIsFired.
-	 * 
-	 * @param newIsFired
-	 * 			The new status of this bullet, which is fired (true) or not fired (false)
-	 * 
-	 * @see implementation
-	 */
-	public void setIsFired(boolean newIsFired){
-		this.isFired = newIsFired;
-	}
-	
-	/**
-	 * Check whether this bullet is fired.
-	 * 
-	 * @see implementation
-	 */
-	public boolean isFired(){
-		return this.isFired;
-	}
-	
-	/**
-	 * Variable registering whether this bullet is fired or not.
-	 */
-	private boolean isFired;
 	
 
 	/**

@@ -136,6 +136,16 @@ public class Vector {
 	}
 	
 	/**
+	 * Return the orientation angle of this vector relative to the positive X-axis.
+	 *  
+	 * @effect
+	 * 			| Math.atan2(getX(), getY())
+	 */
+	public double getOrientationAngle(){
+		return Math.atan2(getX(), getY());
+	}
+	
+	/**
 	 * Return a boolean reflecting whether this vector is identical to the
 	 * given other vector.
 	 * 

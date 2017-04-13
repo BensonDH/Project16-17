@@ -267,6 +267,7 @@ public class World {
 	 * 			| if no such entity exists:
 	 * 			|		result == null
 	 */
+	//TODO: Werkt niet.
 	public Entity getEntityAtPosition(double[] position){
 		Vector convertedPos = new Vector(position[0], position[1]);
 
@@ -389,40 +390,11 @@ public class World {
 			throw new IllegalStateException("This world has been terminated.");
 		if (Double.isNaN(deltaT) || Double.isInfinite(deltaT))
 			throw new IllegalArgumentException("The given deltaT is not valid.");
-		// if there are no entities in this world, we have to do nothing.
-		if (linkedEntities.size() == 0)
-			return;
 		
 		// -- Step 1: predict the first collision
-		double firstCollisionTime = Double.POSITIVE_INFINITY;
-		Entity firstInvolvedEntity=null;
-		// secondInvolvedEntity is null if the first collision is with a border.
-		Entity secondInvolvedEntity=null;
+		Entity[] involvedEntities = getFirstCollisionEntities();
+		double firstCollisionTime = involvedEntities[0].getTimeToCollision(involvedEntities[1]);
 		
-		for (int firstIndex=0; firstIndex < linkedEntities.size(); firstIndex++){
-			// first entity
-			Entity firstEntity = linkedEntities.get(firstIndex);
-			
-			for (int secondIndex= firstIndex+1; secondIndex < linkedEntities.size(); secondIndex++){
-				Entity secondEntity = linkedEntities.get(secondIndex);
-				double collisionTime = firstEntity.getTimeToCollision(secondEntity);
-					
-				if (collisionTime < firstCollisionTime)
-					firstCollisionTime = collisionTime;
-					firstInvolvedEntity = firstEntity;
-					secondInvolvedEntity = secondEntity;
-					
-			} // End For
-			
-			// Collision with the world border
-			double borderCollisionTime = getTimeToCollisionWithBoundaries(firstEntity);
-			
-			if (borderCollisionTime < firstCollisionTime)
-				firstCollisionTime = borderCollisionTime;
-				firstInvolvedEntity = firstEntity;
-				secondInvolvedEntity = null;
-		} //End For 
-
 		// -- Step 2: Check if firstCollisionTime is greater than deltaT
 		if (firstCollisionTime > deltaT) {
 			//if it is, advance all the entities deltaT seconds
@@ -431,7 +403,7 @@ public class World {
 		} else {
 			// if it is not, advance all the entities to the time of collision and handle the collision.
 			advanceEntities(firstCollisionTime);
-			handleCollision(firstInvolvedEntity, secondInvolvedEntity);
+			handleCollision(involvedEntities[0], involvedEntities[1]);
 		}
 		// -- Step 3: recursive call
 		evolve(firstCollisionTime-deltaT);
@@ -594,7 +566,52 @@ public class World {
 				|| ((0.99*radius <= Math.abs(getHeight()-posY)) && (Math.abs(getHeight())-posY) <= 1.01*radius);
 	}
 	
-
+	/**
+	 * Return the two entities that are involved in the next collision of this world.
+	 * If the first element of the returned collection is null, there will be no collision
+	 * in this world.
+	 * When the second element of the returned collection is null, it indicates that the first element of the 
+	 * returned collection will collide with a boundary.
+	 * 
+	 * @return	A 2 dimensional array of Entities that will be involved in the next collision in this world.
+	 */
+	public Entity[] getFirstCollisionEntities(){
+		// if there are no entities in this world, we have to do nothing.
+		if (linkedEntities.size() == 0)
+			return new Entity[]{null, null};
+		
+		
+		double firstCollisionTime = Double.POSITIVE_INFINITY;
+		Entity firstInvolvedEntity=null;
+		// secondInvolvedEntity is null if the first collision is with a border.
+		Entity secondInvolvedEntity=null;
+		
+		for (int firstIndex=0; firstIndex < linkedEntities.size(); firstIndex++){
+			// first entity
+			Entity firstEntity = linkedEntities.get(firstIndex);
+			
+			for (int secondIndex= firstIndex+1; secondIndex < linkedEntities.size(); secondIndex++){
+				Entity secondEntity = linkedEntities.get(secondIndex);
+				double collisionTime = firstEntity.getTimeToCollision(secondEntity);
+					
+				if (collisionTime < firstCollisionTime)
+					firstCollisionTime = collisionTime;
+					firstInvolvedEntity = firstEntity;
+					secondInvolvedEntity = secondEntity;
+					
+			} // End For
+			
+			// Collision with the world border
+			double borderCollisionTime = getTimeToCollisionWithBoundaries(firstEntity);
+			
+			if (borderCollisionTime < firstCollisionTime)
+				firstCollisionTime = borderCollisionTime;
+				firstInvolvedEntity = firstEntity;
+				secondInvolvedEntity = null;
+		} //End For
+		return new Entity[]{firstInvolvedEntity, secondInvolvedEntity};
+	}
+	
 	// Destroy/Terminate methods
 	/**
 	 * Destroy this world by removing all the entities and terminating the world.

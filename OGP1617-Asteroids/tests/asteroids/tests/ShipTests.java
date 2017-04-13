@@ -38,7 +38,7 @@ public class ShipTests {
 
 	@Test
 	public void constructorNormalCase2(){
-		Ship ship = new Ship(10, 10, 50, 100, 20, 0, 200000);
+		Ship ship = new Ship(10, 10, 50, 100, 20, 0, 0);
 		
 		Vector pos = ship.getPosition();
 		assertEquals(10, pos.getX(), EPSILON);
@@ -50,7 +50,7 @@ public class ShipTests {
 		
 		assertEquals(20, ship.getRadius(), EPSILON);
 		assertEquals(0, ship.getAngle(), EPSILON);
-		assertEquals(200000, ship.getSpeedLimit(), EPSILON);
+		assertEquals(ship.getBaseMass(), ship.getMinimalMass(), EPSILON);
 	}
 	
 	@Test
@@ -367,9 +367,9 @@ public class ShipTests {
 		assertEquals(5, timeToCollision, EPSILON);
 		
 		// collisionPosition
-		double[] collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(60, collisionPosition[0], EPSILON);
-		assertEquals(0, collisionPosition[1], EPSILON);
+		Vector collisionPosition = ship1.getCollisionPosition(ship2);
+		assertEquals(60, collisionPosition.getX(), EPSILON);
+		assertEquals(0, collisionPosition.getY(), EPSILON);
 	} 
 	
 	@Test
@@ -394,9 +394,9 @@ public class ShipTests {
 		assertEquals(5, timeToCollision, EPSILON);
 		
 		// collisionPosition
-		double[] collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(10, collisionPosition[0], EPSILON);
-		assertEquals(0, collisionPosition[1], EPSILON);
+		Vector collisionPosition = ship1.getCollisionPosition(ship2);
+		assertEquals(10, collisionPosition.getX(), EPSILON);
+		assertEquals(0, collisionPosition.getY(), EPSILON);
 	} 
 
 	@Test
@@ -427,13 +427,13 @@ public class ShipTests {
 		assertEquals(4, timeToCollision, EPSILON);
 		
 		// collisionPosition
-		double[] collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(0, collisionPosition[0], EPSILON);
-		assertEquals(10, collisionPosition[1], EPSILON);
+		Vector collisionPosition = ship1.getCollisionPosition(ship2);
+		assertEquals(0, collisionPosition.getX(), EPSILON);
+		assertEquals(10, collisionPosition.getY(), EPSILON);
 		
 		collisionPosition = ship2.getCollisionPosition(ship1);
-		assertEquals(0, collisionPosition[0], EPSILON);
-		assertEquals(10, collisionPosition[1], EPSILON);
+		assertEquals(0, collisionPosition.getX(), EPSILON);
+		assertEquals(10, collisionPosition.getY(), EPSILON);
 	}
 
 	@Test
@@ -458,9 +458,9 @@ public class ShipTests {
 		assertEquals(4, timeToCollision, EPSILON);
 		
 		// collisionPosition
-		double[] collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(10+40*Math.cos(Math.PI/3), collisionPosition[0], EPSILON);
-		assertEquals(40*Math.sin(Math.PI/3), collisionPosition[1], EPSILON);
+		Vector collisionPosition = ship1.getCollisionPosition(ship2);
+		assertEquals(10+40*Math.cos(Math.PI/3), collisionPosition.getX(), EPSILON);
+		assertEquals(40*Math.sin(Math.PI/3), collisionPosition.getY(), EPSILON);
 	}
 
 }
