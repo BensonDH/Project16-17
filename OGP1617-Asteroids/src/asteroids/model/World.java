@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hamcrest.core.IsNull;
+
+import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 
 public class World {
@@ -191,11 +193,12 @@ public class World {
 		// and whether entity does not have a world yet.
 		if (!contains(entity) || !(entity.getWorld() == null))
 			return false;
-		
 		// Check whether entity does not overlap with any of the existing entities in this world
 		for (Entity existingEntity: linkedEntities){
-			if (entity.overlapSignificantly(existingEntity))
+			if (entity.overlapSignificantly(existingEntity)){	
 				return false;
+			}
+				
 		}
 		
 		return true;
@@ -305,11 +308,9 @@ public class World {
 	 * 
 	 * @param entity
 	 * 			The entity whose time to collision with a boundary has to be calculated.
-	 * @return
-	 * 			TODO: find something for this.
+	 * @return	The time until the given entity collides with one of the boundaries of this world.
 	 */
-	public double getTimeToCollisionWithBoundaries(Entity entity){
-		//TODO: IMPORTANT: Nog checken of entity in world ligt of moet dat niet?
+	public double getTimeToCollisionWithBoundaries(Entity entity){	
 		double radius = entity.getRadius();
 		Vector current_pos = entity.getPosition();
 		Vector current_vel = entity.getVelocity();
@@ -318,47 +319,32 @@ public class World {
 		// it will never collide with the boundaries.
 		if (!isInWorld(entity) || current_vel.getX() == 0 || current_vel.getY() == 0)
 			return Double.POSITIVE_INFINITY;
+		double x_time;
+		double y_time;
 		// Upper-Right Quadrant
-		else if (current_vel.getX() > 0 && current_vel.getY() > 0){
-			double x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
-			double y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
-			
-			if (x_time <= y_time)
-				return x_time;
-			else
-				return y_time;	
+		if (current_vel.getX() >= 0 && current_vel.getY() >= 0){
+			x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
+			y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
 		}
 		// Upper-Left Quadrant
-		else if (current_vel.getX() < 0 && current_vel.getY() > 0){
-			double x_time = (-radius-current_pos.getX())/current_vel.getX();
-			double y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
-			
-			if (x_time <= y_time)
-				return x_time;
-			else
-				return y_time;	
+		else if (current_vel.getX() <= 0 && current_vel.getY() >= 0){
+			x_time = (radius-current_pos.getX())/current_vel.getX();
+			y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
 		}
 		// Lower-Left Quadrant
-		else if (current_vel.getX() < 0 && current_vel.getY() < 0){
-			double x_time = (-(current_pos.getX()-radius))/current_vel.getX();
-			double y_time = (-(current_pos.getY()-radius))/current_vel.getY();
-			
-			if (x_time <= y_time)
-				return x_time;
-			else
-				return y_time;	
+		else if (current_vel.getX() <= 0 && current_vel.getY() <= 0){
+			x_time = (radius-current_pos.getX())/current_vel.getX();
+			y_time = (radius-current_pos.getY())/current_vel.getY();
 		}
 		// Lower-Right Quadrant
-		else if (current_vel.getX() > 0 && current_vel.getY() < 0){
-			double x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
-			double y_time = (-(current_pos.getY()-radius))/current_vel.getY();
-			
-			if (x_time <= y_time)
-				return x_time;
-			else
-				return y_time;	
+		else {
+			x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
+			y_time = (radius-current_pos.getY())/current_vel.getY();
 		}
-		return 0;
+		if (x_time <= y_time)
+			return x_time;
+		else
+			return y_time;
 	}
 	
 	/**
@@ -370,46 +356,144 @@ public class World {
 	 * 			| result == getTimeToCollisionWithBoundaries(entity)*entity.getVelocity()
 	 */
 	public Vector getPositionToCollisionWithBoundaries(Entity entity){
-		double time = getTimeToCollisionWithBoundaries(entity);
+		double radius = entity.getRadius();
+		Vector current_pos = entity.getPosition();
+		Vector current_vel = entity.getVelocity();
 		
-		if (Double.isInfinite(time))
+		// If the given entity is not moving or does not lie in this world,
+		// it will never collide with the boundaries.
+		if (!isInWorld(entity) || current_vel.getX() == 0 || current_vel.getY() == 0)
 			return null;
-		
-		Vector vel = entity.getVelocity();
-		Vector pos = entity.getPosition();
-		
-		Vector velTimesTime = vel.multiply(time);
-		
-		return pos.add(velTimesTime);
+		double x_time;
+		double y_time;
+		Vector extraPos;
+		// Upper-Right Quadrant
+		if (current_vel.getX() > 0 && current_vel.getY() > 0){
+			x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
+			y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
+			
+			if (x_time <= y_time){
+				extraPos= current_vel.multiply(x_time).add(new Vector(radius, 0));
+				return current_pos.add(extraPos);
+			}
+			extraPos= current_vel.multiply(y_time).add(new Vector(0, radius));
+			return current_pos.add(extraPos);
+		}
+		// Upper-Left Quadrant
+		else if (current_vel.getX() < 0 && current_vel.getY() > 0){
+			x_time = (radius-current_pos.getX())/current_vel.getX();
+			y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
+			
+			if (x_time <= y_time){
+				extraPos= current_vel.multiply(x_time).add(new Vector(-radius, 0));
+				return current_pos.add(extraPos);
+			}
+			extraPos= current_vel.multiply(y_time).add(new Vector(0, radius));
+			return current_pos.add(extraPos);
+		}
+		// Lower-Left Quadrant
+		else if (current_vel.getX() < 0 && current_vel.getY() < 0){
+			x_time = (radius-current_pos.getX())/current_vel.getX();
+			y_time = (radius-current_pos.getY())/current_vel.getY();
+			
+			if (x_time <= y_time){
+				extraPos= current_vel.multiply(x_time).add(new Vector(-radius, 0));
+				return current_pos.add(extraPos);
+			}
+			extraPos= current_vel.multiply(y_time).add(new Vector(0, -radius));
+			return current_pos.add(extraPos);
+		}
+		// Lower-Right Quadrant
+		else {
+			x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
+			y_time = (radius-current_pos.getY())/current_vel.getY();
+			
+			if (x_time <= y_time){
+				extraPos= current_vel.multiply(x_time).add(new Vector(radius, 0));
+				return current_pos.add(extraPos);
+			}
+			extraPos= current_vel.multiply(y_time).add(new Vector(0, -radius));
+			return current_pos.add(extraPos);
+		}
 	}
 	
 	/**
 	 * No Documentation required.
 	 * @param deltaT
 	 */
-	public void evolve(double deltaT){
+	public void evolve(double deltaT, CollisionListener collisionListener){
 		if (isTerminated())
 			throw new IllegalStateException("This world has been terminated.");
-		if (Double.isNaN(deltaT) || Double.isInfinite(deltaT))
-			throw new IllegalArgumentException("The given deltaT is not valid.");
+		if (Double.isNaN(deltaT) || Double.isInfinite(deltaT) || (deltaT < 0))
+			throw new IllegalArgumentException(deltaT+" is not valid.");
 		
 		// -- Step 1: predict the first collision
-		Entity[] involvedEntities = getFirstCollisionEntities();
-		double firstCollisionTime = involvedEntities[0].getTimeToCollision(involvedEntities[1]);
+		FirstCollision firstCollision = getFirstCollision();
+		double firstCollisionTime = firstCollision.getTimeToCollision();
 		
 		// -- Step 2: Check if firstCollisionTime is greater than deltaT
 		if (firstCollisionTime > deltaT) {
 			//if it is, advance all the entities deltaT seconds
 			advanceEntities(deltaT);
-			return;
 		} else {
 			// if it is not, advance all the entities to the time of collision and handle the collision.
 			advanceEntities(firstCollisionTime);
-			handleCollision(involvedEntities[0], involvedEntities[1]);
+			handleCollision(firstCollision, collisionListener);
+		
+			// -- Step 3: recursive call
+			evolve(deltaT-firstCollisionTime, collisionListener);
 		}
-		// -- Step 3: recursive call
-		evolve(firstCollisionTime-deltaT);
-		}
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @return
+	 */
+	public FirstCollision getFirstCollision(){
+		// if there are no entities in this world, we have to do nothing.
+		if (linkedEntities.size() == 0)
+			return new FirstCollision();
+		
+		double firstCollisionTime = Double.POSITIVE_INFINITY;
+		Entity firstInvolvedEntity=null;
+		// secondInvolvedEntity is null if the first collision is with a border.
+		Entity secondInvolvedEntity=null;
+		
+		for (int firstIndex=0; firstIndex < linkedEntities.size(); firstIndex++){
+			// first entity
+			Entity firstEntity = linkedEntities.get(firstIndex);
+			
+			for (int secondIndex= firstIndex+1; secondIndex < linkedEntities.size(); secondIndex++){
+				Entity secondEntity = linkedEntities.get(secondIndex);
+				double collisionTime = firstEntity.getTimeToCollision(secondEntity);
+					
+				if (collisionTime < firstCollisionTime) {
+					firstCollisionTime = collisionTime;
+					firstInvolvedEntity = firstEntity;
+					secondInvolvedEntity = secondEntity;
+				}	
+			} // End For
+			
+			// Collision with the world border
+			double borderCollisionTime = getTimeToCollisionWithBoundaries(firstEntity);
+			
+			if (borderCollisionTime < firstCollisionTime) {
+				firstCollisionTime = borderCollisionTime;
+				firstInvolvedEntity = firstEntity;
+				secondInvolvedEntity = null;
+			}
+		} //End For
+		if (firstInvolvedEntity == null)
+			return new FirstCollision();
+		
+		Vector collisionPosition;
+		if (secondInvolvedEntity == null)
+			collisionPosition = getPositionToCollisionWithBoundaries(firstInvolvedEntity);
+		else
+			collisionPosition = firstInvolvedEntity.getCollisionPosition(secondInvolvedEntity);
+	
+		return new FirstCollision(firstInvolvedEntity, secondInvolvedEntity, collisionPosition, firstCollisionTime);
+	}
 	
 	/**
 	 * Advance all entities that lie in this world with deltaT seconds.
@@ -423,9 +507,9 @@ public class World {
 			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive())
 				((Ship)entity).thrust(deltaT);
 			// Move the entity.
-						entity.move(deltaT);
+			entity.move(deltaT);
 			// Update the coordEntities map
-			updateCoordMap();
+			//updateCoordMap();
 		}
 	}
 	
@@ -456,97 +540,120 @@ public class World {
 	 * 
 	 * This is a helper method for the method evolve.
 	 */
-	private void handleCollision(Entity firstEntity, Entity secondEntity){
-		// -- Case 1: Ship collides with world border
+	private void handleCollision(FirstCollision firstCollision, CollisionListener collisionListener){
+		Entity firstEntity = firstCollision.getFistInvolvedEntity();
+		Entity secondEntity = firstCollision.getSecondInvolvedEntity();
+		Vector collisionPosition = firstCollision.getCollisionPosition();
+		
+		// -- Case 1: Entity collides with world border
 		if (secondEntity == null){		
-			// It's a horizontal border
-			if (apparentlyCollidesWithHorizontalBorder(firstEntity)) {
-				Vector velocity = firstEntity.getVelocity();
-				// Flip the Y-Component of the 
-				firstEntity.setVelocity(velocity.getX(), -velocity.getY());
-				
-				// If the entity is a bullet, we have to check how many times the bullet has 
-				// bounced off a boundary
-				if (firstEntity instanceof Bullet) {
-					int nbTimesBounced = ((Bullet)firstEntity).getNbTimesBounced();
-					int maxTimesBounced = ((Bullet)firstEntity).getMaxTimesBounced();
-					
-					if (nbTimesBounced == maxTimesBounced)
-						firstEntity.die();
-					else
-						((Bullet)firstEntity).setNbTimesBounced(((Bullet)firstEntity).getNbTimesBounced()+1);
-				}
-				
-				// We're done, exit the method
-				return;
-			}
-			// It's a vertical border
-			else {
-				Vector velocity = firstEntity.getVelocity();
-				// Flip the X-Component of the 
-				firstEntity.setVelocity(-velocity.getX(), velocity.getY());
-				
-				// If the entity is a bullet, we have to check how many times the bullet has 
-				// bounced off a boundary
-				if (firstEntity instanceof Bullet) {
-					int nbTimesBounced = ((Bullet)firstEntity).getNbTimesBounced();
-					int maxTimesBounced = ((Bullet)firstEntity).getMaxTimesBounced();
-					
-					if (nbTimesBounced == maxTimesBounced)
-						firstEntity.die();
-					else
-						((Bullet)firstEntity).setNbTimesBounced(((Bullet)firstEntity).getNbTimesBounced()+1);
-				}
-				// We're done, exit the method
-				return;
-			}
+			if(collisionListener != null)
+				collisionListener.boundaryCollision(firstEntity, collisionPosition.getX(), collisionPosition.getY());
 			
+			borderCollision(firstEntity);	
+			// We're done, exit the method
+			return;
 		}
 		
+		if (collisionListener != null)
+			collisionListener.objectCollision(firstEntity, secondEntity, collisionPosition.getX(), collisionPosition.getY());
+		
 		// Case 2: 2 ships collide
-		else if (firstEntity instanceof Ship && secondEntity instanceof Ship){
-			
-			double mi = firstEntity.getTotalMass();
-			double mj = secondEntity.getTotalMass();
-			double sigma = firstEntity.getRadius()+secondEntity.getRadius();
-			
-			Vector firstVel = firstEntity.getVelocity();
-			Vector secondVel = secondEntity.getVelocity();
-			
-			Vector deltaPos = firstEntity.getPosition().subtract(secondEntity.getPosition());
-			Vector deltaVel = firstVel.subtract(secondVel);
-	
-			double J = (2*mi*mj*deltaVel.dot(deltaPos))/ (sigma*(mi+mj));
-			
-			firstEntity.setVelocity(firstVel.getX()+(J*deltaPos.getX())/(sigma*mi),
-									firstVel.getY()+(J*deltaPos.getY())/(sigma*mi));
-			
-			secondEntity.setVelocity(secondVel.getX()+(J*deltaPos.getX())/(sigma*mj),
-									 secondVel.getX()+(J*deltaPos.getY())/(sigma*mj));
-			
-			// All done, exit the method.
+		if (firstEntity instanceof Ship && secondEntity instanceof Ship){
+			shipCollision((Ship)firstEntity, (Ship)secondEntity);
+
+			// We're done, exit the method
 			return;
 		}
 			
-		// Case3+4.a: firstEntity is a Ship and secondEntity is a Bullet
-		else if (firstEntity instanceof Ship && secondEntity instanceof Bullet){
-			// Check whether the bullet belongs to the ship
-			if (((Bullet)secondEntity).getSourceShip() == firstEntity)
-				((Ship)firstEntity).addBullet((Bullet)secondEntity);
-			// If the bullet does not belong to the ship, both ship and bullet die
-			else 
-				firstEntity.die();
-				secondEntity.die();
+		// Case3: firstEntity is a Ship and secondEntity is a Bullet or vice versa
+		else if ((firstEntity instanceof Ship && secondEntity instanceof Bullet) ||
+				 (secondEntity instanceof Ship && firstEntity instanceof Bullet)){
+			if (firstEntity instanceof Ship)
+				shipBulletCollision((Ship)firstEntity, (Bullet)secondEntity);
+			else
+				shipBulletCollision((Ship)secondEntity, (Bullet)firstEntity);
 		}
-		// Case3+4.b: firstEntity is a Bullet and secondEntity is a Ship
-		else if (firstEntity instanceof Bullet && secondEntity instanceof Ship) {
-			// Check whether the bullet belongs to the ship
-			if (((Bullet)firstEntity).getSourceShip() == secondEntity)
-				((Ship)secondEntity).addBullet((Bullet)firstEntity);
-			// If the bullet does not belong to the ship, both ship and bullet die
-			else 
-				firstEntity.die();
-				secondEntity.die();
+		// Case4: both entities are bullets
+		else if (firstEntity instanceof Bullet && secondEntity instanceof Bullet){
+			firstEntity.die();
+			secondEntity.die();
+		}
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @param entity
+	 */
+	private void borderCollision(Entity entity){
+		// If the entity is a bullet, we have to check how many times the bullet has 
+		// bounced off a boundary
+		if (entity instanceof Bullet) {
+			int nbTimesBounced = ((Bullet)entity).getNbTimesBounced();
+			int maxTimesBounced = ((Bullet)entity).getMaxTimesBounced();
+			
+			if (nbTimesBounced == maxTimesBounced)
+				entity.die();
+			else
+				((Bullet)entity).setNbTimesBounced(((Bullet)entity).getNbTimesBounced()+1);
+		}
+		
+		// It's a horizontal border
+		if (apparentlyCollidesWithHorizontalBorder(entity)) {
+			Vector velocity = entity.getVelocity();
+			// Flip the Y-Component of the 
+			entity.setVelocity(velocity.getX(), -velocity.getY());
+		}
+		// It's a vertical border
+		else {
+			Vector velocity = entity.getVelocity();
+			// Flip the X-Component of the 
+			entity.setVelocity(-velocity.getX(), velocity.getY());
+			
+			// We're done, exit the method
+			return;
+		}
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @param firstShip
+	 * @param secondShip
+	 */
+	private void shipCollision(Ship firstShip, Ship secondShip){
+		double mi = firstShip.getTotalMass();
+		double mj = secondShip.getTotalMass();
+		double sigma = firstShip.getRadius()+secondShip.getRadius();
+		
+		Vector firstVel = firstShip.getVelocity();
+		Vector secondVel = secondShip.getVelocity();
+		
+		Vector deltaPos = secondShip.getPosition().subtract(firstShip.getPosition());
+		Vector deltaVel = secondVel.subtract(firstVel);
+
+		double J = (2*mi*mj*deltaVel.dot(deltaPos))/ (sigma*(mi+mj));
+		
+		firstShip.setVelocity(firstVel.getX()+(J*deltaPos.getX())/(sigma*mi),
+								firstVel.getY()+(J*deltaPos.getY())/(sigma*mi));
+		
+		secondShip.setVelocity(secondVel.getX()-(J*deltaPos.getX())/(sigma*mj),
+								 secondVel.getX()-(J*deltaPos.getY())/(sigma*mj));
+	}
+	
+	/**
+	 * TODO: Documentation
+	 * @param ship
+	 * @param bullet
+	 */
+	private void shipBulletCollision(Ship ship, Bullet bullet){
+		// Check whether the bullet belongs to the ship
+		Ship temp = bullet.getSourceShip();
+		if (bullet.getSourceShip() == ship)
+			ship.addBullet(bullet);
+		// If the bullet does not belong to the ship, both ship and bullet die
+		else {
+			ship.die();
+			bullet.die();
 		}
 	}
 	
@@ -569,51 +676,6 @@ public class World {
 				|| ((0.99*radius <= Math.abs(getHeight()-posY)) && (Math.abs(getHeight())-posY) <= 1.01*radius);
 	}
 	
-	/**
-	 * Return the two entities that are involved in the next collision of this world.
-	 * If the first element of the returned collection is null, there will be no collision
-	 * in this world.
-	 * When the second element of the returned collection is null, it indicates that the first element of the 
-	 * returned collection will collide with a boundary.
-	 * 
-	 * @return	A 2 dimensional array of Entities that will be involved in the next collision in this world.
-	 */
-	public Entity[] getFirstCollisionEntities(){
-		// if there are no entities in this world, we have to do nothing.
-		if (linkedEntities.size() == 0)
-			return new Entity[]{null, null};
-		
-		
-		double firstCollisionTime = Double.POSITIVE_INFINITY;
-		Entity firstInvolvedEntity=null;
-		// secondInvolvedEntity is null if the first collision is with a border.
-		Entity secondInvolvedEntity=null;
-		
-		for (int firstIndex=0; firstIndex < linkedEntities.size(); firstIndex++){
-			// first entity
-			Entity firstEntity = linkedEntities.get(firstIndex);
-			
-			for (int secondIndex= firstIndex+1; secondIndex < linkedEntities.size(); secondIndex++){
-				Entity secondEntity = linkedEntities.get(secondIndex);
-				double collisionTime = firstEntity.getTimeToCollision(secondEntity);
-					
-				if (collisionTime < firstCollisionTime)
-					firstCollisionTime = collisionTime;
-					firstInvolvedEntity = firstEntity;
-					secondInvolvedEntity = secondEntity;
-					
-			} // End For
-			
-			// Collision with the world border
-			double borderCollisionTime = getTimeToCollisionWithBoundaries(firstEntity);
-			
-			if (borderCollisionTime < firstCollisionTime)
-				firstCollisionTime = borderCollisionTime;
-				firstInvolvedEntity = firstEntity;
-				secondInvolvedEntity = null;
-		} //End For
-		return new Entity[]{firstInvolvedEntity, secondInvolvedEntity};
-	}
 	
 	// Destroy/Terminate methods
 	/**

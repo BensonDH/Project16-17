@@ -267,10 +267,7 @@ public abstract class Entity {
    	 * @throws IllegalStateException
    	 */
    	public void removeWorld() throws IllegalStateException {
-   		if (getWorld() == null)
-   			throw new IllegalStateException("This entity does not have a world.");
-   		else
-   			this.world = null;
+   		this.world = null;
    	}
    	
    	/**
@@ -398,8 +395,8 @@ public abstract class Entity {
 	public double getTimeToCollision(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
 			throw new NullPointerException("otherEntity is null");
-		if(overlap(otherEntity))
-			throw new IllegalArgumentException("The entities overlap");
+		if(overlapSignificantly(otherEntity))
+			throw new IllegalArgumentException("The entities overlap significantly");
 		// if one of the two entities is not in a world, the two entities will never collide
 		if (getWorld() == null || otherEntity.getWorld() == null)
 			return Double.POSITIVE_INFINITY;
@@ -444,9 +441,9 @@ public abstract class Entity {
 	 */
 	public Vector getCollisionPosition(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
-			throw new NullPointerException("otherShip is null");
-		if (overlap(otherEntity))
-			throw new IllegalArgumentException("ship overlaps with othership");
+			throw new NullPointerException("otherEntity is null");
+		if (overlapSignificantly(otherEntity))
+			throw new IllegalArgumentException("This entity overlaps significantly with otherEntity");
 		// if one of the two entities is not in a world, the two entities will never collide
 		if (getWorld() == null || otherEntity.getWorld() == null)
 			return null;
@@ -477,7 +474,7 @@ public abstract class Entity {
 		if (getWorld() != null)
 			getWorld().removeEntity(this);
 		
-		setWorld(null);
+		removeWorld();
 		this.isTerminated=true;
 	}
 	

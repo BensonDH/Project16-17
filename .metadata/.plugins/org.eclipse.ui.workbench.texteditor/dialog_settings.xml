@@ -13,20 +13,20 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="rMin" key="selection"/>
+		<item value="boundaryCollision" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="setShip"/>
+			<item value="getEntityAt"/>
 			<item value="rMin"/>
 			<item value="die"/>
 			<item value="canHaveAsBullet"/>
 			<item value="system"/>
 			<item value="speedLimit"/>
 			<item value="can"/>
-			<item value="300000"/>
-			<item value="c"/>
 		</list>
 		<list key="replacehistory">
 		</list>

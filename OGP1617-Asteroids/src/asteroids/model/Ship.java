@@ -1,5 +1,7 @@
 package asteroids.model;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hamcrest.core.IsNull;
@@ -181,7 +183,7 @@ public class Ship extends Entity {
 	 * @return
 	 */
 	public double getTotalAcceleration(){
-		if (isShipThrusterActive())
+		if (!isShipThrusterActive())
 			return 0;
 		
 		return getThrusterForce()/getTotalMass();
@@ -412,11 +414,11 @@ public class Ship extends Entity {
      * TODO: Documentation
      * @param bullet
      */
-    public void fireBullet(Bullet bullet){
-    	if (bullet == null || getWorld() == null || !(loadedBullets.contains(bullet)))
+    public void fireBullet(){
+    	if (loadedBullets.size() == 0 || getWorld() == null)
     		return;
     	
-    	loadedBullets.remove(bullet);
+    	Bullet bullet = loadedBullets.remove(loadedBullets.size()-1);
     	bullet.setShip(null);
     	bullet.setSourceShip(this);
     		
@@ -426,23 +428,22 @@ public class Ship extends Entity {
     	// Place the bullet right next to the ship
     	double totalRadius = getRadius() + bullet.getRadius();
     	Vector curPos = getPosition();
-    	bullet.setPosition(curPos.getX()+totalRadius*Math.cos(getAngle()+Math.PI/2),
-    					   curPos.getY()+totalRadius*Math.sin(getAngle()+Math.PI/2));
+    	bullet.setPosition(curPos.getX()+totalRadius*Math.cos(getAngle()),
+    					   curPos.getY()+totalRadius*Math.sin(getAngle()));
     	// Check whether the bullet collides with something
     	if (!getWorld().contains(bullet))
     		bullet.die();
     	else {
     		Set<Entity> worldEntities = getWorld().queryEntities();
     		for (Entity entity: worldEntities){
-    			if (bullet.apparentlyCollide(entity)) {
+    			if (entity != this && bullet.overlapSignificantly(entity)) {
     				bullet.die();
     				entity.die();
     				return;
     			}
     		} // end for
-    		bullet.setWorld(getWorld());
-    	}
-    
+    		getWorld().addEntity(bullet);
+    	} 
     }
     
     /**
@@ -452,12 +453,12 @@ public class Ship extends Entity {
      */
    	public boolean canHaveAsBullet(Bullet bullet){
    		if (bullet == null)
-   				return false;
+   			return false;
    		if (loadedBullets.contains(bullet))
    			return false;
-   		if (bullet.getShip() != null ||bullet.getWorld() != null)
+   		if (bullet.getShip() != null)
    			return false;
-   		if (getDistanceBetweenCenters(bullet) + bullet.getRadius() > getRadius())
+   		if (bullet.getRadius() >= getRadius())
    			return false;
    		else
    			return true;	
@@ -473,10 +474,8 @@ public class Ship extends Entity {
    		for(Bullet bullet:bullets){
    			if(bullet == null)
    				throw new NullPointerException();
-   			if (!canHaveAsBullet(bullet) || !bullet.canHaveAsShip(this))
+   			if (!bullet.canHaveAsShip(this))
    				throw new IllegalArgumentException();
-//   			if (bullet.getRadius() >= getRadius())
-//   				throw new IllegalArgumentException("The bullet is too large for this ship!");
    			else {
    				if (bullet.getWorld() != null) {
    					// Remove the bullet from its current world
@@ -496,24 +495,28 @@ public class Ship extends Entity {
    	 * TODO: Documentation
    	 */
    	public Set<Bullet> getBullets(){
-   		return this.loadedBullets;
+   		return new HashSet<Bullet>(loadedBullets);
    	}
    	
+   	/**
+   	 * TODO: Documentation
+   	 * @param bullet
+   	 * @throws IllegalArgumentException
+   	 * @throws NullPointerException
+   	 */
    	public void removeBullet(Bullet bullet)throws IllegalArgumentException, NullPointerException {
 		if (bullet == null || bullet.isTerminated)
 			throw new NullPointerException("bullet that is terminated can't be in loaded in a ship");
 		if (!(loadedBullets.contains(bullet)))
 			throw new IllegalArgumentException("the given bullet is not loaded in the Ship");
 		this.loadedBullets.remove(bullet);
-			
-				
-		
+		bullet.setShip(null);
 	}	
    	
    	/**
    	 * A set registering all the bullet that are loaded in this spaceship.
    	 */
-   	private Set<Bullet> loadedBullets = new HashSet<Bullet>();
+   	private List<Bullet> loadedBullets = new ArrayList<Bullet>();
 	
    	/**
    	 * Get the initial speed of a bullet when fired from this ship.

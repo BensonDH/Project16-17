@@ -6,6 +6,7 @@ import java.util.Set;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
 import asteroids.model.Ship;
+import asteroids.model.Vector;
 import asteroids.model.World;
 import asteroids.part1.facade.IFacade;
 import asteroids.part2.CollisionListener;
@@ -28,6 +29,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		}	catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -43,6 +46,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -58,6 +63,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -72,6 +79,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -86,6 +95,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -100,6 +111,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -115,6 +128,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -130,6 +145,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 	
@@ -144,6 +161,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 	
@@ -160,6 +179,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}	
 	}
 
@@ -196,6 +217,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -212,6 +235,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -232,6 +257,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 	
@@ -247,6 +274,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -258,6 +287,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -269,6 +300,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -280,6 +313,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -291,6 +326,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -302,6 +339,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -313,6 +352,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -324,6 +365,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -336,6 +379,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -347,6 +392,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 		
 	}
@@ -359,6 +406,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -370,6 +419,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -381,6 +432,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -392,6 +445,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -403,6 +458,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -414,6 +471,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -425,6 +484,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -436,6 +497,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -447,6 +510,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -458,6 +523,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -469,6 +536,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -480,6 +549,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -491,6 +562,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -502,6 +575,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -513,6 +588,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -524,6 +601,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -535,6 +614,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -546,6 +627,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -557,6 +640,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -568,6 +653,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -579,6 +666,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -590,19 +679,35 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
 	@Override
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			ship.removeBullet(bullet);
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		}
 	}
 
 	@Override
 	public void fireBullet(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			ship.fireBullet();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		}
 	}
 
 	@Override
@@ -613,6 +718,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -624,6 +731,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
@@ -635,13 +744,19 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
 		}
 	}
 
 	@Override
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
 		try {
-			return ((Entity)entity1).getCollisionPosition((Entity)entity2).toDoubleArray();
+			Vector result = ((Entity)entity1).getCollisionPosition((Entity)entity2);
+			if (result == null)
+				return null;
+			else
+				return result.toDoubleArray();
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
@@ -651,20 +766,41 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 
 	@Override
 	public double getTimeNextCollision(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return world.getFirstCollision().getTimeToCollision();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		}
 	}
 
 	@Override
 	public double[] getPositionNextCollision(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return world.getFirstCollision().getCollisionPosition().toDoubleArray();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		}
 	}
 
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.evolve(dt, collisionListener);
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		}
 	}
 
 	@Override
@@ -675,8 +811,14 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return world.queryEntities();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		}
 	}
-
 }

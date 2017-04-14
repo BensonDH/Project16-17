@@ -174,8 +174,9 @@ public class Bullet extends Entity {
 	 * @return
 	 */
 	public boolean canHaveAsShip(Ship ship){
-		if (ship == null && getShip() != null)
-			return false;
+		// Ship becomes null when the bullet is fired.
+		if (ship == null)
+			return true;
 		return ship.canHaveAsBullet(this);
 	}
 	
@@ -215,11 +216,14 @@ public class Bullet extends Entity {
 	 */
 	@Override
 	public void die(){
-		if (getWorld() != null)
+		if (getWorld() != null) {
 			getWorld().removeEntity(this);
-		if( getShip() != null)
+			removeWorld();
+		}
+		if(getShip() != null) {
 			getShip().removeBullet(this);
-		setShip(null);
+			setShip(null);
+		}
 		setSourceShip(null);
 		this.isTerminated = true;
 	}
