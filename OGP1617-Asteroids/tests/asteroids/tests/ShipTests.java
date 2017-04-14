@@ -6,6 +6,7 @@ import org.junit.*;
 import org.junit.Test;
 import asteroids.model.Ship;
 import asteroids.model.Vector;
+import asteroids.model.World;
 
 
 public class ShipTests {
@@ -348,11 +349,13 @@ public class ShipTests {
 	@Test
 	public void simpleCase1(){
 		// SCENARIO: ship1 is moving right towards ship2 with a velocity of [10, 0].
-		//			 ship2 is standing still at [70, 0].
+		//			 ship2 is standing still at [90, 20].
 		//			 ship1 and ship 2 have a radius of 10.
-		Ship ship1 = new Ship(0, 0, 10, 0, 10, 0);
-		Ship ship2 = new Ship(70, 0, 0, 0, 10, 0);
-		
+		Ship ship1 = new Ship(20, 20, 10, 0, 10, 0);
+		Ship ship2 = new Ship(90, 20, 0, 0, 10, 0);
+		World world = new World(10000,10000);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		// distanceBetween
 		double distanceBetween = ship1.getDistanceBetween(ship2);
 		assertEquals(50, distanceBetween, EPSILON);
@@ -368,8 +371,8 @@ public class ShipTests {
 		
 		// collisionPosition
 		Vector collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(60, collisionPosition.getX(), EPSILON);
-		assertEquals(0, collisionPosition.getY(), EPSILON);
+		assertEquals(80, collisionPosition.getX(), EPSILON);
+		assertEquals(20, collisionPosition.getY(), EPSILON);
 	} 
 	
 	@Test
@@ -377,9 +380,11 @@ public class ShipTests {
 		// SCENARIO: ship1 is moving left towards ship2 with a velocity of [-10, 0].
 		//			 ship2 is standing still at [0, 0].
 		//			 ship1 and ship 2 have a radius of 10.
-		Ship ship1 = new Ship(70, 0, -10, 0, 10, 0);
-		Ship ship2 = new Ship(0, 0, 0, 0, 10, 0);
-		
+		Ship ship1 = new Ship(90, 20, -10, 0, 10, 0);
+		Ship ship2 = new Ship(20, 20, 0, 0, 10, 0);
+		World world = new World(10000,10000);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		// distanceBetween
 		double distanceBetween = ship1.getDistanceBetween(ship2);
 		assertEquals(50, distanceBetween, EPSILON);
@@ -395,8 +400,8 @@ public class ShipTests {
 		
 		// collisionPosition
 		Vector collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(10, collisionPosition.getX(), EPSILON);
-		assertEquals(0, collisionPosition.getY(), EPSILON);
+		assertEquals(30, collisionPosition.getX(), EPSILON);
+		assertEquals(20, collisionPosition.getY(), EPSILON);
 	} 
 
 	@Test
@@ -404,9 +409,11 @@ public class ShipTests {
 		// SCENARIO: ship1 is standing still in the origin	
 		// 		     ship2 is moving right towards ship1 from above
 		
-		Ship ship1 = new Ship(0, 0, 0, 0,10, 0);
-		Ship ship2 = new Ship(0, 60, 0, -10, 10, 0);
-		
+		Ship ship1 = new Ship(20, 20, 0, 0,10, 0);
+		Ship ship2 = new Ship(20, 80, 0, -10, 10, 0);
+		World world = new World(10000,10000);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		// distanceBetween
 		double distanceBetween = ship1.getDistanceBetween(ship2);
 		assertEquals(40, distanceBetween, EPSILON);
@@ -428,12 +435,12 @@ public class ShipTests {
 		
 		// collisionPosition
 		Vector collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(0, collisionPosition.getX(), EPSILON);
-		assertEquals(10, collisionPosition.getY(), EPSILON);
+		assertEquals(20, collisionPosition.getX(), EPSILON);
+		assertEquals(30, collisionPosition.getY(), EPSILON);
 		
 		collisionPosition = ship2.getCollisionPosition(ship1);
-		assertEquals(0, collisionPosition.getX(), EPSILON);
-		assertEquals(10, collisionPosition.getY(), EPSILON);
+		assertEquals(20, collisionPosition.getX(), EPSILON);
+		assertEquals(30, collisionPosition.getY(), EPSILON);
 	}
 
 	@Test
@@ -441,9 +448,11 @@ public class ShipTests {
 		// SCENARIO: ship1 is moving with velocity [10cos(PI/3), 10sin(PI/3)]
 		//			 ship2 is moving with velocity [-10cos(PI/3), 10sin(PI/3)]
 		// 			 Both ships are moving on an equilateral triangle.
-		Ship ship1 = new Ship(0, 0, 10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
-		Ship ship2 = new Ship(60, 0, -10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
-		
+		Ship ship1 = new Ship(20, 20, 10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
+		Ship ship2 = new Ship(80, 20, -10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10, 0);
+		World world = new World(10000,10000);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		// distanceBetween
 		double distanceBetween = ship1.getDistanceBetween(ship2);
 		assertEquals(40, distanceBetween, EPSILON);
@@ -459,8 +468,8 @@ public class ShipTests {
 		
 		// collisionPosition
 		Vector collisionPosition = ship1.getCollisionPosition(ship2);
-		assertEquals(10+40*Math.cos(Math.PI/3), collisionPosition.getX(), EPSILON);
-		assertEquals(40*Math.sin(Math.PI/3), collisionPosition.getY(), EPSILON);
+		assertEquals(30+40*Math.cos(Math.PI/3), collisionPosition.getX(), EPSILON);
+		assertEquals(20+40*Math.sin(Math.PI/3), collisionPosition.getY(), EPSILON);
 	}
 
 }

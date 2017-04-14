@@ -217,7 +217,8 @@ public class Bullet extends Entity {
 	public void die(){
 		if (getWorld() != null)
 			getWorld().removeEntity(this);
-
+		if( getShip() != null)
+			getShip().removeBullet(this);
 		setShip(null);
 		setSourceShip(null);
 		this.isTerminated = true;

@@ -403,20 +403,23 @@ public abstract class Entity {
 		// if one of the two entities is not in a world, the two entities will never collide
 		if (getWorld() == null || otherEntity.getWorld() == null)
 			return Double.POSITIVE_INFINITY;
+		// both entities must be in the same world
+		if (getWorld() != otherEntity.getWorld())
+			return Double.POSITIVE_INFINITY;
 			
 		double totalRadius = getRadius()+otherEntity.getRadius();
 		
 		Vector thisPos = getPosition();
 		Vector otherPos = otherEntity.getPosition();
-		Vector deltaPos = thisPos.subtract(otherPos);
+		Vector deltaPos = otherPos.subtract(thisPos);
 		
 		Vector thisVel = getVelocity();
 		Vector otherVel = otherEntity.getVelocity();
-		Vector deltaVel = thisVel.subtract(otherVel);
+		Vector deltaVel = otherVel.subtract(thisVel);
 		
 		double VTimesR = deltaPos.dot(deltaVel);
-		double Vquad = deltaVel.norm(); 
-		double Rquad = deltaPos.norm();
+		double Vquad = deltaVel.squaredNorm(); 
+		double Rquad = deltaPos.squaredNorm();
 		
 		double d = Math.pow(VTimesR, 2.0)- Vquad*(Rquad-Math.pow(totalRadius, 2.0));
 		

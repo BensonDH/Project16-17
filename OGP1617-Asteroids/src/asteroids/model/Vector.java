@@ -3,18 +3,30 @@ package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * Class representing a value in a 2 dimensional space.	Values returned have to be doubles
+ * Class representing a value in a 2 dimensional space.	Values returned have to be doubles.
  */
 @Value
 public class Vector {
+	/**
+	 * This constructor will initialize a new vector with two doubles given
+	 * @param x
+	 * 			double determining the x position of the two dimensional field
+	 * @param y
+	 * 			double determining the y position of the two dimensional field
+	 * @Post
+	 * 		|	this.getX() = 0
+	 * 		|	this.getY() = 0
+	 */
 	public Vector(double x, double y){
-		this.x = x;
-		this.y = y;
+			this.x = x;
+			this.y = y;
 	}
 	
+
 	/**
 	 * Return the X-component of this vector.
 	 */
+	@Basic
 	public double getX(){
 		return this.x;
 	}
@@ -27,6 +39,7 @@ public class Vector {
 	/**
 	 * Return the Y-component of this vector.
 	 */
+	@Basic
 	public double getY(){
 		return this.y;
 	}
@@ -54,6 +67,14 @@ public class Vector {
 	 */
 	public double norm(){
 		return Math.sqrt(Math.pow(getX(),2)+Math.pow(getY(), 2));
+	}
+	
+	/**
+	 * Instead of returning the Euclidian Norm it returns the Euclidian root squared
+	 * @See implementation
+	 */
+	public double squaredNorm(){
+		return Math.pow(getX(),2)+Math.pow(getY(), 2);
 	}
 	
 	/**
@@ -139,10 +160,10 @@ public class Vector {
 	 * Return the orientation angle of this vector relative to the positive X-axis.
 	 *  
 	 * @effect
-	 * 			| Math.atan2(getX(), getY())
+	 * 			| Math.atan2(getY(), getX())
 	 */
 	public double getOrientationAngle(){
-		return Math.atan2(getX(), getY());
+		return Math.atan2(getY(), getX());
 	}
 	
 	/**

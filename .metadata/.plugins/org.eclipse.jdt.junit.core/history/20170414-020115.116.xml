@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="VectorTests" project="OGP1617-Asteroids" tests="5" started="5" failures="0" errors="0" ignored="0">
+  <testsuite name="asteroids.tests.VectorTests" time="0.0">
+    <testcase name="subtract" classname="asteroids.tests.VectorTests" time="0.0"/>
+    <testcase name="add" classname="asteroids.tests.VectorTests" time="0.0"/>
+    <testcase name="dot" classname="asteroids.tests.VectorTests" time="0.0"/>
+    <testcase name="norm" classname="asteroids.tests.VectorTests" time="0.0"/>
+    <testcase name="multiply" classname="asteroids.tests.VectorTests" time="0.0"/>
+  </testsuite>
+</testrun>

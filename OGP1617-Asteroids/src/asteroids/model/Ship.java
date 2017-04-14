@@ -69,7 +69,6 @@ public class Ship extends Entity {
 
    		if (!isValidRadius(radius))
 			throw new IllegalArgumentException("The given radius is not valid.");
-
    		this.radius = radius;
    		this.thrust = thrustMode;
    		setBaseMass(mass);
@@ -302,7 +301,13 @@ public class Ship extends Entity {
 	 * @return
 	 */
 	public boolean isValidRadius(double radius){
-		return (Double.isNaN(radius) || Double.isInfinite(radius) || radius > getMinimumRadius());
+		if (Double.isNaN(radius))
+			return false;
+		else if (Double.isInfinite(radius))
+			return false;
+		else if (radius >= rMin)
+			return true;
+		return false;
 	}
 	
 	/**
@@ -421,8 +426,8 @@ public class Ship extends Entity {
     	// Place the bullet right next to the ship
     	double totalRadius = getRadius() + bullet.getRadius();
     	Vector curPos = getPosition();
-    	bullet.setPosition(curPos.getX()+totalRadius*Math.cos(getAngle()),
-    					   curPos.getY()+totalRadius*Math.sin(getAngle()));
+    	bullet.setPosition(curPos.getX()+totalRadius*Math.cos(getAngle()+Math.PI/2),
+    					   curPos.getY()+totalRadius*Math.sin(getAngle()+Math.PI/2));
     	// Check whether the bullet collides with something
     	if (!getWorld().contains(bullet))
     		bullet.die();
@@ -494,6 +499,17 @@ public class Ship extends Entity {
    		return this.loadedBullets;
    	}
    	
+   	public void removeBullet(Bullet bullet)throws IllegalArgumentException, NullPointerException {
+		if (bullet == null || bullet.isTerminated)
+			throw new NullPointerException("bullet that is terminated can't be in loaded in a ship");
+		if (!(loadedBullets.contains(bullet)))
+			throw new IllegalArgumentException("the given bullet is not loaded in the Ship");
+		this.loadedBullets.remove(bullet);
+			
+				
+		
+	}	
+   	
    	/**
    	 * A set registering all the bullet that are loaded in this spaceship.
    	 */
@@ -516,6 +532,9 @@ public class Ship extends Entity {
 	/**
 	 * Variable registering the Speed of light.
 	 */
-   	static double c = 300000.0;	 
+   	static double c = 300000.0;
+
+
+	 
 }
 

@@ -129,6 +129,8 @@ public class World {
 	 * 			| !canHaveAsEntity(entity)
 	 */
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException{
+		if (entity == null)
+			throw new NullPointerException();
 		if (!canHaveAsEntity(entity))
 			throw new IllegalArgumentException("This entity cannot be added.");
 		else {
@@ -417,11 +419,11 @@ public class World {
 	private void advanceEntities(double deltaT){
 		
 		for (Entity entity: linkedEntities){
-			// Move the entity.
-			entity.move(deltaT);
 			// If this entity is a Ship and its thruster is active, update its velocity
 			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive())
 				((Ship)entity).thrust(deltaT);
+			// Move the entity.
+						entity.move(deltaT);
 			// Update the coordEntities map
 			updateCoordMap();
 		}
@@ -557,6 +559,7 @@ public class World {
 	 * 
 	 * @param entity
 	 * 			The entity that has to be verified.
+	 * @See implementation
 	 */
 	private boolean apparentlyCollidesWithHorizontalBorder(Entity entity){
 		double radius = entity.getRadius();
