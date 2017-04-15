@@ -159,7 +159,7 @@ public class World {
 		if (entity == null)
 			throw new NullPointerException("entity cannot be null.");
 		else if (!isInWorld(entity))
-			throw new IllegalArgumentException("The given enitity is not in this world.");
+			throw new IllegalArgumentException("The given entity is not in this world.");
 		else {
 			entity.removeWorld();
 			linkedEntities.remove(entity);
@@ -649,7 +649,7 @@ public class World {
 		// Check whether the bullet belongs to the ship
 		Ship temp = bullet.getSourceShip();
 		if (bullet.getSourceShip() == ship)
-			ship.addBullet(bullet);
+			ship.loadBullets(bullet);
 		// If the bullet does not belong to the ship, both ship and bullet die
 		else {
 			ship.die();

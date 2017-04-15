@@ -5,14 +5,20 @@ import be.kuleuven.cs.som.annotate.*;
 
 public class Bullet extends Entity {
 	/**
-	 * TODO: Documentation
+	 * Initializes the bullet with the given values
 	 * @param positionX
 	 * @param positionY
 	 * @param velocityX
 	 * @param velocityY
 	 * @param radius
 	 * @param speedLimit
+	 * @effect
+	 * 			|super(positionX,positionY,velocityX,velocityY,speedLimit)
+	 * @Post
+	 * 			|if (isValidRadius(radius))
+	 * 			| then new.getRadius() == radius
 	 * @throws IllegalArgumentException
+	 * 			|if (!isValidRadius(radius))
 	 */
 	public Bullet(double positionX, double positionY, double velocityX, double velocityY,
 				  double radius, double speedLimit) throws IllegalArgumentException{
@@ -25,19 +31,23 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * Initializes the bullet with the given values and its speed limit set to the speed of light
 	 * @param positionX
 	 * @param positionY
 	 * @param velocityX
 	 * @param velocityY
 	 * @param radius
+	 * @effect
+	 * 			|this(positionX,positionY,velocityX,velocityY,radius,c)
 	 */
 	public Bullet(double positionX,double positionY,double velocityX, double velocityY,double radius){
 		this(positionX,positionY,velocityX,velocityY,radius,c);
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * Initializes the bullet with default parameters
+	 * @effect
+	 * 		|this(0,0,0,0,minRadius)
 	 */
 	public Bullet(){
 		this(0,0,0,0,1,c);
@@ -54,13 +64,13 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * Checks whether the given radius is a valid radius
 	 * @param radius
-	 * @return
+	 * @see implementation
 	 */
 	@Basic
 	public boolean isValidRadius(double radius) {
-		return (Double.isNaN(radius) || Double.isInfinite(radius) || getMinimumRadius() <= radius);
+		return (!(Double.isNaN(radius)) && !Double.isInfinite(radius) && getMinimumRadius() <= radius);
 	}
 	
 	/**
@@ -91,7 +101,7 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * TODO: documentation
+	 * returns the density of the bullet
 	 */
 	@Basic
 	public double getDensity(){
@@ -159,8 +169,11 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * makes the association between the Ship and the bullet
 	 * @param ship
+	 * @post
+	 * 		| if (canHaveAsShip())
+	 * 		| then new.getShip() == ship
 	 */
 	public void setShip(Ship ship){
 		if (canHaveAsShip(ship)){
@@ -169,9 +182,13 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * checks whether the bullet can have the given ship as it's ship
 	 * @param ship
-	 * @return
+	 * @return 
+	 * 		| if( ship == null)
+	 * 		| then return true
+	 * @effect 
+	 * 		|ship.canHaveAsBullet(this)
 	 */
 	public boolean canHaveAsShip(Ship ship){
 		// Ship becomes null when the bullet is fired.
@@ -197,8 +214,9 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * Sets the ship where the bullet came from as it source ship
 	 * @param ship
+	 * @see implementation
 	 */
 	public void setSourceShip(Ship ship){
 		this.sourceShip = ship;

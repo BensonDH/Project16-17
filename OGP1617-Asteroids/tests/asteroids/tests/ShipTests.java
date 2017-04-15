@@ -4,20 +4,28 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 import org.junit.Test;
-import asteroids.model.Ship;
-import asteroids.model.Vector;
-import asteroids.model.World;
-
+import asteroids.model.*;
 
 public class ShipTests {
 	
 	private static final double EPSILON = 0.0001;
 	
-	Ship glob_ship1;
+	Ship ship1;
+	World world1;
+	Bullet bullet1;
+	Bullet bullet2;
+	Bullet bullet3;
+	
 	@Before
 	public void SetUp(){
-		glob_ship1 = new Ship(-5, 10, -5, 10, 15, 0);
-	}
+		ship1 = new Ship(50, 50, 0, 0, 10, 0);
+		world1 = new World(50000,50000);
+		bullet1 = new Bullet(50,50,0,0,1);
+		bullet2 =  new Bullet(50,50,0,0,1);
+		bullet3 =  new Bullet(50,50,0,0,1);
+		ship1.loadBullets(bullet1,bullet2,bullet3);
+		world1.addEntity(ship1);
+	}	
 	
 	
 	// CONSTRUCTOR TESTS
@@ -142,88 +150,86 @@ public class ShipTests {
 	// GETTERS AND SETTERS VALID VALUES TESTS
 	@Test
 	public void testPosition(){
-		Vector position = glob_ship1.getPosition();
+		Vector position = ship1.getPosition();
 		
-		assertEquals(-5, position.getX(), EPSILON);
-		assertEquals(10, position.getY(), EPSILON);
-		glob_ship1.setPosition(25, -50);
+		assertEquals(50, position.getX(), EPSILON);
+		assertEquals(50, position.getY(), EPSILON);
+		ship1.setPosition(25, -50);
 		
-		position = glob_ship1.getPosition();
+		position = ship1.getPosition();
 		
 		assertEquals(25, position.getX(), EPSILON);
 		assertEquals(-50, position.getY(), EPSILON);
-		
-		// Back to original state
-		glob_ship1.setPosition(-5, 10);
+	
 
 	}
 
 	public void testVelocity(){
-		Vector velocity = glob_ship1.getVelocity();
+		Vector velocity = ship1.getVelocity();
 		
 		assertEquals(-5, velocity.getX(), EPSILON);
 		assertEquals(10, velocity.getY(), EPSILON);
-		assertEquals(Math.sqrt(Math.pow(5, 2.0)+Math.pow(10, 2.0)), glob_ship1.getTotalVelocity(), EPSILON);
-		glob_ship1.setVelocity(30, -50);
+		assertEquals(Math.sqrt(Math.pow(5, 2.0)+Math.pow(10, 2.0)), ship1.getTotalVelocity(), EPSILON);
+		ship1.setVelocity(30, -50);
 		
-		velocity = glob_ship1.getVelocity();
+		velocity = ship1.getVelocity();
 		assertEquals(30, velocity.getX(), EPSILON);
 		assertEquals(-50, velocity.getY(), EPSILON);
-		assertEquals(Math.sqrt(Math.pow(30, 2.0)+Math.pow(50, 2.0)), glob_ship1.getTotalVelocity(), EPSILON);
+		assertEquals(Math.sqrt(Math.pow(30, 2.0)+Math.pow(50, 2.0)), ship1.getTotalVelocity(), EPSILON);
 		//Back to original state
-		glob_ship1.setVelocity(-5, 10);
+		ship1.setVelocity(-5, 10);
 	}
 	
 	@Test
 	public void testAngle(){
 		
-		assertEquals(0, glob_ship1.getAngle(), EPSILON);
-		glob_ship1.setAngle(2*Math.PI);
-		assertEquals(2*Math.PI, glob_ship1.getAngle(), EPSILON);
+		assertEquals(0, ship1.getAngle(), EPSILON);
+		ship1.setAngle(2*Math.PI);
+		assertEquals(2*Math.PI, ship1.getAngle(), EPSILON);
 		
 		// Back to original state
-		glob_ship1.setAngle(0);
+		ship1.setAngle(0);
 	}
 
 
 	// GETTERS AND SETTERS INVALID VALUES TESTS
 	@Test (expected = IllegalArgumentException.class)
 	public void testPositionXInvalidValue(){
-		glob_ship1.setPosition(Double.NaN, 0);
+		ship1.setPosition(Double.NaN, 0);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testPositionYInvalidValue(){
-		glob_ship1.setPosition(0, Double.NaN);
+		ship1.setPosition(0, Double.NaN);
 	}
 
 	@Test
 	public void testVelocityInvalidValue(){
 		
-		glob_ship1.setVelocity(Double.NaN, 0);
-		Vector velocity = glob_ship1.getVelocity();
-		assertEquals(-5, velocity.getX(), EPSILON);
-		assertEquals(10, velocity.getY(), EPSILON);
+		ship1.setVelocity(Double.NaN, 0);
+		Vector velocity = ship1.getVelocity();
+		assertEquals(0, velocity.getX(), EPSILON);
+		assertEquals(0, velocity.getY(), EPSILON);
 		
-		glob_ship1.setVelocity(0, Double.NaN);
-		velocity = glob_ship1.getVelocity();
-		assertEquals(-5, velocity.getX(), EPSILON);
-		assertEquals(10, velocity.getY(), EPSILON);
+		ship1.setVelocity(0, Double.NaN);
+		velocity = ship1.getVelocity();
+		assertEquals(0, velocity.getX(), EPSILON);
+		assertEquals(0, velocity.getY(), EPSILON);
 	}
 
 	@Test (expected = AssertionError.class)
 	public void testAngleNegativeInvalidValue(){
-		glob_ship1.setAngle(-10);
+		ship1.setAngle(-10);
 	}
 	
 	@Test (expected = AssertionError.class)
 	public void testAnglePositiveInvalidValue(){
-		glob_ship1.setAngle(Double.MAX_VALUE);
+		ship1.setAngle(Double.MAX_VALUE);
 	}
 	
 	@Test (expected = AssertionError.class)
 	public void testAngleNaNValue(){
-		glob_ship1.setAngle(Double.NaN);
+		ship1.setAngle(Double.NaN);
 	}
 	
 
@@ -259,23 +265,24 @@ public class ShipTests {
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void infiniteDuration(){
-		glob_ship1.move(Double.POSITIVE_INFINITY);
+		ship1.move(Double.POSITIVE_INFINITY);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void NaNDuration(){
-		glob_ship1.move(Double.NaN);
+		ship1.move(Double.NaN);
 	}
 	
 	@Test
 	public void largeAmount(){
 		Ship ship = new Ship();
+		ship.setThrust(true);
 		ship.thrust(Double.POSITIVE_INFINITY);
 		Vector vel = ship.getVelocity();
 		assertEquals(0, vel.getX(), EPSILON);
 		assertEquals(0, vel.getY(), EPSILON);
 		
-		ship.thrust(450000);
+		ship.thrust(450000000);
 		vel = ship.getVelocity();
 		assertEquals(300000, vel.getX(), EPSILON);
 		assertEquals(0, vel.getY(), EPSILON);
@@ -283,7 +290,7 @@ public class ShipTests {
 	
 	@Test (expected=AssertionError.class)
 	public void testInvalidTurn(){
-		glob_ship1.turn(100);
+		ship1.turn(100);
 	}
 	
 	@Test
@@ -300,23 +307,23 @@ public class ShipTests {
 	// Checkers
 	@Test
 	public void testIsValidVelocity(){
-		assertTrue(glob_ship1.isValidVelocity(10, 10));
-		assertFalse(glob_ship1.isValidVelocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+		assertTrue(ship1.isValidVelocity(10, 10));
+		assertFalse(ship1.isValidVelocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
 		
 	}
 	
 	@Test
 	public void testIsValidSpeedLimit(){
-		assertTrue(glob_ship1.isValidSpeedLimit(150000));
-		assertFalse(glob_ship1.isValidSpeedLimit(300001));
-		assertFalse(glob_ship1.isValidSpeedLimit(-150000));
+		assertTrue(ship1.isValidSpeedLimit(150000));
+		assertFalse(ship1.isValidSpeedLimit(300001));
+		assertFalse(ship1.isValidSpeedLimit(-150000));
 	}
 	
 	@Test
 	public void testIsValidAngle(){
-		assertTrue(glob_ship1.isValidAngle(Math.PI/2));
-		assertFalse(glob_ship1.isValidAngle(-10));
-		assertFalse(glob_ship1.isValidAngle(100));
+		assertTrue(ship1.isValidAngle(Math.PI/2));
+		assertFalse(ship1.isValidAngle(-10));
+		assertFalse(ship1.isValidAngle(100));
 	}
 	
 
@@ -471,5 +478,79 @@ public class ShipTests {
 		assertEquals(30+40*Math.cos(Math.PI/3), collisionPosition.getX(), EPSILON);
 		assertEquals(20+40*Math.sin(Math.PI/3), collisionPosition.getY(), EPSILON);
 	}
+	
+	//Mass
+	
+	@Test
+	public void getTotalMass(){
+		double mass = ship1.getBaseMass() + 3*bullet1.getTotalMass();
+		assertEquals(mass, ship1.getTotalMass(),EPSILON);
+	}
+	
+	//Associations
+	@Test
+	public void normalFire(){
+		ship1.fireBullet();
+		assertEquals(2,ship1.getNbBulletsLoaded(),EPSILON);
+		ship1.fireBullet();
+		assertEquals(1, ship1.getNbBulletsLoaded(),EPSILON);
+		ship1.fireBullet();
+		assertEquals(0, ship1.getNbBulletsLoaded(),EPSILON);
+		ship1.fireBullet();
+		assertEquals(0, ship1.getNbBulletsLoaded(),EPSILON);
+		assertTrue( bullet1.getWorld() == ship1.getWorld());
+		assertTrue(bullet1.getSourceShip() == ship1);
+		assertTrue(bullet2.getShip() == null);
+		assertEquals(1,bullet1.getRadius(),EPSILON);
+		assertEquals(61,bullet1.getPosition().getX(),EPSILON);
+	}
+	
+	@Test
+	public void fireNearBorder(){
+		World world = new World(61,61);
+		ship1.removeWorld();
+		ship1.setWorld(world);
+		ship1.fireBullet();
+		assertTrue(bullet1.isDead() || bullet2.isDead() || bullet3.isDead());
+	}
+	
+	@Test
+	public void normalAddBullet(){
+		Bullet bullet = new Bullet();
+		ship1.loadBullets(bullet);
+		assertTrue(ship1.getPosition().equals(bullet.getPosition()));
+		assertTrue(bullet.getShip() == ship1 );
+		assertTrue(bullet.getSourceShip() == null);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void illegalAddbullet(){
+		ship1.loadBullets(bullet1);
+		
+	}
+	
+	@Test (expected=NullPointerException.class)
+	public void illegalAddBulletNull(){
+		ship1.loadBullets(null);
+	}
+	
+	
+	@Test
+	public void terminateShip(){
+		ship1.die();
+		assertTrue(ship1.isDead());
+		assertFalse(world1.isInWorld(ship1));
+		
+	}
+	
 
+		
+		
+		
+		
 }
+	
+	
+	
+	
+

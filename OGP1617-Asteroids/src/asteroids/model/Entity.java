@@ -53,12 +53,16 @@ public abstract class Entity {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * initializes this new entity with its given paramaters and its speed limit set to the speed of light
 	 * @param positionX
 	 * @param positionY
 	 * @param velocityX
 	 * @param velocityY
+	 * @effect 
+	 * 		| this(positionX,positionY,velocityX,velocityY,C)
 	 * @throws IllegalArgumentException
+	 * 		| isInfinite(positionX) || isNaN(positionX)
+   	 * 		| isInfinite(positionY) || isNan(positionY)
 	 */
    	public Entity(double positionX, double positionY, double velocityX, 
    			double velocityY) throws IllegalArgumentException{
@@ -244,44 +248,56 @@ public abstract class Entity {
 	private final double speedLimit;
 	
 	// Radius [DEFENSIVE]
+	/**
+	 * get the radius of an Entity
+	 */
 	public abstract double getRadius();
    	// Mass [TOTAL]
+	/**
+	 * get the total mass of an entity
+	 * @return
+	 */
    	public abstract double getTotalMass();
 	
    	
    	// World-Entity Relation
    	/**
-   	 * TODO: Documentation
+   	 * Sets the world of the entity to the given world
    	 * @param world
+   	 * @post 
+   	 * 		| if (canHaveAsWorld)
+   	 * 		| then new.getWorld() == world
    	 * @throws IllegalStateException
+   	 * 		| if (!(getWorld() == null)
    	 */
    	public void setWorld(World world) throws IllegalStateException {
    		if (!(getWorld() == null))
    			throw new IllegalStateException("This entity already has a world.");
    		if (canHaveAsWorld(world))
    			this.world = world;
+   			
    	}
    	
    	/**
-   	 * TODO: Documentation
-   	 * @throws IllegalStateException
+   	 * removes the entity from the given world.
    	 */
-   	public void removeWorld() throws IllegalStateException {
+   	public void removeWorld() {
    		this.world = null;
    	}
    	
    	/**
-   	 * TODO: Documentation
-   	 * @return
+   	 * returns the world of this entity
+   	 * @se implementation
    	 */
    	public World getWorld(){
    		return this.world;
    	}
    	
    	/**
-   	 * TODO: Documentation
+   	 * checks whether this entity can have this world as its world
    	 * @param world
-   	 * @return
+   	 * @effect
+   	 * 		| world.canHaveAsEntity(this)
    	 */
    	public boolean canHaveAsWorld(World world){
    		return world.canHaveAsEntity(this);
@@ -296,9 +312,8 @@ public abstract class Entity {
    	// ------- Other functions --------
    	/**
    	 * Get the distance between this Entity and the other Entity
-   	 * TODO: Documentation
    	 * @param otherEntity
-   	 * @return
+   	 * @see implementation
    	 */
    	public double getDistanceBetweenCenters(Entity otherEntity){
  		Vector differenceBetweenVectors = getPosition().subtract(otherEntity.getPosition());
@@ -307,9 +322,9 @@ public abstract class Entity {
    	}
    	
    	/**
-   	 * TODO: Documentation
+   	 * checks if an entity significantly overlaps with another entity
    	 * @param otherEntity
-   	 * @return
+   	 * @see implementation
    	 */
    	public boolean overlapSignificantly(Entity otherEntity){
    		double distance = getDistanceBetweenCenters(otherEntity);
@@ -318,9 +333,9 @@ public abstract class Entity {
    		return distance <= (0.99*totalRadius);
    	}
    	/**
-   	 * TODO: Documentation
+   	 * checks whether an entity overlaps with another entity
    	 * @param otherEntity
-   	 * @return
+   	 * @see implementation
    	 */
    	public boolean apparentlyCollide(Entity otherEntity) {
    		double distance = getDistanceBetweenCenters(otherEntity);
