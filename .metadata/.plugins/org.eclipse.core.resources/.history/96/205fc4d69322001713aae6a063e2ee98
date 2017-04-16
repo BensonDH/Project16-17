@@ -707,7 +707,7 @@ public class World {
 	/**
 	 * Check whether this world is terminated.
 	 */
-	@Basic
+	@Basic @Raw
 	public boolean isTerminated(){
 		return isTerminated;
 	}

@@ -2,7 +2,6 @@ package asteroids.model;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
-import be.kuleuven.cs.som.annotate.Raw;
 
 public abstract class Entity {
 	
@@ -182,7 +181,7 @@ public abstract class Entity {
 	 * 		   | 	then new.velocity == [speedLimit*cos(theta), speedLimit*sin(theta)]
 	 *		   |		with theta = atan(velocityY/velocitX)
 	 */
-	@Basic @Raw
+	@Basic
 	public void setVelocity(double velocityX, double velocityY){
 		if (Double.isNaN(velocityX) || (Double.isNaN(velocityY)))
 			return;
@@ -206,7 +205,6 @@ public abstract class Entity {
    	 * 			of the Vector representing this Entity's velocity.
    	 * 			| this.getVelocity().norm()
    	 */
-	@Basic
 	public double getTotalVelocity(){
 		return getVelocity().norm();
 	}
@@ -221,7 +219,6 @@ public abstract class Entity {
 	 * @return 	True if and only if the velocity is smaller than or equal to the speed limit of this entity.
 	 * 		   | result == sqrt(velocityY^2 + velocityX^2) <= speedLimit
 	 */
-	@Basic
 	public boolean isValidVelocity(double velocityX, double velocityY){
 		Vector velocity = new Vector(velocityX,velocityY);
 		return velocity.norm() <= getSpeedLimit();
@@ -236,7 +233,6 @@ public abstract class Entity {
 	 * 			| if (0 <= speedLimit <= c) then true
 	 * 			| false otherwise
 	 */
-	@Basic
 	public boolean isValidSpeedLimit(double speedLimit){
 		return ((speedLimit >= 0) && (speedLimit <= c));
 	}
@@ -255,13 +251,12 @@ public abstract class Entity {
 	/**
 	 * get the radius of an Entity
 	 */
-	@Basic
 	public abstract double getRadius();
    	// Mass [TOTAL]
 	/**
 	 * get the total mass of an entity
+	 * @return
 	 */
-	@Basic
    	public abstract double getTotalMass();
 	
    	
@@ -275,7 +270,6 @@ public abstract class Entity {
    	 * @throws IllegalStateException
    	 * 		| if (!(getWorld() == null)
    	 */
-	@Raw @Basic
    	public void setWorld(World world) throws IllegalStateException {
    		if (!(getWorld() == null))
    			throw new IllegalStateException("This entity already has a world.");
@@ -287,16 +281,14 @@ public abstract class Entity {
    	/**
    	 * removes the entity from the given world.
    	 */
-	@Raw
    	public void removeWorld() {
    		this.world = null;
    	}
    	
    	/**
    	 * returns the world of this entity
-   	 * @see implementation
+   	 * @se implementation
    	 */
-	@Basic
    	public World getWorld(){
    		return this.world;
    	}
@@ -307,7 +299,6 @@ public abstract class Entity {
    	 * @effect
    	 * 		| world.canHaveAsEntity(this)
    	 */
-	@Basic
    	public boolean canHaveAsWorld(World world){
    		return world.canHaveAsEntity(this);
    	}
@@ -505,7 +496,6 @@ public abstract class Entity {
 	/**
 	 * Check whether this entity is dead (terminated) or not.
 	 */
-	@Basic
 	public boolean isDead(){
 		return this.isTerminated;
 	}

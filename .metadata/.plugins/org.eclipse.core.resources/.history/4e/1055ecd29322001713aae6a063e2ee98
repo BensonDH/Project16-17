@@ -29,7 +29,6 @@ public class World {
 	 * 		  | then new.getHeight() == getDefaultHeight()
 	 * 		  | else new.getHeight() == height	
 	 */
-	@Raw
 	public World(double width, double height){
 		if (isValidBorderDistance(width))
 			this.width = width;
@@ -48,7 +47,6 @@ public class World {
 	 * @effect 	
 	 * 			| World(getDefaultWidth(), getDefaultHeight())
 	 */
-	@Raw
 	public World(){
 		this(World.getDefaultWidth(), World.getDefaultHeight());
 	}
@@ -61,7 +59,6 @@ public class World {
 	 * @see implementation
 	 * 			
 	 */
-	@Basic
 	public static boolean isValidBorderDistance(double value){
 		return (value > 0 && value < Double.MAX_VALUE);
 	}
@@ -188,7 +185,6 @@ public class World {
 	 * @throws	NullPointerException
 	 * 			| entity == null
 	 */
-	@Basic
 	public boolean canHaveAsEntity(Entity entity) throws NullPointerException{
 		if (entity == null)
 			throw new NullPointerException("Entity cannot be null.");
@@ -215,7 +211,6 @@ public class World {
 	 * 				The entity that has to be verified
 	 * @see implementation
 	 */
-	@Basic
 	public boolean isInWorld(Entity entity){
 		return linkedEntities.contains(entity);
 	}
@@ -277,6 +272,7 @@ public class World {
 	 * 			| if no such entity exists:
 	 * 			|		result == null
 	 */
+	//TODO: Werkt niet.
 	public Entity getEntityAtPosition(double[] position){
 		Vector convertedPos = new Vector(position[0], position[1]);
 
@@ -295,7 +291,6 @@ public class World {
 	 * 			| false if (getDistanceToClosestBorder(entity) < 0.99*entity.getRadius())
 	 * 			| true otherwise
 	 */
-	@Basic
 	public boolean contains(Entity entity){
 		Vector entityPos = entity.getPosition();
 		double radius = entity.getRadius();
@@ -707,7 +702,7 @@ public class World {
 	/**
 	 * Check whether this world is terminated.
 	 */
-	@Basic
+	@Basic @Raw
 	public boolean isTerminated(){
 		return isTerminated;
 	}

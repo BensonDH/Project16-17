@@ -8,7 +8,7 @@ import org.junit.*;
 import asteroids.model.World;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
-import asteroids.model.Collision;
+import asteroids.model.FirstCollision;
 import asteroids.model.Ship;
 import asteroids.model.Vector;
 
@@ -314,7 +314,7 @@ public class WorldTests {
 		assertEquals(correctCollisionPosition.getY(), returnedPosition.getY(), EPSILON);
 		
 		// Helper method test
-		Collision firstCollision = testWorld.getFirstCollision();
+		FirstCollision firstCollision = testWorld.getFirstCollision();
 		returnedPosition = firstCollision.getCollisionPosition();
 		assertEquals((70-10*Math.sqrt(2))/15.0, firstCollision.getTimeToCollision(), EPSILON);
 		assertEquals(correctCollisionPosition.getX(), returnedPosition.getX(), EPSILON);

@@ -27,7 +27,8 @@ public class RandomTests {
 		Entity entity2 = new Ship(30, 30, 0, 0, 10, 0);
 		testMap.put(entity1.getPosition(), entity1);
 		testMap.put(entity2.getPosition(), entity2);
-		Vector testVector = new Vector(30,30);
+		
+		Vector testVector = entity1.getPosition();
 		System.out.println(testMap.containsKey(testVector));
 	}
 }

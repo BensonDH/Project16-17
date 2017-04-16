@@ -181,7 +181,7 @@ public class Vector {
 	 * 				-The Y-component of this vector is equal to the second
 	 * 				 component of the given object
 	 */
-	@Override @Basic
+	@Override
 	public boolean equals(Object other){
 		if (other == null)
 			return false;

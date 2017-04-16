@@ -229,7 +229,6 @@ public class Bullet extends Entity {
 	 * @param ship
 	 * @see implementation
 	 */
-	@Basic @Raw
 	public void setSourceShip(Ship ship){
 		this.sourceShip = ship;
 	}

@@ -20,7 +20,6 @@ public class Bullet extends Entity {
 	 * @throws IllegalArgumentException
 	 * 			|if (!isValidRadius(radius))
 	 */
-	@Raw
 	public Bullet(double positionX, double positionY, double velocityX, double velocityY,
 				  double radius, double speedLimit) throws IllegalArgumentException{
 		super(positionX, positionY, velocityX, velocityY, speedLimit);
@@ -41,7 +40,6 @@ public class Bullet extends Entity {
 	 * @effect
 	 * 			|this(positionX,positionY,velocityX,velocityY,radius,c)
 	 */
-	@Raw
 	public Bullet(double positionX,double positionY,double velocityX, double velocityY,double radius){
 		this(positionX,positionY,velocityX,velocityY,radius,c);
 	}
@@ -51,7 +49,6 @@ public class Bullet extends Entity {
 	 * @effect
 	 * 		|this(0,0,0,0,minRadius)
 	 */
-	@Raw
 	public Bullet(){
 		this(0,0,0,0,1,c);
 	}
@@ -84,7 +81,6 @@ public class Bullet extends Entity {
 	/**
 	 * Return the minimal radius of this bullet.
 	 */
-	@Basic @Immutable
 	public double getMinimumRadius(){
 		return Bullet.minimumRadius;
 	}
@@ -100,7 +96,6 @@ public class Bullet extends Entity {
 	 * returns the mass of this bullet.
 	 * @see implementation 
 	 */
-	@Basic
 	public double getTotalMass(){
 		return (4.0/3)* Math.PI* Math.pow(this.getRadius(), 3.0)*getDensity();
 	}
@@ -126,7 +121,6 @@ public class Bullet extends Entity {
 	 * 
 	 * @see implementation	
 	 */
-	@Basic
 	public int getNbTimesBounced(){
 		return nbTimesBounced;
 	}
@@ -142,7 +136,6 @@ public class Bullet extends Entity {
      * 
      * @see implementation
 	 */
-	@Raw
 	public void setNbTimesBounced(int times){
 		if (times <= getMaxTimesBounced())
 			nbTimesBounced = times;
@@ -171,7 +164,6 @@ public class Bullet extends Entity {
 	 * @return The ship carrying this bullet.
 	 * @return Null if no ship is carrying this bullet
 	 */
-	@Basic
 	public Ship getShip(){
 		return this.ship;
 	}
@@ -183,7 +175,6 @@ public class Bullet extends Entity {
 	 * 		| if (canHaveAsShip())
 	 * 		| then new.getShip() == ship
 	 */
-	@Basic
 	public void setShip(Ship ship){
 		if (canHaveAsShip(ship)){
 			this.ship = ship;
@@ -199,7 +190,6 @@ public class Bullet extends Entity {
 	 * @effect 
 	 * 		|ship.canHaveAsBullet(this)
 	 */
-	@Basic
 	public boolean canHaveAsShip(Ship ship){
 		// Ship becomes null when the bullet is fired.
 		if (ship == null)
@@ -219,7 +209,6 @@ public class Bullet extends Entity {
 	 * @return if ifFired() then result == getShip()
 	 * 			else result == null
 	 */
-	@Basic
 	public Ship getSourceShip(){
 		return this.sourceShip;
 	}
@@ -229,7 +218,6 @@ public class Bullet extends Entity {
 	 * @param ship
 	 * @see implementation
 	 */
-	@Basic @Raw
 	public void setSourceShip(Ship ship){
 		this.sourceShip = ship;
 	}

@@ -255,13 +255,12 @@ public abstract class Entity {
 	/**
 	 * get the radius of an Entity
 	 */
-	@Basic
 	public abstract double getRadius();
    	// Mass [TOTAL]
 	/**
 	 * get the total mass of an entity
+	 * @return
 	 */
-	@Basic
    	public abstract double getTotalMass();
 	
    	
@@ -275,7 +274,6 @@ public abstract class Entity {
    	 * @throws IllegalStateException
    	 * 		| if (!(getWorld() == null)
    	 */
-	@Raw @Basic
    	public void setWorld(World world) throws IllegalStateException {
    		if (!(getWorld() == null))
    			throw new IllegalStateException("This entity already has a world.");
@@ -287,16 +285,14 @@ public abstract class Entity {
    	/**
    	 * removes the entity from the given world.
    	 */
-	@Raw
    	public void removeWorld() {
    		this.world = null;
    	}
    	
    	/**
    	 * returns the world of this entity
-   	 * @see implementation
+   	 * @se implementation
    	 */
-	@Basic
    	public World getWorld(){
    		return this.world;
    	}
@@ -307,7 +303,6 @@ public abstract class Entity {
    	 * @effect
    	 * 		| world.canHaveAsEntity(this)
    	 */
-	@Basic
    	public boolean canHaveAsWorld(World world){
    		return world.canHaveAsEntity(this);
    	}
@@ -505,7 +500,6 @@ public abstract class Entity {
 	/**
 	 * Check whether this entity is dead (terminated) or not.
 	 */
-	@Basic
 	public boolean isDead(){
 		return this.isTerminated;
 	}

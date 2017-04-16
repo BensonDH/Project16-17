@@ -62,14 +62,5 @@ public class VectorTests {
 		Vector testVector = new Vector(0,5);
 		assertEquals(Math.PI/2,testVector.getOrientationAngle(),EPSILON);
 	}
-	
-	@Test
-	public void equals(){
-		Vector vector1 = new Vector(3,3);
-		Vector vector2 = new Vector(3,3);
-		Vector vector3 = new Vector(2, 2);
-		assertTrue(vector1.equals(vector2));
-		assertFalse(vector2.equals(vector3));
-		
-	}
+
 }

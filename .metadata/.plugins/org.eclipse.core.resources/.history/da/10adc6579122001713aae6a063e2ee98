@@ -1,7 +1,5 @@
 package asteroids.model;
 
-import java.util.Objects;
-
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -181,7 +179,7 @@ public class Vector {
 	 * 				-The Y-component of this vector is equal to the second
 	 * 				 component of the given object
 	 */
-	@Override @Basic
+	@Override
 	public boolean equals(Object other){
 		if (other == null)
 			return false;
@@ -214,7 +212,7 @@ public class Vector {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hash(getX(),getY());
+		return super.hashCode();
 	}	
 
 	/**
