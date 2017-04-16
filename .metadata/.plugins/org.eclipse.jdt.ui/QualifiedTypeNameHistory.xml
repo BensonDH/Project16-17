@@ -16,12 +16,13 @@
 <fullyQualifiedTypeName name="asteroids.part2.CollisionListener"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
 <fullyQualifiedTypeName name="asteroids.model.FirstCollision"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="asteroids.model.Entity"/>
-<fullyQualifiedTypeName name="java.lang.NullPointerException"/>
 <fullyQualifiedTypeName name="asteroids.model.Vector"/>
 <fullyQualifiedTypeName name="java.util.Objects"/>
 <fullyQualifiedTypeName name="be.kuleuven.cs.som.annotate.Raw"/>
+<fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
+<fullyQualifiedTypeName name="asteroids.model.Collision"/>
+<fullyQualifiedTypeName name="java.lang.NullPointerException"/>
 </qualifiedTypeNameHistroy>

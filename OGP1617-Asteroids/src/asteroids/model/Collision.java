@@ -3,35 +3,42 @@ package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A Class that contains all the information about the next collision that
- * will happen in a game World
+ *  GitHub repository : https://github.com/BensonDH/Project16-17
+ */
+
+/**
+ * An immutable Class that contains all important information about a collision that
+ * will happen in a game World.
  * 
+ * @version	1.0
+ * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
+ * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek)  
  */
 public class Collision{
 	
 	/**
-	 * Initialize this new firstCollision object.
+	 * Initialize this new Collision object.
 	 * 
 	 * @param firstInvolvedEntity
-	 * 			The first involved Entity of this collision
+	 * 			The first Entity involved in this collision.
 	 * @param secondInvolvedEntity
-	 * 			The second involved Entity of this collision
-	 * 			if secondInvolvedEntity is null, firstInvolvedEntity will collide
+	 * 			The second Entity involved in this collision.
+	 * 			If secondInvolvedEntity is null, firstInvolvedEntity will collide
 	 * 			with a boundary of its world.
 	 * @param collisionPosition
 	 * 			The position where this collision will happen.
 	 * @param timeToCollision
 	 * 			The time until this collision will happen, seen at the moment of creation of this object.
-	 * @post	firstInvolvedEntity will be set to the given firstInvolvedEntity
-	 * 			| getFirstInvolvedEntity() == firstInvolvedEntity
-	 * @post	secondInvolvedEntity will be set to the given secondInvolvedEntity
-	 * 			| getSecondInvolvedEntity() == secondInvolvedEntity
-	 * @post	if the given firstInvolvedEntity is not null, collisionPosition and timeToCollision
+	 * @post	FirstInvolvedEntity will be set to the given firstInvolvedEntity
+	 * 			| new.getFirstInvolvedEntity() == firstInvolvedEntity
+	 * @post	SecondInvolvedEntity will be set to the given secondInvolvedEntity
+	 * 			| new.getSecondInvolvedEntity() == secondInvolvedEntity
+	 * @post	If the given firstInvolvedEntity is not null, collisionPosition and timeToCollision
 	 * 			will be set to the given collisionPosition and timeToCollision respectively.
 	 * 			| if (firstInvolvedEntity != null)
 	 * 			| then (getCollisionPosition() == collisionPosition) &&
 	 * 			|	   (getTimeToCollision() == timeToCollision)
-	 * @post	if the given firstInvolvedEntity is null, collisionPosition and timeToCollision
+	 * @post	If the given firstInvolvedEntity is null, collisionPosition and timeToCollision
 	 * 			will be set to null and Double.POSITIVE_INFINITY respectively.
 	 * 			| if (firstInvolvedEntity == null)
 	 * 			| then (getCollisionPosition() == null) &&
@@ -53,15 +60,16 @@ public class Collision{
 	}
 	
 	/**
-	 * Initialize this new firstCollision object.
+	 * Initialize this new Collision object.
 	 * 
-	 * When this constructor is used, this FirstCollision will be the 
-	 * same as: "No collision will happen". 
+	 * When this constructor is used, this Collision object will be the 
+	 * equivalent to: "No collision will happen". 
 	 * This means that firstInvolvedEntity, secondInvovledEntity and 
 	 * collisionPosition will be null, and timeToCollision will be
 	 * Double.POSITIVE_INFINITY
 	 * 
-	 * @effect	this(null, null, null, Double.POSITIVE_INFINITY)
+	 * @effect	
+	 * 			| this(null, null, null, Double.POSITIVE_INFINITY)
 	 */
 	public Collision(){
 		this(null, null, null, Double.POSITIVE_INFINITY);
@@ -118,7 +126,7 @@ public class Collision{
 	
 	/**
 	 * Get the time until this collision will happen.
-	 * I.e. the time until this collision when this FirstCollision object
+	 * I.e. the time until this collision when this Collision object
 	 * was created.
 	 * 
 	 * @see implementation
@@ -133,4 +141,33 @@ public class Collision{
 	 */
 	private final double timeToCollision;
 	
+	/**
+	 * Return a textual representation of this collision
+	 * 
+	 * @return 
+	 * 		  	| If getFirstInvolvedEntity() == null && getSecondInvolvedEntity() == null,
+	 * 		  	| 	then result =="Collision: No collision will happen."
+	 * @return 
+	 * 			| If getFirstInvolvedEntity() != null && getSecondInvolvedEntity() == null
+	 * 			| 	then result == "Collision: Between "+getFistInvolvedEntity()+" and a border at "+
+	 *			|					getCollisionPosition()+" in "+getTimeToCollision()+" s.";
+	 * @return
+	 *			| If getFirstInvolvedEntity() != null && getSecondInvolvedEntity() != null
+	 *			|	then result == "Collision between "+getFistInvolvedEntity()+" and "+getSecondInvolvedEntity()+" at "+
+	 *								getCollisionPosition()+" in "+getTimeToCollision()+" s.";
+	 */
+	@Override
+	public String toString(){
+		if (getFistInvolvedEntity() == null && getSecondInvolvedEntity() == null) {
+			return "Collision: No collision will happen";
+		}
+		else if (getSecondInvolvedEntity() == null) {
+			return "Collision: Between "+getFistInvolvedEntity()+" and a border at "+
+					getCollisionPosition()+" in "+getTimeToCollision()+"sec";
+		}
+		else {
+			return "Collision between "+getFistInvolvedEntity()+" and "+getSecondInvolvedEntity()+" at "+
+			getCollisionPosition()+" in "+getTimeToCollision()+" s.";
+		}
+	}
 }

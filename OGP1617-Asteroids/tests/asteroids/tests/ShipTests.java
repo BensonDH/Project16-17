@@ -160,8 +160,6 @@ public class ShipTests {
 		
 		assertEquals(25, position.getX(), EPSILON);
 		assertEquals(-50, position.getY(), EPSILON);
-	
-
 	}
 
 	public void testVelocity(){
@@ -252,6 +250,16 @@ public class ShipTests {
 		assertEquals(50*Math.cos(Math.PI/4), newVel.getX(), EPSILON);
 		assertEquals(50*Math.sin(Math.PI/4), newVel.getY(), EPSILON);
 		
+		// thruster methods
+		assertFalse(ship.isShipThrusterActive());
+		assertEquals(0, ship.getTotalAcceleration(), EPSILON);
+		ship.setThrust(true);
+		assertTrue(ship.isShipThrusterActive());
+		
+		double acceleration = ship.getTotalAcceleration();
+		assertEquals(ship.getThrusterForce()/ship.getTotalMass(), acceleration, EPSILON);
+
+		
 		// killVelocity
 		ship.killVelocity();
 		newVel = ship.getVelocity();
@@ -309,7 +317,6 @@ public class ShipTests {
 	public void testIsValidVelocity(){
 		assertTrue(ship1.isValidVelocity(10, 10));
 		assertFalse(ship1.isValidVelocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
-		
 	}
 	
 	@Test
@@ -326,6 +333,10 @@ public class ShipTests {
 		assertFalse(ship1.isValidAngle(100));
 	}
 	
+	public void testIsValidRadius(){
+		assertFalse(ship1.isValidRadius(-10));
+		assertTrue(ship1.isValidRadius(Ship.getMinimumRadius()+10));
+	}
 
 	// getDistanceBetween, overlap, getTimeToCollision, getCollisionPosition TESTS
 	@Test
@@ -334,7 +345,7 @@ public class ShipTests {
 		// case 1 ships are not overlapping
 		Ship ship1 = new Ship();
 		Ship ship2 = new Ship(40, 0, 0, 0, 10, 0);
-		assertEquals(20, ship1.getDistanceBetween(ship2), EPSILON);
+		assertEquals(40-Ship.getMinimumRadius()-10, ship1.getDistanceBetween(ship2), EPSILON);
 		
 		//case 2 ships are touching
 		ship2.setPosition(20, 0);
@@ -480,7 +491,6 @@ public class ShipTests {
 	}
 	
 	//Mass
-	
 	@Test
 	public void getTotalMass(){
 		double mass = ship1.getBaseMass() + 3*bullet1.getTotalMass();
@@ -531,9 +541,8 @@ public class ShipTests {
 	
 	@Test (expected=NullPointerException.class)
 	public void illegalAddBulletNull(){
-		ship1.loadBullets(null);
+		ship1.loadBullets((Bullet)null);
 	}
-	
 	
 	@Test
 	public void terminateShip(){
@@ -541,13 +550,7 @@ public class ShipTests {
 		assertTrue(ship1.isDead());
 		assertFalse(world1.isInWorld(ship1));
 		
-	}
-	
-
-		
-		
-		
-		
+	}			
 }
 	
 	

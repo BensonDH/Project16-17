@@ -1,0 +1,479 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import org.junit.*;
+import asteroids.model.*;
+
+
+public class BulletTests {
+	private static final double EPSILON = 0.0001;
+
+	Bullet globBullet;
+	@Before
+	public void setUp(){
+		globBullet = new Bullet(1, 2, 3, 4, 10);
+	}
+	
+	// CONSTRUCTOR TESTS
+	@Test
+	public void constructorNormalCase(){
+		Bullet testBullet = new Bullet(100, 150, -3, -5, 10);
+		
+		Vector testPos = testBullet.getPosition();
+		assertEquals(100, testPos.getX(), EPSILON);
+		assertEquals(150, testPos.getY(), EPSILON);
+		
+		Vector testVel = testBullet.getVelocity();
+		assertEquals(-3, testVel.getX(), EPSILON);
+		assertEquals(-5, testVel.getY(), EPSILON);
+		
+		assertEquals(10, testBullet.getRadius(), EPSILON);
+		assertEquals(300000, testBullet.getSpeedLimit(), EPSILON);
+	}
+	
+	@Test
+	public void constructorNormalCase2(){
+		Bullet testBullet = new Bullet(-300, -250, 24, -33, 20);
+		
+		Vector testPos = testBullet.getPosition();
+		assertEquals(-300, testPos.getX(), EPSILON);
+		assertEquals(-250, testPos.getY(), EPSILON);
+		
+		Vector testVel = testBullet.getVelocity();
+		assertEquals(24, testVel.getX(), EPSILON);
+		assertEquals(-33, testVel.getY(), EPSILON);
+		
+		assertEquals(20, testBullet.getRadius(), EPSILON);
+		assertEquals(300000, testBullet.getSpeedLimit(), EPSILON);
+	}
+
+	@Test
+	public void defaultConstructor() {
+		Bullet testBullet = new Bullet();
+		
+		Vector testPos = testBullet.getPosition();
+		assertEquals(0, testPos.getX(), EPSILON);
+		assertEquals(0, testPos.getY(), EPSILON);
+		
+		Vector testVel = testBullet.getVelocity();
+		assertEquals(0, testVel.getX(), EPSILON);
+		assertEquals(0, testVel.getY(), EPSILON);
+		
+		assertEquals(Bullet.getMinimumRadius(), testBullet.getRadius(), EPSILON);
+		assertEquals(300000, testBullet.getSpeedLimit(), EPSILON);
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void invalidXPositionConstructor(){
+		new Bullet(Double.NaN, 0, 0, 0, 10);
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void invalidYPositionConstructor(){
+		new Bullet(0, Double.POSITIVE_INFINITY, 0, 0, 10);
+	}
+
+	@Test
+	public void invalidXVelocityConstructor(){
+		Bullet testBullet = new Bullet(0, 0, Double.NaN, -250, 10);
+		
+		Vector testVel = testBullet.getVelocity();
+		assertEquals(0, testVel.getX(), EPSILON);
+		assertEquals(0, testVel.getY(), EPSILON);
+	}
+
+	@Test
+	public void invalidYVelocityConstructor(){
+		Bullet testBullet = new Bullet(0, 0, 300, Double.POSITIVE_INFINITY, 10);
+		
+		Vector testVel = testBullet.getVelocity();
+		assertEquals(0, testVel.getX(), EPSILON);
+		assertEquals(0, testVel.getY(), EPSILON);
+	}
+	
+	
+	@Test
+	public void setVelocitySeveralSpecialCases(){
+		Bullet testBullet = new Bullet(0, 0, Double.NEGATIVE_INFINITY, 0, 10);
+		
+		Vector testVel = testBullet.getVelocity();
+		assertEquals(0, testVel.getX(), EPSILON);
+		assertEquals(0, testVel.getY(), EPSILON);
+		
+		testBullet.setVelocity(300000, 300000);
+		testVel = testBullet.getVelocity();
+		assertEquals(300000*Math.cos(Math.PI/4), testVel.getX(), EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), testVel.getY(), EPSILON);
+		assertEquals(300000, testBullet.getTotalVelocity(), EPSILON);
+		
+		testBullet.setVelocity(-300000, 300000);
+		testVel = testBullet.getVelocity();
+		assertEquals(-300000*Math.cos(Math.PI/4), testVel.getX(), EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), testVel.getY(), EPSILON);
+		assertEquals(300000, testBullet.getTotalVelocity(), EPSILON);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void invalidRadiusConstructor(){
+		new Bullet(10, 10, 10, 10, -100);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void infiniteRadiusConstructor(){
+		new Bullet(10, 10, 10, 10, Double.POSITIVE_INFINITY);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void NaNRadiusConstructor(){
+		new Bullet(10, 10, 10, 10, Double.NaN);
+	}
+
+	// GETTERS AND SETTERS VALID TESTS
+	@Test
+	public void testPosition(){
+		Vector pos = globBullet.getPosition();
+		assertEquals(1, pos.getX(), EPSILON);
+		assertEquals(2, pos.getY(), EPSILON);
+		
+		globBullet.setPosition(123, 456);
+		
+		pos = globBullet.getPosition();
+		assertEquals(123, pos.getX(), EPSILON);
+		assertEquals(456, pos.getY(), EPSILON);
+		
+		// Back to original state
+		globBullet.setPosition(1, 2);
+		
+		pos = globBullet.getPosition();
+		assertEquals(1, pos.getX(), EPSILON);
+		assertEquals(2, pos.getY(), EPSILON);
+	}
+
+	@Test
+	public void testVelocity(){
+		Vector vel = globBullet.getVelocity();
+		
+		assertEquals(3, vel.getX(), EPSILON);
+		assertEquals(4, vel.getY(), EPSILON);
+		assertEquals(Math.sqrt(Math.pow(3, 2.0)+Math.pow(4, 2.0)), globBullet.getTotalVelocity(), EPSILON);
+		
+		globBullet.setVelocity(789, 654);
+		vel = globBullet.getVelocity();
+		assertEquals(789, vel.getX(), EPSILON);
+		assertEquals(654, vel.getY(), EPSILON);
+		assertEquals(Math.sqrt(Math.pow(789, 2.0)+Math.pow(654, 2.0)), globBullet.getTotalVelocity(), EPSILON);
+		
+		// Rescale of velocity test	
+		globBullet.setVelocity(300000, 300000);
+		vel = globBullet.getVelocity();
+		assertEquals(300000*Math.cos(Math.PI/4), vel.getX(), EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), vel.getY(), EPSILON);
+		assertEquals(300000, globBullet.getTotalVelocity(), EPSILON);
+		
+		globBullet.setVelocity(-300000, 300000);
+		vel = globBullet.getVelocity();
+		assertEquals(-300000*Math.cos(Math.PI/4), vel.getX(), EPSILON);
+		assertEquals(300000*Math.sin(Math.PI/4), vel.getY(), EPSILON);
+		assertEquals(300000, globBullet.getTotalVelocity(), EPSILON);
+	}
+
+	//move
+	@Test
+	public void normalcases() {
+		Bullet testBullet = new Bullet(0, 0, 10, 10, 20);
+		// move
+		testBullet.move(10);
+		
+		Vector newPos = testBullet.getPosition();
+		assertEquals(100, newPos.getX(), EPSILON);
+		assertEquals(100, newPos.getY(), EPSILON);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void moveInfiniteDuration(){
+		globBullet.move(Double.POSITIVE_INFINITY);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void NaNDuration(){
+		globBullet.move(Double.NaN);
+	}
+
+	// Checkers
+	@Test
+	public void isValidPositionComponentTest(){
+		assertTrue(globBullet.isValidPositionComponent(0));
+		assertFalse(globBullet.isValidPositionComponent(Double.NEGATIVE_INFINITY));
+	}
+	
+	@Test
+	public void testIsValidVelocityTest(){
+		assertTrue(globBullet.isValidVelocity(10, 10));
+		assertFalse(globBullet.isValidVelocity(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+	}
+	
+	@Test
+	public void testIsValidSpeedLimitTest(){
+		assertTrue(globBullet.isValidSpeedLimit(150000));
+		assertFalse(globBullet.isValidSpeedLimit(300001));
+		assertFalse(globBullet.isValidSpeedLimit(-150000));
+	}
+
+	public void testIsValidRadiusTest(){
+		assertFalse(globBullet.isValidRadius(-10));
+		assertTrue(globBullet.isValidRadius(Bullet.getMinimumRadius()+10));
+	}
+	
+	@Test
+	public void canHaveAsShipTest(){
+		Bullet testBullet = new Bullet(50, 50, 0, 0, 10);
+		Ship testShip = new Ship(100, 100, 0, 0, 15, 0);
+		
+		assertTrue(testBullet.canHaveAsShip(testShip));
+		testShip.loadBullets(testBullet);
+		// testBullet is already loaded
+		assertFalse(testBullet.canHaveAsShip(testShip));
+		
+		// testBullet is already in another ship
+		Ship testShip2 = new Ship();
+		assertFalse(testBullet.canHaveAsShip(testShip2));
+		
+		// testBullet is too large
+		Bullet testBullet2 = new Bullet(0, 0, 0, 0, 100);
+		assertFalse(testBullet2.canHaveAsShip(testShip2));
+	}
+	
+	// getDistanceBetween, overlap, getTimeToCollision, getCollisionPosition TESTS
+	@Test
+	public void DistanceBetweenTests() {	
+		// create two test bullets that will only be used for this experiment
+		// case 1 bullets are not overlapping
+		Bullet bullet1 = new Bullet();
+		Bullet bullet2 = new Bullet(40, 0, 0, 0, 10);
+		assertEquals(40-Bullet.getMinimumRadius()-10, bullet1.getDistanceBetween(bullet2), EPSILON);
+		
+		//case 2 bullets are touching
+		bullet2.setPosition(Bullet.getMinimumRadius()+10, 0);
+		assertEquals(0, bullet1.getDistanceBetween(bullet2), EPSILON);
+		
+		//case 3 bullets are overlapping, negative value expected
+		bullet2.setPosition(10, 0);
+		assertEquals(-Bullet.getMinimumRadius(), bullet1.getDistanceBetween(bullet2), EPSILON);
+		
+		// Case 4 one bullet is completely in the other bullet
+		bullet2.setPosition(0.75, 0);
+		Ship ship3 = new Ship(0, 0, 0, 0, 30, 0);
+		assertEquals(bullet2.getDistanceBetween(ship3), -19.25, EPSILON);
+		
+		// case 5  get distance between bullet1 and bullet1, this should return 0
+		assertEquals(0, bullet1.getDistanceBetween(bullet1), EPSILON);
+	}	
+	
+	@Test
+	public void simpleCase1(){
+		// SCENARIO: bullet1 is moving right towards bullet2 with a velocity of [10, 0].
+		//			 bullet2 is standing still at [90, 20].
+		//			 bullet1 and bullet2 both have a radius of 10.
+		Bullet bullet1 = new Bullet(20, 20, 10, 0, 10);
+		Bullet bullet2 = new Bullet(90, 20, 0, 0, 10);
+		World world = new World(10000,10000);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
+		// distanceBetween
+		double distanceBetween = bullet1.getDistanceBetween(bullet2);
+		assertEquals(50, distanceBetween, EPSILON);
+		
+		// overlap
+		assertFalse(bullet1.overlap(bullet2));
+		assertFalse(bullet2.overlap(bullet1));
+		assertTrue(bullet1.overlap(bullet1));
+		
+		// timeToCollision
+		double timeToCollision = bullet1.getTimeToCollision(bullet2);
+		assertEquals(5, timeToCollision, EPSILON);
+		
+		// collisionPosition
+		Vector collisionPosition = bullet1.getCollisionPosition(bullet2);
+		assertEquals(80, collisionPosition.getX(), EPSILON);
+		assertEquals(20, collisionPosition.getY(), EPSILON);
+	} 
+
+	@Test
+	public void simpleCase2(){
+		// SCENARIO: bullet1 is moving left towards bullet2 with a velocity of [-10, 0].
+		//			 bullet2 is standing still at [0, 0].
+		//			 bullet1 and bullet2 have a radius of 10.
+		Bullet bullet1 = new Bullet(90, 20, -10, 0, 10);
+		Bullet bullet2 = new Bullet(20, 20, 0, 0, 10);
+		World world = new World(10000,10000);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
+		// distanceBetween
+		double distanceBetween = bullet1.getDistanceBetween(bullet2);
+		assertEquals(50, distanceBetween, EPSILON);
+		
+		// overlap
+		assertFalse(bullet1.overlap(bullet2));
+		assertFalse(bullet2.overlap(bullet1));
+		assertTrue(bullet1.overlap(bullet1));
+		
+		// timeToCollision
+		double timeToCollision = bullet1.getTimeToCollision(bullet2);
+		assertEquals(5, timeToCollision, EPSILON);
+		
+		// collisionPosition
+		Vector collisionPosition = bullet1.getCollisionPosition(bullet2);
+		assertEquals(30, collisionPosition.getX(), EPSILON);
+		assertEquals(20, collisionPosition.getY(), EPSILON);
+	} 
+
+	@Test
+	public void simpleCase3(){
+		// SCENARIO: bullet1 is standing still in the origin	
+		// 		     bullet2 is moving right towards bullet1 from above
+		
+		Bullet bullet1 = new Bullet(20, 20, 0, 0,10);
+		Bullet bullet2 = new Bullet(20, 80, 0, -10, 10);
+		World world = new World(10000,10000);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
+		// distanceBetween
+		double distanceBetween = bullet1.getDistanceBetween(bullet2);
+		assertEquals(40, distanceBetween, EPSILON);
+		
+		distanceBetween = bullet2.getDistanceBetween(bullet1);
+		assertEquals(40, distanceBetween, EPSILON);
+		
+		// overlap
+		assertFalse(bullet1.overlap(bullet2));
+		assertFalse(bullet2.overlap(bullet1));
+		assertTrue(bullet1.overlap(bullet1));
+		
+		// timeToCollision
+		double timeToCollision = bullet1.getTimeToCollision(bullet2);
+		assertEquals(4, timeToCollision, EPSILON);
+		
+		timeToCollision = bullet2.getTimeToCollision(bullet1);
+		assertEquals(4, timeToCollision, EPSILON);
+		
+		// collisionPosition
+		Vector collisionPosition = bullet1.getCollisionPosition(bullet2);
+		assertEquals(20, collisionPosition.getX(), EPSILON);
+		assertEquals(30, collisionPosition.getY(), EPSILON);
+		
+		collisionPosition = bullet2.getCollisionPosition(bullet1);
+		assertEquals(20, collisionPosition.getX(), EPSILON);
+		assertEquals(30, collisionPosition.getY(), EPSILON);
+	}
+
+	@Test
+	public void symetricalCase(){
+		// SCENARIO: bullet1 is moving with velocity [10cos(PI/3), 10sin(PI/3)]
+		//			 bullet2 is moving with velocity [-10cos(PI/3), 10sin(PI/3)]
+		// 			 Both bullets are moving on an equilateral triangle.
+		Bullet bullet1 = new Bullet(20, 20, 10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10);
+		Bullet bullet2 = new Bullet(80, 20, -10*Math.cos(Math.PI/3), 10*Math.sin(Math.PI/3), 10);
+		World world = new World(10000,10000);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
+		// distanceBetween
+		double distanceBetween = bullet1.getDistanceBetween(bullet2);
+		assertEquals(40, distanceBetween, EPSILON);
+		
+		// overlap
+		assertFalse(bullet1.overlap(bullet2));
+		assertFalse(bullet2.overlap(bullet1));
+		assertTrue(bullet1.overlap(bullet1));
+		
+		// timeToCollision
+		double timeToCollision = bullet1.getTimeToCollision(bullet2);
+		assertEquals(4, timeToCollision, EPSILON);
+		
+		// collisionPosition
+		Vector collisionPosition = bullet1.getCollisionPosition(bullet2);
+		assertEquals(30+40*Math.cos(Math.PI/3), collisionPosition.getX(), EPSILON);
+		assertEquals(20+40*Math.sin(Math.PI/3), collisionPosition.getY(), EPSILON);
+	}
+
+	// getMass Tests
+	@Test
+	public void getMassTest(){
+		double mass = globBullet.getTotalMass();
+		
+		assertEquals((4.0/3)*Math.PI*Math.pow(globBullet.getRadius(), 3.0)*globBullet.getDensity(), mass, EPSILON);
+	}
+	
+	// nbTimesBounced Tests
+	public void nbTimesBouncedTest(){
+		assertEquals(0, globBullet.getNbTimesBounced());
+		
+		globBullet.setNbTimesBounced(globBullet.getMaxTimesBounced()+10);
+		assertEquals(0, globBullet.getNbTimesBounced());
+		
+		globBullet.setNbTimesBounced(globBullet.getMaxTimesBounced());
+		assertEquals(globBullet.getMaxTimesBounced(), globBullet.getNbTimesBounced());
+		
+		globBullet.setNbTimesBounced(0);
+	}
+
+	// Associations
+	@Test
+	public void shipRelationTest(){
+		Bullet testBullet = new Bullet(50, 50, 0, 0, 10);
+		Ship testShip = new Ship(100, 100, 0, 0, 15, 0);
+		
+		assertNull(testBullet.getShip());
+		
+		testBullet.setShip(testShip);
+		assertTrue(testBullet.getShip() == testShip);
+		
+		testBullet.setShip(null);
+		assertNull(testBullet.getShip());
+		
+	}
+	
+	@Test
+	public void sourceShipRelationTest(){
+		Bullet testBullet = new Bullet(50, 50, 0, 0, 10);
+		Ship testShip = new Ship(100, 100, 0, 0, 15, 0);
+		
+		assertNull(testBullet.getSourceShip());
+		
+		testBullet.setSourceShip(testShip);
+		assertTrue(testBullet.getSourceShip() == testShip);
+		
+		testBullet.setSourceShip(null);
+		assertNull(testBullet.getSourceShip());
+	}
+	
+	// Termination tests
+	@Test
+	public void terminationTest(){
+		Bullet testBullet = new Bullet(100, 100, 0, 0, 0);
+		Ship testShip = new Ship(500, 500, 0, 0, 0, 0);
+		World testWorld = new World(1000, 1000);
+		
+		testShip.loadBullets(testBullet);
+		testWorld.addEntity(testBullet);
+		testWorld.addEntity(testShip);
+		
+		testBullet.die();
+		
+		assertTrue(testBullet.isDead());
+		assertNull(testBullet.getShip());
+		assertNull(testBullet.getWorld());
+		assertFalse(testWorld.contains(testBullet));
+		assertFalse(testShip.getBullets().contains(testBullet));
+		
+		Bullet testBullet2 = new Bullet(250, 250, 0, 0, 0);
+		testWorld.addEntity(testBullet2);
+		testShip.loadBullets(testBullet2);
+		testShip.fireBullet();
+		
+		assertTrue(testBullet2.getSourceShip() == testShip);
+		testBullet2.die();
+		assertTrue(testBullet2.isDead());
+		assertNull(testBullet2.getSourceShip());
+	}
+}

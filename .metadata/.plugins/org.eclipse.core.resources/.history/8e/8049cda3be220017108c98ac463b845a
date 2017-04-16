@@ -1,0 +1,169 @@
+package asteroids.model;
+
+import be.kuleuven.cs.som.annotate.*;
+
+/**
+ * A Class that contains all the information about a collision that
+ * will happen in a game World.
+ * 
+ * @version	1.0
+ * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
+ * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek)  
+ */
+public class Collision{
+	
+	/**
+	 * Initialize this new Collision object.
+	 * 
+	 * @param firstInvolvedEntity
+	 * 			The first Entity involved in this collision.
+	 * @param secondInvolvedEntity
+	 * 			The second Entity involved in this collision.
+	 * 			If secondInvolvedEntity is null, firstInvolvedEntity will collide
+	 * 			with a boundary of its world.
+	 * @param collisionPosition
+	 * 			The position where this collision will happen.
+	 * @param timeToCollision
+	 * 			The time until this collision will happen, seen at the moment of creation of this object.
+	 * @post	FirstInvolvedEntity will be set to the given firstInvolvedEntity
+	 * 			| new.getFirstInvolvedEntity() == firstInvolvedEntity
+	 * @post	SecondInvolvedEntity will be set to the given secondInvolvedEntity
+	 * 			| new.getSecondInvolvedEntity() == secondInvolvedEntity
+	 * @post	If the given firstInvolvedEntity is not null, collisionPosition and timeToCollision
+	 * 			will be set to the given collisionPosition and timeToCollision respectively.
+	 * 			| if (firstInvolvedEntity != null)
+	 * 			| then (getCollisionPosition() == collisionPosition) &&
+	 * 			|	   (getTimeToCollision() == timeToCollision)
+	 * @post	If the given firstInvolvedEntity is null, collisionPosition and timeToCollision
+	 * 			will be set to null and Double.POSITIVE_INFINITY respectively.
+	 * 			| if (firstInvolvedEntity == null)
+	 * 			| then (getCollisionPosition() == null) &&
+	 * 			|	   (getTimeToCollision() == Double.POSITIVE_INFINITY)
+	 */
+	public Collision(Entity firstInvolvedEntity, Entity secondInvolvedEntity, 
+					Vector collisionPosition, double timeToCollision){
+		
+		this.firstInvolvedEntity = firstInvolvedEntity;
+		this.secondInvolvedEntity = secondInvolvedEntity;
+		
+		if (firstInvolvedEntity == null){
+			this.timeToCollision = Double.POSITIVE_INFINITY;
+			this.collisionPosition = null;
+		} else { 	
+			this.collisionPosition = collisionPosition;
+			this.timeToCollision = timeToCollision;
+		}
+	}
+	
+	/**
+	 * Initialize this new Collision object.
+	 * 
+	 * When this constructor is used, this Collision object will be the 
+	 * equivalent to: "No collision will happen". 
+	 * This means that firstInvolvedEntity, secondInvovledEntity and 
+	 * collisionPosition will be null, and timeToCollision will be
+	 * Double.POSITIVE_INFINITY
+	 * 
+	 * @effect	
+	 * 			| this(null, null, null, Double.POSITIVE_INFINITY)
+	 */
+	public Collision(){
+		this(null, null, null, Double.POSITIVE_INFINITY);
+	}
+	
+	/**
+	 * Get the first Entity that is involved in this collision.
+	 * @see implementation
+	 */
+	@Basic @Immutable
+	public Entity getFistInvolvedEntity(){
+		return firstInvolvedEntity;
+	}
+	
+	/**
+	 * A variable registering the first involved entity of this collision
+	 */
+	private final Entity firstInvolvedEntity;
+	
+	
+	/**
+	 * Get the second Entity that is involved in this collision
+	 * When secondInvolvedEntity is null, firstInvolvedEntity will
+	 * collide with a boundary of its world.
+	 * 
+	 * @return The second involved Entity of this collision.
+	 * 			if (result == null) then getFistInvolvedEntity() will
+	 * 			collide with a boundary of getFirstInvolvedEntity().getWorld()
+	 */
+	@Basic @Immutable
+	public Entity getSecondInvolvedEntity(){
+		return this.secondInvolvedEntity;
+	}
+	
+	/**
+	 * A variable registering the second involved entity of this collision.
+	 */
+	private final Entity secondInvolvedEntity;
+	
+	/**
+	 * Get the position where this collision will happen.
+	 * @see implementation
+	 */
+	@Basic @Immutable
+	public Vector getCollisionPosition(){
+		return this.collisionPosition;
+	}
+	
+	/**
+	 * A variable registering the position of this collision
+	 */
+	private final Vector collisionPosition;
+	
+	
+	/**
+	 * Get the time until this collision will happen.
+	 * I.e. the time until this collision when this Collision object
+	 * was created.
+	 * 
+	 * @see implementation
+	 */
+	@Basic @Immutable
+	public double getTimeToCollision(){
+		return this.timeToCollision;
+	}
+	
+	/**
+	 * A variable registering the time until this collision.
+	 */
+	private final double timeToCollision;
+	
+	/**
+	 * Return a textual representation of this collision
+	 * 
+	 * @return 
+	 * 		  	| If getFirstInvolvedEntity() == null && getSecondInvolvedEntity() == null,
+	 * 		  	| 	then result =="No collision will happen"
+	 * @return 
+	 * 			| If getFirstInvolvedEntity() != null && getSecondInvolvedEntity() == null
+	 * 			| 	then result == "Collision: Between "+getFistInvolvedEntity()+" and a border at "+
+	 *			|					getCollisionPosition()+" in "+getTimeToCollision()+"sec";
+	 * @return
+	 *			| If getFirstInvolvedEntity() != null && getSecondInvolvedEntity() != null
+	 *			|	then result == "Collision between "+getFistInvolvedEntity()+" and "+getSecondInvolvedEntity()+" at "+
+	 *								getCollisionPosition()+" in "+getTimeToCollision()+"sec";
+	 */
+	@Override
+	public String toString(){
+		if (getFistInvolvedEntity() == null && getSecondInvolvedEntity() == null) {
+			return "Collision: No collision will happen";
+		}
+		else if (getSecondInvolvedEntity() == null) {
+			return "Collision: Between "+getFistInvolvedEntity()+" and a border at "+
+					getCollisionPosition()+" in "+getTimeToCollision()+"sec";
+		}
+		else {
+			return "Collision between "+getFistInvolvedEntity()+" and "+getSecondInvolvedEntity()+" at "+
+			getCollisionPosition()+" in "+getTimeToCollision()+"sec";
+		}
+	}
+}

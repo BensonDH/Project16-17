@@ -5,7 +5,8 @@ import java.util.Objects;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * Class representing a value in a 2 dimensional space.	Values returned have to be doubles.
+ * An immutable class representing a value in a 2 dimensional space.	
+ * Values returned have to be doubles.
  */
 @Value
 public class Vector {
@@ -15,7 +16,7 @@ public class Vector {
 	 * 			double determining the x position of the two dimensional field
 	 * @param y
 	 * 			double determining the y position of the two dimensional field
-	 * @Post
+	 * @post
 	 * 		|	this.getX() = 0
 	 * 		|	this.getY() = 0
 	 */
@@ -64,7 +65,7 @@ public class Vector {
 	/**
 	 * Return the Euclidean norm (also known as the 2-norm) of this 2-Dimensional vector.
 	 *  
-	 * @return	The Euclidean norm of this vector
+	 * @return	The Euclidean norm of this vector.
 	 * 			| sqrt(getX()^2 + getY()^2)
 	 */
 	public double norm(){
@@ -72,7 +73,8 @@ public class Vector {
 	}
 	
 	/**
-	 * Instead of returning the Euclidian Norm it returns the Euclidian root squared
+	 * Instead of returning the Euclidian Norm it returns the Euclidian root squared.
+	 * 
 	 * @See implementation
 	 */
 	public double squaredNorm(){

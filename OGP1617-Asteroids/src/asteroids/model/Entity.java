@@ -1,9 +1,30 @@
 package asteroids.model;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
-import be.kuleuven.cs.som.annotate.Raw;
+import be.kuleuven.cs.som.annotate.*;
 
+/**
+ * GitHub repository : https://github.com/BensonDH/Project16-17
+ */
+
+/**
+ * A Class representing entities.
+ *
+ * - Entities are located on a certain position [km] with a certain velocity [km/s], 
+ * 	 expressed in a Cartesian coordinate system with x- and y-coordinates.
+ * - Entities also have a speed limit, meaning that the total velocity of an entity
+ * 	 will never exceed the speed limit.
+ * - Entities can be located in a world. Each entity can only be in one world at the
+ * 	 same time
+ * 
+ * @invar Both X- and Y-components of the position must be valid for every
+ * 		  entity.
+ * 		  | isValidPositionComponent(positionX)
+ * 		  | isValidPositionComponent(positionY)
+ * 
+ * @version	1.0
+ * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
+ * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek) 
+ */
 public abstract class Entity {
 	
 	/**
@@ -36,9 +57,11 @@ public abstract class Entity {
    	 * 			X- and Y-component (velocityX and velocityY)
    	 * 			| setVelocity(velocityX,velocityY)
    	 * @throws 	IllegalArgumentException
-   	 * 			The given position is infinite or has Double.Nan as a value 
-   	 * 			| isInfinite(positionX) || isNaN(positionX)
-   	 * 			| isInfinite(positionY) || isNan(positionY)
+	 * 				The given positionX is not valid.
+	 * 				| isValidPositionComponent(positionX)
+	 * @throws	IllegalArgumentException
+	 * 				The given positionY is not valid.
+	 * 				| isValidPositionComponent(positionY)
    	 */
 	public Entity(double positionX, double positionY, double velocityX, 
    			double velocityY, double speedLimit) throws IllegalArgumentException{
@@ -50,20 +73,29 @@ public abstract class Entity {
    		
 		setPosition(positionX, positionY);
  		setVelocity(velocityX, velocityY);
-	
 	}
 	
 	/**
-	 * initializes this new entity with its given paramaters and its speed limit set to the speed of light
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @effect 
-	 * 		| this(positionX,positionY,velocityX,velocityY,C)
-	 * @throws IllegalArgumentException
-	 * 		| isInfinite(positionX) || isNaN(positionX)
-   	 * 		| isInfinite(positionY) || isNan(positionY)
+	 * initializes this new entity with its given parameters and its speed limit set 
+	 * to its default value, which is the speed of light.
+	 * 
+   	 * @param positionX
+   	 * 				The x-component of the position of the entity.
+   	 * @param positionY
+   	 * 				The y-component of the position of the entity.
+   	 * @param velocityX
+   	 * 				The x-component of the velocity of the entity.
+   	 * @param velocityY
+   	 * 				The y-component of the velocity of the entity.
+	 * @effect 		This entity will be set at the given coordinates with the given
+	 * 				velocity and its speed limit set to the speed of light.
+	 * 				| this(positionX, positionY, velocityX, velocityY, c)
+   	 * @throws 	IllegalArgumentException
+	 * 				The given positionX is not valid.
+	 * 				| isValidPositionComponent(positionX)
+	 * @throws	IllegalArgumentException
+	 * 				The given positionY is not valid.
+	 * 				| isValidPositionComponent(positionY)
 	 */
    	public Entity(double positionX, double positionY, double velocityX, 
    			double velocityY) throws IllegalArgumentException{
@@ -85,49 +117,69 @@ public abstract class Entity {
 	// Position [DEFENSIVE]
 	/**
 	 * Return the position of this entity.
-	 * @return	The position of this entity represented by a Vector as [xPosition, yPosition].
+	 * 
+	 * @return	The position of this entity represented by an 
+	 * 			object of the class Vector.
 	 */
 	@Basic
 	public Vector getPosition() {
-		// TODO: .clone is niet nodig als Vector immutable is
-		return this.position.clone();
+		return this.position;
 	}
 	
 	/**
 	 * Set the position of this entity to the given x and y value.
+	 * 
 	 * @param x
 	 * 			The x-component of the position of this entity.
 	 * @param y
 	 * 			The y-component of the position of this entity.
 	 * @post 	The position of this entity will be equal to the given
 	 * 			X-component and Y-component
-	 * 		   | new.getPosition() == [x, y]
+	 * 		   	| new.getPosition().getX() == x
+	 * 			| new.getPosition().getY() == y
 	 * @throws IllegalArgumentException
-	 * 				The given parameter x or y is infinite or equal to NaN
-	 * 				| x == INFINITE || y == INFINITE || x == NaN || y == NaN
+	 * 			The given X-component is not valid.
+	 * 			| !isValidPositionComponent(x)
+	 * @throws IllegalArgumentException
+	 * 			The given Y-component is not valid.
+	 * 			| !isValidPositionComponent(y)
 	 */
 	@Basic
 	public void setPosition(double x, double y) throws IllegalArgumentException{
-		if (Double.isNaN(x) || Double.isInfinite(x))
-			throw new IllegalArgumentException("The given x-value is not valid.");
-		else if (Double.isNaN(y) || Double.isInfinite(y))
-			throw new IllegalArgumentException("The given y-value is not valid.");
+		if (!isValidPositionComponent(x))
+			throw new IllegalArgumentException("The given X-component is not valid.");
+		if (!isValidPositionComponent(y))
+			throw new IllegalArgumentException("The given Y-component is not valid.");
 		
 		this.position = new Vector(x, y);
 	}
 		
 	/**
+	 * Check whether the given value is a valid value for one of the components
+	 * of the position of this ship.
+	 * A value is a valid position component if it is finite and not NaN. 
+	 * 
+	 * @param value
+	 * 			The value that has to be verified.
+	 * @see implementation
+	 */
+	public boolean isValidPositionComponent(double value){
+		return !(Double.isNaN(value) || Double.isInfinite(value));
+	}
+	
+	/**
 	 * Change the position of this entity based on the current position, velocity 
 	 * and given duration.
+	 * 
 	 * @param duration
-	 * 			The considered duration of the movement.
-	 * @post	The position of this entity will be set to the position it has after the
-	 * 			considered amount of time.
-	 * 			| setPosition(getPosition().getX()+duration*getVelocity().getX(), 
-	 * 						  getPosition().getY()+duration*getVelocity().getY())
+	 * 				The considered duration of the movement.
+	 * @post		The position of this entity will be set to the position it has after the
+	 * 				considered amount of time.
+	 * 				| setPosition(getPosition().getX()+duration*getVelocity().getX(), 
+	 * 						  	  getPosition().getY()+duration*getVelocity().getY())
 	 * @throws	IllegalArgumentException
-	 * 			The given duration is equal to NaN.
-	 * 			| duration == Double.NaN
+	 * 				The given duration is equal to NaN.
+	 * 				| duration == Double.NaN
 	 */
 	public void move(double duration) throws IllegalArgumentException{
 		if (Double.isNaN(duration))
@@ -144,26 +196,17 @@ public abstract class Entity {
 
 
 	// Velocity [TOTAL]
-	
 	/**
 	 * Return the velocity of this entity.
-	 * @return
-	 * 		A Vector representing the velocity of this entity as [xVelocity, yVelocity]
+	 * 
+	 * @return The velocity of this entity represented as an 
+	 * 		   object of the class Vector.
 	 */	
 	@Basic
 	public Vector getVelocity() {
-		return this.velocity.clone();
+		return this.velocity;
 	}
 
-	/**
-	 * Returns the speed limit of this entity.
-	 * @return The speed limit of this entity.
-	 */
-	@Basic
-	public double getSpeedLimit(){
-		return this.speedLimit;
-	}
-	
 	/**
 	 * Set the velocity of this entity to the given velocityX and velocityY values.
 	 * 
@@ -199,6 +242,16 @@ public abstract class Entity {
 		}
 	}
 	
+	/**
+	 * Return the speed limit of this entity.
+	 * 
+	 * @see implementation
+	 */
+	@Basic
+	public double getSpeedLimit(){
+		return this.speedLimit;
+	}
+	
    	/**
    	 * Return the length of the velocity vector of this entity.
    	 * 
@@ -229,6 +282,7 @@ public abstract class Entity {
 	
 	/**
 	 * Checks whether the given speedLimit is a valid speed.
+	 * 
 	 * @param speedLimit
 	 * 			The speed limit that needs to be verified.
 	 * @return 	True if and only if the given speed limit is larger than 0 and smaller
@@ -251,12 +305,15 @@ public abstract class Entity {
 	 */
 	private final double speedLimit;
 	
+	
 	// Radius [DEFENSIVE]
 	/**
 	 * get the radius of an Entity
 	 */
 	@Basic
 	public abstract double getRadius();
+	
+	
    	// Mass [TOTAL]
 	/**
 	 * get the total mass of an entity
@@ -267,12 +324,15 @@ public abstract class Entity {
    	
    	// World-Entity Relation
    	/**
-   	 * Sets the world of the entity to the given world
+   	 * Sets the world of the entity to the given world.
+   	 * 
    	 * @param world
-   	 * @post 
+   	 * @post The entity's world will be set to the given world if
+   	 * 		 the given world is valid.
    	 * 		| if (canHaveAsWorld)
    	 * 		| then new.getWorld() == world
    	 * @throws IllegalStateException
+   	 * 		When this entity already lies in a world.
    	 * 		| if (!(getWorld() == null)
    	 */
 	@Raw @Basic
@@ -285,7 +345,10 @@ public abstract class Entity {
    	}
    	
    	/**
-   	 * removes the entity from the given world.
+   	 * Removes the entity from it's world.
+   	 * 
+   	 * @post	The entity's world will be set to null
+   	 * 			| new.getWorld() == null
    	 */
 	@Raw
    	public void removeWorld() {
@@ -293,7 +356,8 @@ public abstract class Entity {
    	}
    	
    	/**
-   	 * returns the world of this entity
+   	 * Returns the world of this entity.
+   	 * 
    	 * @see implementation
    	 */
 	@Basic
@@ -302,10 +366,13 @@ public abstract class Entity {
    	}
    	
    	/**
-   	 * checks whether this entity can have this world as its world
+   	 * Checks whether this entity can have the given world as its world.
+   	 * 
    	 * @param world
-   	 * @effect
-   	 * 		| world.canHaveAsEntity(this)
+   	 * 			The world that has to be verified.
+   	 * @effect	Returns true if the given world can hold this entity, returns
+   	 * 			false otherwise.
+   	 * 			| world.canHaveAsEntity(this)
    	 */
 	@Basic
    	public boolean canHaveAsWorld(World world){
@@ -320,8 +387,10 @@ public abstract class Entity {
    	
    	// ------- Other functions --------
    	/**
-   	 * Get the distance between this Entity and the other Entity
+   	 * Get the distance between this Entity and the given other Entity.
+   	 * 
    	 * @param otherEntity
+   	 * 				The other entity involved in the calculations.
    	 * @see implementation
    	 */
    	public double getDistanceBetweenCenters(Entity otherEntity){
@@ -331,9 +400,14 @@ public abstract class Entity {
    	}
    	
    	/**
-   	 * checks if an entity significantly overlaps with another entity
+   	 * Checks whether an entity overlaps significantly with another entity.
+   	 * 
    	 * @param otherEntity
-   	 * @see implementation
+   	 * 			The other entity that is involved in the calculations.
+     * @return True if and only if the distance between both entities' centers
+     * 		   is smaller than or equal to 99% of the sum of both entities' radiuses.
+     * 		   | result == (getDistanceBetweenCenters(otherEntity) 
+     * 		   |			<= 0.99*(getRadius() + otherEntity.getRadius()) 
    	 */
    	public boolean overlapSignificantly(Entity otherEntity){
    		double distance = getDistanceBetweenCenters(otherEntity);
@@ -341,10 +415,17 @@ public abstract class Entity {
    		
    		return distance <= (0.99*totalRadius);
    	}
+   	
    	/**
-   	 * checks whether an entity overlaps with another entity
+   	 * Checks whether an entity overlaps with another entity.
+   	 * 
    	 * @param otherEntity
-   	 * @see implementation
+   	 * @return	True if and only if the distance between both entities' centers
+   	 * 			is between 99% and 101% of the sum of both entities' radiuses.
+   	 * 			False otherwise
+   	 * 			| let (totalRadius = getRadius() + otherEntity.getRadius())
+   	 * 			|	 result == (0.99*totalRadius <= getDistanceBetweenCenters(otherEntity)
+   	 * 			|								 <= 1.01*totalRadius)
    	 */
    	public boolean apparentlyCollide(Entity otherEntity) {
    		double distance = getDistanceBetweenCenters(otherEntity);
@@ -359,14 +440,16 @@ public abstract class Entity {
 	 * @param otherEntity
 	 * 			The other entity involved in the calculation of the distance in between
 	 * 			both entities.
-	 * @return	The distance between this entity and otherEntity. The distance may be
-	 * 			negative if both entities overlap. if this == otherEntity the distance will be zero
-	 * 			| if(this== otherEntity)
-	 * 			| 	then this.getDistanceBetween(otherEntity) == 0
-	 * 			| if(this.overlap(otherEntity))
-	 * 			|	then this.getDistanceBetween(otherEntity) < 0
+	 * @return 	Zero if this entity equals the given other entity.
+	 * 			| if(this == otherEntity)
+	 * 			| 	then result == 0
+	 * 
+	 * @return	The distance between this entity and otherEntity. 
+	 * 			The distance may be negative if both entities overlap. 
+	 * 			| if (this.overlap(otherEntity))
+	 * 			|	then result < 0
 	 * 			| else
-	 * 			| 	this.getDistanceBetween(otherEntity) > 0
+	 * 			| 	result > 0
 	 * 
 	 * @throws	NullPointerException
 	 * 			The given otherEntity is null.
@@ -395,10 +478,12 @@ public abstract class Entity {
    	
 	/**
 	 * Checks whether two entities overlap.
-	 * @param otherENtity
+	 * 
+	 * @param otherEntity
 	 * 			The other entity involved in the calculations.
-	 * @return	True if and only if this entity and otherEntity overlap.
-	 * 			| this.getDistanceBetween(otherEntity) <= 0
+	 * @return	True if and only if the distance between this entity and 
+	 * 			otherEntity is zero or negative.
+	 * 			| result == (this.getDistanceBetween(otherEntity) <= 0)
 	 */
 	public boolean overlap(Entity otherEntity) throws NullPointerException{
 		if (otherEntity == null)
@@ -407,14 +492,23 @@ public abstract class Entity {
 	}
 	
 	/**
+	 * Calculate the time it takes for this entity and the given otherEntity to collide.
+	 * 
 	 * @param otherEntity
 	 * 			The other entity that collides with this entity.
-	 * @return The resulting double will be the time in seconds that it takes for the two entities to collide.
+	 * @return The resulting double will be the time in seconds that it takes for the 
+	 * 			two entities to collide.
 	 * 			| let
 	 * 			| 	new = this.move(result)
 	 * 			|   newOtherEntity = otherEntity.move(result)
 	 * 			| in
 	 * 			|	new.getDistanceBetween(newOtherEntity) == 0
+	 * @throws	NullPointerException
+	 * 			If otherEntity is null
+	 * 			| otherEntity == null
+	 * @throws	IllegalArgumentException
+	 * 			If both entities already collided (if they overlap)
+	 * 			| overlapSignificantly(otherEntity)
 	 */
 	public double getTimeToCollision(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
@@ -451,17 +545,19 @@ public abstract class Entity {
 	}
 
 	/** 
-	 * Return the position of this entity when this ship and the given other entity collide.
-	 * 	This method returns null if this entity and the given other entity never collide.
+	 * Return the position of this entity when this entity and the given otherEntity collide.
+	 * This method returns null if this entity and the given other entity never collide.
+	 * 
 	 * @param otherEntity
 	 * 			The other entity that collides with this entity.
-	 * @return 	An array with the x- and y-components of the position where this entity and the given otherEntity collide.
+	 * @return  Null if both entities never collide.
+	 * @return 	A vector representing the coordinates where the collision will take place.
 	 * @throws	NullPointerException
 	 * 			The given otherEntity is null
 	 * 			| otherEntity == null
 	 * @throws IllegalArgumentException
 	 * 			the entity overlaps with the other entity
-	 * 			| this.overlap(otherEntity)
+	 * 			| this.overlapSignificantly(otherEntity)
 	 */
 	public Vector getCollisionPosition(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)

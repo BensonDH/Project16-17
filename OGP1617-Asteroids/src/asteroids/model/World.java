@@ -7,27 +7,44 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hamcrest.core.IsNull;
-
 import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 
+/**
+ *  GitHub repository : https://github.com/BensonDH/Project16-17
+ */
+
+/**
+ * A class representing a game world.
+ * 
+ * - Game worlds have an immutable width and height.
+ * - A game world can contain Entities.
+ * 
+ * @version	1.0
+ * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
+ * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek) 
+ */
 public class World {
 	
 	/**
 	 * Initialize this new world with the given width and height.
+	 * 
 	 * @param width
 	 * 		  The width of this new world.
 	 * @param height
 	 * 		  The height of this new world.
+	 * @post
+	 * 		  | if (isValidBorderDistance(width))
+	 * 		  |		then new.getWidth() == width
 	 * @post 
 	 * 		  | if (!isValidBorderDistance(width)
-	 * 		  | then new.getWidth() == getDefaultWidth()
-	 * 		  | else new.getWidth() == width
+	 * 		  |	 	then new.getWidth() == getDefaultWidth()
+	 * @post
+	 * 		  | if (isValidBorderDistance(height)
+	 * 		  | 	then new.getHeight() == height
 	 * @post
 	 * 		  | if (!isValidBorderDistance(height)
-	 * 		  | then new.getHeight() == getDefaultHeight()
-	 * 		  | else new.getHeight() == height	
+	 * 		  | 	then new.getHeight() == getDefaultHeight()
 	 */
 	@Raw
 	public World(double width, double height){
@@ -58,8 +75,9 @@ public class World {
 	 * 
 	 * @param value
 	 * 		   	The value that needs to be verified.
-	 * @see implementation
-	 * 			
+	 * @return	True if and only if the given value is between 0 and 
+	 * 			Double.MAX_VALUE, false otherwise
+	 * 			| result == (0 < value < Double.MAX_VALUE)
 	 */
 	@Basic
 	public static boolean isValidBorderDistance(double value){
@@ -68,6 +86,8 @@ public class World {
 	
 	/**
 	 * Return the width of this world.
+	 * 
+	 * @see implementation
 	 */
 	@Basic @Immutable
 	public double getWidth(){
@@ -81,6 +101,8 @@ public class World {
 	
 	/**
 	 * Return the height of this world.
+	 * 
+	 * @see implementation
 	 */
 	@Basic @Immutable
 	public double getHeight(){
@@ -94,6 +116,8 @@ public class World {
 	
 	/**
 	 * Return the default width of this world.
+	 * 
+	 * @see implementation
 	 */
 	@Basic @Immutable
 	public static double getDefaultWidth(){
@@ -107,6 +131,8 @@ public class World {
 	
 	/**
 	 * Return the default height of this world.
+	 * 
+	 * @see implementation
 	 */
 	@Basic @Immutable
 	public static double getDefaultHeight(){
@@ -201,15 +227,13 @@ public class World {
 		for (Entity existingEntity: linkedEntities){
 			if (entity.overlapSignificantly(existingEntity)){	
 				return false;
-			}
-				
+			}		
 		}
-		
 		return true;
 	}
 	
 	/**
-	 * Check whether the given entity lies in this world
+	 * Check whether the given entity is present in this world.
 	 * 
 	 * @param entity	
 	 * 				The entity that has to be verified
@@ -231,7 +255,6 @@ public class World {
 		for (Entity entity: linkedEntities)
 			if (entity instanceof Ship)
 				result.add((Ship)entity);
-		
 		return result;
 	}
 	
@@ -245,7 +268,6 @@ public class World {
 		for (Entity entity: linkedEntities)
 			if (entity instanceof Bullet)
 				result.add((Bullet)entity);
-		
 		return result;
 	}
 	
@@ -277,8 +299,8 @@ public class World {
 	 * 			| if no such entity exists:
 	 * 			|		result == null
 	 */
-	public Entity getEntityAtPosition(double[] position){
-		Vector convertedPos = new Vector(position[0], position[1]);
+	public Entity getEntityAtPosition(double x, double y){
+		Vector convertedPos = new Vector(x, y);
 
 		return coordEntities.get(convertedPos);
 	}
@@ -424,7 +446,15 @@ public class World {
 	
 	/**
 	 * No Documentation required.
-	 * @param deltaT
+	 * 
+	 * @throws IllegalStateException
+	 * 			| isTerminated()
+	 * @throws IllegalArgumentException
+	 * 			| Double.isNaN(deltaT)
+	 * @throws IllegalArgumentException
+	 * 			| Double.isInfinite(deltaT)
+	 * @throws IllegalArgumentException
+	 * 			| (deltaT < 0)
 	 */
 	public void evolve(double deltaT, CollisionListener collisionListener){
 		if (isTerminated())
@@ -451,8 +481,11 @@ public class World {
 	}
 	
 	/**
-	 * TODO: Documentation
-	 * @return
+	 * Return a FirstCollision object that contains all the information about the
+	 * first collision that will happen in this world.
+	 * 
+	 * @return A FirstCollision object that contains all the information 
+	 * 		   about the next collision in this world.
 	 */
 	public Collision getFirstCollision(){
 		// if there are no entities in this world, we have to do nothing.
@@ -502,8 +535,18 @@ public class World {
 	
 	/**
 	 * Advance all entities that lie in this world with deltaT seconds.
-	 * TODO: Documentation
+	 * 
 	 * @param deltaT
+	 * 				The considered time interval of the Entities' movement.
+	 * @effect	
+	 * 			| for every entity in queryEntities():
+	 * 			|		entity.move(deltaT)
+	 * @effect	
+	 * 			| for every entity of type Ship in queryEntities():
+	 * 			|		if ship.isShipThrusterActive()
+	 * 			|			ship.thrust(deltaT)
+	 * 
+	 * This is a helper method of the method evolve.
 	 */
 	private void advanceEntities(double deltaT){
 		
@@ -514,7 +557,7 @@ public class World {
 			// Move the entity.
 			entity.move(deltaT);
 			// Update the coordEntities map
-			//updateCoordMap();
+			updateCoordMap();
 		}
 	}
 	
@@ -523,16 +566,19 @@ public class World {
 	 * with their position as key.
 	 */
 	private void updateCoordMap(){
+		Map<Vector, Entity> tempMap = new HashMap<Vector, Entity>();
+		
 		for (Vector key: coordEntities.keySet()){
-			// Remove the outdated coordinate-Entity pair and save the entity
-			Entity currentEntity = coordEntities.remove(key);
-			
-			// Add the Entity again, with updated coordinates
-			coordEntities.put(currentEntity.getPosition(), currentEntity);
+			Entity entity = coordEntities.get(key);
+			tempMap.put(entity.getPosition(), entity);					
 		}
+		coordEntities = tempMap;
 	}
 	
-	
+	/**
+	 * A Map that contains an entity that lies in this world as value and the entity's
+	 * position as the corresponding key.
+	 */
 	private Map<Vector, Entity> coordEntities = new HashMap<Vector, Entity>();
 	
 	/**
@@ -587,8 +633,36 @@ public class World {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * Handle a collision of an entity with a boundary.
+	 * 
+	 * When the entity is a Bullet and it has bounced off a boundary too many
+	 * times, the bullet will die.
+	 * If the entity collides with a horizontal border, the Y-component of its
+	 * velocity vector is reversed.
+	 * If the entity collides with a vertical border, the X-component of its
+	 * velocity vector is reversed.
+	 * 
 	 * @param entity
+	 * 			The entity that will collide with a boundary
+	 * @post	If the entity is a bullet and it has reached the maximum amount of collisions 
+	 * 			with boundaries, the bullet will die.
+	 * 		    | if (entity instanceof Bullet && 
+	 * 			|	  entity.getNbTimesBounced()+1 == entity.getMaxTimesBounced())
+	 * 			| then new.entity.isDead() == true
+	 * @post	If the entity is a bullet and it did not reach its maximum amount of collisions
+	 * 			with boundaries yet, the bullet's NbTimesBounced will be increased with 1.
+	 * 			| if (entity instanceof Bullet &&
+	 * 			| 	  entity.getNbTimesBounced()+1 < entity.getMaxTimesBounced())
+	 * 			| then new.entity.getNbTimesBounced() == old.entity.getNbTimesBounced()+1
+	 * @effect	
+	 * 			| if (apparentlyCollidesWithHorizontalBorder(entity))
+	 * 			|		entity.setVelocity(-1*entity.getVelocity().getX(),
+	 * 			|						   entity.getVelocity().getY())
+     * 			| else
+     * 			|		entity.setVelocity(entity.getVelocity().getX(),
+     * 			|						   -1*entity.getVelocity()*getY())
+     * 
+     * This is a helper method for the method handleCollisions.
 	 */
 	private void borderCollision(Entity entity){
 		// If the entity is a bullet, we have to check how many times the bullet has 
@@ -621,9 +695,18 @@ public class World {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * Handle a collision with two ships.
+	 * 
 	 * @param firstShip
+	 * 			The first ship involved in the collision.
 	 * @param secondShip
+	 * 			The second ship involved in the collision.
+	 * 
+	 * @post	Both ships their velocity will be changed in a way
+	 * 			that they bounce off each other.
+	 * 			The mass of both ships influences the collision's resolution.
+	 * 
+	 * This is a helper method for the method handleCollision.
 	 */
 	private void shipCollision(Ship firstShip, Ship secondShip){
 		double mi = firstShip.getTotalMass();
@@ -646,13 +729,26 @@ public class World {
 	}
 	
 	/**
-	 * TODO: Documentation
+	 * Handle a collision between a bullet and a ship.
+	 * 
 	 * @param ship
+	 * 			The ship involved in the collision.
 	 * @param bullet
+	 * 			The bullet involved in the collision.
+	 * @post	If the bullet belongs to the ship, the bullet is
+	 * 			loaded on the ship.
+	 * 			| if (bullet.getSourceShip() == ship)
+	 * 			| then ship.addBullet(bullet);
+	 * @post 	If the bullet does not belong to the ship,
+	 * 			both bullet and ship die.
+	 * 			| if (bullet.getSourceShip() != ship)
+	 * 			| then ship.die()
+	 * 			|	   bullet.die()
+	 * 
+	 * This is a helper method for the method handleCollision.
 	 */
 	private void shipBulletCollision(Ship ship, Bullet bullet){
 		// Check whether the bullet belongs to the ship
-		Ship temp = bullet.getSourceShip();
 		if (bullet.getSourceShip() == ship)
 			ship.loadBullets(bullet);
 		// If the bullet does not belong to the ship, both ship and bullet die

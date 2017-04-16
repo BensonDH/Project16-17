@@ -805,8 +805,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade{
 
 	@Override
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return world.getEntityAtPosition(x, y);
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		}
 	}
 
 	@Override

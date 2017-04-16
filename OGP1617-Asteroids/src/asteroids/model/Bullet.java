@@ -1,19 +1,55 @@
 package asteroids.model;
 
-import org.hamcrest.core.IsNull;
 import be.kuleuven.cs.som.annotate.*;
 
+/**
+ *  GitHub repository : https://github.com/BensonDH/Project16-17
+ */
+
+/**
+ * A class representing Bullets that can be located in a game world or loaded in a Ship.
+ * 
+ * - Bullets are represented as circles with radiuses r [km].
+ * - They have a position [km] and velocity [km/s] expressed in a Cartesian coordinate 
+ * 	 system with x- and y-coordinates.
+ * - They also have a speed limit, the Bullets' total velocity will never
+ * 	 exceed this limit.
+ * - Bullets can be loaded in a Ship, a bullet can only be loaded in one ship at
+ * 	 the same time.
+ * - Bullets can also be located in a game World. Each bullet can only be in one
+ * 	 game world at te same time.
+ * 
+ * 
+ * @invar	The X- and Y-component of every bullet's position
+ * 			must be valid
+ * 			| isValidPositionComponent(positionX)
+ * 			| isValidPositionComponent(positionY)
+ * @invar	The radius of every bullet must be valid.
+ * 			| isValidRadius(radius)
+ *  
+ * @version	1.0
+ * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
+ * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek) 
+ *
+ */
 public class Bullet extends Entity {
 	/**
-	 * Initializes the bullet with the given values
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @param speedLimit
+	 * Initialize a bullet with the given values.
+	 * 
+   	 * @param positionX
+   	 * 			The x-component of the position of this bullet.
+   	 * @param positionY
+   	 * 			The y-component of the position of this bullet.
+   	 * @param velocityX
+   	 * 			The x-component of the velocity of this bullet.
+   	 * @param velocityY
+   	 * 			The y-component of the velocity of this bullet.
+   	 * @param radius
+   	 * 			The radius of this bullet.
+   	 * @param speedLimit
+   	 * 			The maximum speed that this bullet can reach.
 	 * @effect
-	 * 			|super(positionX,positionY,velocityX,velocityY,speedLimit)
+	 * 			|super(positionX, positionY, velocityX, velocityY, speedLimit)
 	 * @Post
 	 * 			|if (isValidRadius(radius))
 	 * 			| then new.getRadius() == radius
@@ -32,14 +68,21 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Initializes the bullet with the given values and its speed limit set to the speed of light
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
+	 * Initialize a bullet with the given values and its speed limit set 
+	 *  to its default value, which is the speed of light
+	 * 
+   	 * @param positionX
+   	 * 			The x-component of the position of this bullet.
+   	 * @param positionY
+   	 * 			The y-component of the position of this bullet.
+   	 * @param velocityX
+   	 * 			The x-component of the velocity of this bullet.
+   	 * @param velocityY
+   	 * 			The y-component of the velocity of this bullet.
+   	 * @param radius
+   	 * 			The radius of this bullet.
 	 * @effect
-	 * 			|this(positionX,positionY,velocityX,velocityY,radius,c)
+	 * 			|this(positionX, positionY, velocityX, velocityY, radius, c)
 	 */
 	@Raw
 	public Bullet(double positionX,double positionY,double velocityX, double velocityY,double radius){
@@ -47,13 +90,14 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Initializes the bullet with default parameters
+	 * Initialize a bullet with it's default parameters
+	 * 
 	 * @effect
-	 * 		|this(0,0,0,0,minRadius)
+	 * 			|this(0, 0, 0, 0, getMinimumRadius(), c)
 	 */
 	@Raw
 	public Bullet(){
-		this(0,0,0,0,1,c);
+		this(0, 0, 0, 0, getMinimumRadius(), c);
 	}
 	
 	
@@ -67,8 +111,10 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Checks whether the given radius is a valid radius
+	 * Checks whether the given radius is a valid radius.
+	 * 
 	 * @param radius
+	 * 			The radius that has to be verified.
 	 * @see implementation
 	 */
 	@Basic
@@ -82,23 +128,27 @@ public class Bullet extends Entity {
 	private final double radius;
 	
 	/**
-	 * Return the minimal radius of this bullet.
+	 * Return the minimal radius of every bullet.
 	 */
 	@Basic @Immutable
-	public double getMinimumRadius(){
+	public static double getMinimumRadius(){
 		return Bullet.minimumRadius;
 	}
 	
 	/**
-	 * Variable registering the minimal radius of this bullet.
+	 * Variable registering the minimal radius of every bullet.
 	 */
 	private static double minimumRadius = 1;
 	
 	
 	// Mass [TOTAL]
 	/**
-	 * returns the mass of this bullet.
-	 * @see implementation 
+	 * Return the mass of this bullet.
+	 * 
+	 * @return The total mass of this bullet, which is equal to the
+	 * 		   volume of this bullet (a sphere) times the density of this 
+	 * 		   bullet.
+	 * 		   | result == (4/3)*PI*getDensity()*getRadius()^3
 	 */
 	@Basic
 	public double getTotalMass(){
@@ -106,7 +156,7 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * returns the density of the bullet
+	 * Return the density of the bullet.
 	 */
 	@Basic
 	public double getDensity(){
@@ -132,11 +182,6 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Variable registering how many times a bullet has bounced with a world's border.
-	 */
-	private int nbTimesBounced=0;
-	
-	/**
 	 * Set the amount of times a bullet has bounced off a world boundary to
 	 * the given times.
      * 
@@ -149,7 +194,16 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Get the maximum amount of times a bullet can bounce with a world's boundaries.
+	 * Variable registering how many times a bullet has bounced with a world's border.
+	 */
+	private int nbTimesBounced=0;
+	
+
+	
+	/**
+	 * Return the maximum amount of times a bullet can bounce with a world's boundaries.
+	 * 
+	 * @see implementation
 	 */
 	@Immutable
 	public int getMaxTimesBounced(){
@@ -169,7 +223,7 @@ public class Bullet extends Entity {
 	 * Returns the ship it belongs to. 
 	 * 
 	 * @return The ship carrying this bullet.
-	 * @return Null if no ship is carrying this bullet
+	 * @return Null if no ship is carrying this bullet.
 	 */
 	@Basic
 	public Ship getShip(){
@@ -177,11 +231,13 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * makes the association between the Ship and the bullet
+	 * Set up the association between the given ship and this bullet.
+	 * 
 	 * @param ship
+	 * 			The ship that will carry this bullet.
 	 * @post
-	 * 		| if (canHaveAsShip())
-	 * 		| then new.getShip() == ship
+	 * 			| if (canHaveAsShip())
+	 * 			| then new.getShip() == ship
 	 */
 	@Basic
 	public void setShip(Ship ship){
@@ -191,13 +247,16 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * checks whether the bullet can have the given ship as it's ship
+	 * Check whether this bullet can have the given ship as it's ship.
+	 * 
 	 * @param ship
+	 * 		The ship that has to be verified.
 	 * @return 
-	 * 		| if( ship == null)
-	 * 		| then return true
+	 * 		| if (ship == null)
+	 * 		|  then result ==  true
 	 * @effect 
-	 * 		|ship.canHaveAsBullet(this)
+	 * 		| if (ship != null)
+	 * 		|  then result == ship.canHaveAsBullet(this)
 	 */
 	@Basic
 	public boolean canHaveAsShip(Ship ship){
@@ -214,10 +273,11 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Get the ship that fired this bullet (the source ship)
+	 * Get the ship that fired this bullet (the source ship).
 	 * 
-	 * @return if ifFired() then result == getShip()
-	 * 			else result == null
+	 * @return 	Null if this bullet has not been fired yet.
+	 *  
+	 * @see implementation 
 	 */
 	@Basic
 	public Ship getSourceShip(){
@@ -225,8 +285,10 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Sets the ship where the bullet came from as it source ship
+	 * Set the ship where this bullet came from as its source ship.
+	 * 
 	 * @param ship
+	 * 			The ship that fired this bullet.
 	 * @see implementation
 	 */
 	@Basic @Raw
@@ -241,8 +303,22 @@ public class Bullet extends Entity {
 	
 
 	/**
-	 * Let the entity die
-	 * When an entity dies, it will be removed from its world (if any).
+	 * Let this bullet die by removing it from its world (if any)
+	 * 
+	 * @post	If this bullet was located in a world, it is removed
+	 * 			from this world.
+	 * 			| if (getWorld() != null)
+	 * 			|  then new.getWorld().isInWorld() == false
+	 * 			|  		new.getWorld() == null
+	 * @post	If this bullet was loaded in a ship, it will be removed from
+	 * 			this ship.
+	 *			| if (getShip() != null)
+	 *			|  then !new.getShip().getBullets().contains(this)
+	 *			|		 new.getShip() == null
+	 * @post	The sourceShip of this bullet will be set to null
+	 * 			| new.getSourceShip() == null
+	 * @post	This bullet will be terminated.
+	 * 			| new.isDead()  	 
 	 */
 	@Override
 	public void die(){

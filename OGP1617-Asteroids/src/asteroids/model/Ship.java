@@ -4,25 +4,29 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hamcrest.core.IsNull;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * 
- *  Github repository : https://github.com/BensonDH/Project16-17
+ *  GitHub repository : https://github.com/BensonDH/Project16-17
  */
 
 /**
- * A class representing spaceships. 
- * - Spaceships are represented as circles with radius r [km].
+ * A class representing (space)ships
+ 
+ * - Ships are represented as circles with radius r [km].
  * - They have a position [km] and velocity [km/s] expressed in a Cartesian coordinate 
  * 	 system with x- and y-coordinates.
- * - They also have an orientation angle, expressed in radians. 
+ * - They also have an orientation angle, expressed in radians. An orientation angle of 
+ *   0 means that the Ship is orientated along the positive X-axis.
+ * - Ships have a speed limit, meaning that the ships' total velocity will
+ * 	 never exceed this limit.
+ * - Ships can load, carry and fire bullets, ships can carry multiple bullets. 
+ * - Ships can be located in a world. Each ship can only be in one game world at the same time.
  * 
  * @invar	The orientation angle of each spaceship must be a valid angle.
  *  		| isValidAngle(angle)
  * 
- * @version	1.0
+ * @version	2.0
  * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
  * 			De Jaegere Xander burgerlijk ingenieur computerwetenschappen - elektrotechniek)  
  * 
@@ -30,7 +34,8 @@ import be.kuleuven.cs.som.annotate.*;
 public class Ship extends Entity {
 
 	/**
-   	 * Initialize this new spaceship with the given parameters.
+   	 * Initialize this new (space)ship with the given parameters.
+   	 * 
    	 * @param positionX
    	 * 			The x-component of the position of the spaceship.
    	 * @param positionY
@@ -49,8 +54,8 @@ public class Ship extends Entity {
    	 * 			The maximum velocity of the spaceship.
    	 * @param thrustMode
    	 * 			The mode of the thrusters when initialized, whether they are on or off
-   	 * @effect 	this constructor will initialize the ship as an entity with given position, velocity and speedLimit
-   	 * 			| super(positionX,positionY,velocityX,velocityY,speedLimit);
+   	 * @effect 	This constructor will initialize the ship as an entity with given position, velocity and speedLimit
+   	 * 			| super(positionX, positionY, velocityX, velocityY, speedLimit);
    	 * @pre		the angle must be between 0 and 2*PI
    	 * 			| 0 <= angle <= 2*PI
    	 * @post	The radius of this ship will be set to the given radius 
@@ -78,7 +83,7 @@ public class Ship extends Entity {
    	}
 	
    	/**
-   	 * Initialize this new spaceship with the given parameters and the thrustMode set to its default
+   	 * Initialize this new (space)ship with the given parameters and the thrustMode set to its default
    	 * parameter, which is false (off), and its speeldLimit set to the speed of light.
    	 * 
    	 * @param positionX
@@ -104,7 +109,7 @@ public class Ship extends Entity {
    	}
    	
  	/**
-   	 * Initialize this new spaceship with the given parameters and the thrustMode set to its default 
+   	 * Initialize this new (space)ship with the given parameters and the thrustMode set to its default 
    	 *  parameter which, is off, and the speeldLimit set to the speed of light.
    	 *  
    	 * @param positionX
@@ -129,11 +134,11 @@ public class Ship extends Entity {
    	}
    	
    	/**
-   	 * Initialize this new spaceship by setting it in the origin with no velocity, thrusters on false (off),
+   	 * Initialize this new (space)ship by putting it in the origin with no velocity, thrusters on false (off),
 	 * a speed limit equal to the speed of light, a radius equal to the minimal radius,
 	 * an orientation angle of 0 radians and a density equal to the minimal density.
      *
-   	 * @effect 	The spaceship will be initialized with its default values.
+   	 * @effect 	The ship will be initialized with its default values.
    	 * 			| this(0, 0, 0, 0, Ship.getMinimalRadius(), 0, minDensity, c, false)
    	*/
    	public Ship(){
@@ -146,6 +151,7 @@ public class Ship extends Entity {
 	// Velocity TOTAL
 	/**
 	 * Cancels the ship's velocity setting it to 0
+	 * 
 	 * @effect The velocity will be set to 0
 	 * 			| setVelocity(0, 0)
 	 */
@@ -158,7 +164,7 @@ public class Ship extends Entity {
 	 * 
 	 * @param timeAmount
 	 * 			The amount of time that the ship thrusts.
-	 * @effect 
+	 * @effect 	The velocity of this ship will be changed based on the current velocity, orientation and timeAmount
 	 * 			| new.getVelocity() == setVelocity(getVelocity().getX()+getShipAcceleration()*cos(getAngle())*timeAmount,
 	 * 			|					    		   getVelocity().getY()+getShipAcceleration()*sin(getAngle())*timeAmount)
 	 */
@@ -169,7 +175,8 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * gives the accelerationVector of a ship caused by it's thrusters
+	 * Return the accelerationVector of a ship caused by it's thrusters.
+	 * 
 	 * @See implementation
 	 */
 	@Basic
@@ -180,13 +187,16 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * Gives the absolute acceleration of a ship when it's thrusters are active
-	 * @return a double containing the total acceleration of a ship when the thrusters are active
-	 * 		, if the thrusters aren't active it returns 0
-	 * 			|if (isShipThrusterActive())
-	 * 			| then @See implementation
-	 * 			|else
-	 * 			| return 0
+	 * Return the total acceleration of this spaceship, this result is derived
+	 * from the ship's thruster force and the Newton's second law of motion (F = m.a). 
+	 *
+	 * @return If the ship's thruster is not active, the ship does not accelerate
+	 * 		   | if (!isShipThrusterActive()
+	 * 		   | 	then result == 0
+	 * @return If the ship's thruster is active, the returned acceleration is derived
+	 * 		   from the ship's thruster force and Newtons's second law of motion (F = m.a).
+	 * 		   | if (isShipThrusterActive()
+	 * 		   | 	then result == getThrusterForce()/getTotalMass()
 	 */
 	@Basic
 	public double getTotalAcceleration(){
@@ -205,14 +215,17 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * variable registering the force of this ship's thruster
+	 * variable registering the force of this ship's thruster.
 	 */
 	private double force = 1.1 * Math.pow(10,21);
 	
 	
 	// Thrusters total
 	/**
-	 * checks whether the thruster of a Ship is active
+	 * Check whether the thruster of this ship is active.
+	 * 
+	 * @return 
+	 * 			| getThrust()
 	 */
 	@Basic
 	public boolean isShipThrusterActive(){
@@ -220,7 +233,7 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * returns the mode of the thruster, false for off and true for on
+	 * Return the mode of the thruster, false meaning off and true meaning on.
 	 */
 	@Basic
 	private boolean getThrust() {
@@ -228,10 +241,11 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * Sets the thrust mode to the given value
+	 * Sets the thrust mode to the given value.
+	 * 
 	 * @param thrust
-	 * 			a boolean to set the thruster on or off
-	 * @Post the thruster will be set on or off according to the value given
+	 * 			A boolean to set the thruster on or off.
+	 * @post 	The thruster will be set on or off, according to the given value.
 	 * 			| new.getThrust() == thrust 
 	 */
 	@Basic @Raw
@@ -246,8 +260,6 @@ public class Ship extends Entity {
 	
 	
 	// Orientation NOMINAL
-	
-	
 	/**
 	 * Return the orientation angle of this ship, expressed in radians.
 	 */
@@ -257,9 +269,10 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * Set the orientation angle of this spaceship, expressed in radians.
+	 * Set the orientation angle of this ship, expressed in radians.
+	 * 
 	 * @param angle
-	 * 		  The new orientation angle of this spaceship
+	 * 		  The new orientation angle of this ship
 	 * @pre	  The given angle must be between 0 and 2*PI
 	 * 		  | 0 < angle < 2*PI
 	 * @post  The orientation angle is equal to the given angle.
@@ -273,9 +286,11 @@ public class Ship extends Entity {
 	
 	/**
 	 * Checks whether the given angle is a valid angle.
-	 * @param currentAngle		The current angle of the spaceship.
-	 * @return					True if and only if the given angle is between 0 and 2*PI
-	 * 							| result == (0 <= angle) AND (angle <= 2*PI)
+	 * 
+	 * @param Angle		
+	 * 				The angle that has to be verified.
+	 * @return		True if and only if the given angle is between 0 and 2*PI
+	 * 				| result == (0 <= angle <= 2*PI)
 	 */
 	@Basic
 	public boolean isValidAngle(double angle){
@@ -283,9 +298,10 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * Turn the spaceship with the given angle.
+	 * Turn the ship with the given angle.
+	 * 
 	 * @param angle
-	 * 			The size of change of rotation the angle.
+	 * 			The size of the change in rotation angle.
 	 * 			A negative angle will result in an anti-clockwise rotation.
 	 *  		A positive angle will result in a clockwise rotation.
 	 * @effect 	The angle of the ship is incremented by the given angle.
@@ -296,14 +312,14 @@ public class Ship extends Entity {
 	}
 
 	/**
-	 * Variable registering the orientation angle of the spaceship, expressed in radians.
+	 * Variable registering the orientation angle of the ship, expressed in radians.
 	 */
 	private double angle;
 	
 	
 	// Radius DEFENSIVE
 	/**
-	 * return the radius of this spaceship, expressed in kilometers.
+	 * Return the radius of this ship, expressed in kilometers.
 	 */
 	@Basic @Immutable @Override
 	public double getRadius(){
@@ -311,14 +327,14 @@ public class Ship extends Entity {
 	}	
 	
 	/**
-	 * Checks whether the given radius is a valid radius
+	 * Check whether the given radius is a valid radius.
+	 * 
 	 * @param radius
-	 * @return
-	 * 		True if the given radius is higher than the minimum radius given
-	 * 			| if (radius >= minimum radius)
-	 * 			| 	then return true
-	 * 		false if the radius given is Nan or infinite or smaller than the minimum radius
-	 * 			| if (radius is infinite || radius is Nan || radius < minimum radius
+	 * 			The radius that has to be verified.
+	 * @return	True if the given radius is higher than the minimum radius given
+	 * 			| result == (radius >= getMinimumRadius())
+	 * @return	False if the given radius is NaN, infinite or smaller than the minimum radius.
+	 * 			| result == !(isInfinite(radius) || radius.isNaN() || radius < getMinimumRadius())
 	 */
 	@Basic
 	public boolean isValidRadius(double radius){
@@ -337,7 +353,8 @@ public class Ship extends Entity {
 	private final double radius;
 	
 	/**
-	 * Return the minimal radius that a Ship has to have.
+	 * Return the minimal radius that a ship can have.
+	 * 
 	 * @see implementation
 	 */
 	@Basic @Immutable
@@ -350,15 +367,16 @@ public class Ship extends Entity {
    	 */
    	static double rMin = 10;
    	
+   	
    	// Mass [TOTAL]
     /**
-     * Return the total Mass of this spaceship.
+     * Return the total Mass of this ship.
      * 
      * @return 	The total mass is equal to the mass of the ship plus
-     * 		   	the sum masses of all the loaded bullets.
+     * 		   	the sum in masses of all the loaded bullets.
      * 			| result == getBaseMass()
-     * 			|			+ (for each bullet in this ship:
-     * 			|					+ bullet.getMass)
+     * 			|			+ (for each bullet in ship.getBullets():
+     * 			|					+ bullet.getMass())
      * 
      */
    	@Basic
@@ -372,14 +390,17 @@ public class Ship extends Entity {
     }
     
     /**
-     * Sets the base mass of the ship to the given value
+     * Sets the base mass of the ship to the given value.
+     * 
      * @param mass
-     * @Post the mass of the ship will be set to the given mass
+     * 			The new base mass of this ship.
+     * @post 	If the given base mass is valid, the base mass of this ship will be 
+     * 			set to the given mass.
      * 			| if (isValidBaseMass(mass)
-     * 			|	Then new.getBaseMass() = mass
-     * @effect if the given mass isn't valid the minimal mass of a ship will be used
+     * 			|	then new.getBaseMass() = mass
+     * @effect 	If the given mass is not valid, the minimal mass of a ship will be used.
      * 			| if (!isValidBaseMass(mass)
-     * 			| then new.getBaseMass() = getMinimalMass)
+     * 			| 	then new.getBaseMass() = getMinimalMass()
      */
    	@Basic @Raw
     public void setBaseMass(double mass){
@@ -390,8 +411,12 @@ public class Ship extends Entity {
     }
     
     /**
-     * returns the minimal mass of each ship
-     * @See implementation
+     * Returns the minimal base mass of this ship.
+     * 
+     * @return	The minimal base mass of this ship, which
+     * 			is equal to the volume of this ship (a sphere)
+     * 			times the density of this ship.
+     * 			| result == (4/3)*PI*getDensity()*getRadius()^3
      */
    	@Basic
     public double getMinimalMass(){
@@ -399,7 +424,8 @@ public class Ship extends Entity {
     }
     
     /**
-     * returns the baseMass of a ship
+     * Returns the base mass of this ship, this is the mass of this ship
+     * without any bullets.
      */
    	@Basic
     public double getBaseMass(){
@@ -407,22 +433,27 @@ public class Ship extends Entity {
     }
     
     /**
-     * checks whether a given value is a valid base mass for a ship
-     * @see implementation
+     * Check whether a given value is a valid base mass for this ship.
+     * 
+     * @param	mass
+     * 			The mass that has to be verified.
+     * @return 	True if and only if the given mass is larger than the
+     * 		   	minimal base mass, false otherwise.
+     * 			| result == (mass >= getMinimalMass())
      */
    	@Basic
     public boolean isValidBaseMass(double mass){
-    	return mass >= (4/3)*Math.PI*Math.pow(getRadius(), 3.0)*getDensity();
+    	return mass >= getMinimalMass();
     }
     
     /**
-     * Variable registering the base mass of the spaceship
-     * this is the mass of the ship without the bullets.
+     * Variable registering the base mass of this ship
+     * this is the mass of this ship without the bullets.
      */
     private double mass;
     
     /**
-     * gets the density of a ship
+     * Get the density of this ship.
      */
     @Basic
     public double getDensity(){
@@ -437,26 +468,25 @@ public class Ship extends Entity {
     	
    	
   	//-----------ASSOCIATIONS-------------
-   	//--------BUllets-------- [DEFENSIVE] except for method fire()
+   	//--------Bullets-------- [DEFENSIVE] except for method fire()
     /**
-     * Fires a random bullet that is loaded on the ship. 
-     * If the ship doesn't have any bullets then nothing will happen
+     * Fire the last bullet that was loaded on the ship. 
      * 
-     * @Post the ship will have one less bullet loaded
-     * 			| new.getNbLoadedBullets() = this.getNbLoadeBullets - 1
+     * @post 	The ship will have one less bullet loaded
+     * 			| new.getNbLoadedBullets() = getNbLoadeBullets - 1
      * let 
      * 	bullet be the bullet that is fired when this method is used
      * in 
-     * @Post	the bullet will be given a velocity in the orientation the ship is facing
-     * 				| bullet.getVelcoity.getAngle == this.getOrientation
-     * @Post the bullet will be placed outside of the Ship in extension of its orientation
-     * 				| this.overlap(bullet) == false
-     * 		if the bullet overlaps with another entity it and the other entity will die
-     * 				| if for one entity in bullet.getWorld() bullet.overlap(entity) == true
-     * 				| then bullet.die() and entity.Die()
-     * 		if the bullet isn't contained by the world then the bullet will be terminated
-     * 				| if (!world.contains(bullet)
-     * 				| then bullet.die  
+     * @post	The bullet will be given velocity in the direction that the ship is facing.
+     * 			| bullet.getVelcoity.getOrientationAngle() == this.getAngle()
+     * @post 	The bullet will be placed next to the ship, in extension of the ship's orientation
+     * 			| overlapSignificantly(bullet) == false
+     * @post			If the bullet overlaps with another entity it and the other entity will die
+     * 			| if for one entity in bullet.getWorld() bullet.overlap(entity) == true
+     * 			| then bullet.die() and entity.Die()
+     * @post	If the bullet isn't contained by the world then the bullet will be terminated
+     * 			| if (!world.contains(bullet)
+     * 			| then bullet.die  
      */
     public void fireBullet(){
     	if (loadedBullets.size() == 0 || getWorld() == null)
@@ -491,43 +521,40 @@ public class Ship extends Entity {
     }
     
     /**
-     * Checks wheter the given bullet can be loaded onto this ship.
+     * Check whether the given bullet can be loaded onto this ship.
+     * 
      * @param bullet
-     * @return
-     * 		false if the bullet is null or the bullet is already loaded into the ship
-     * 			or if the bullet is already loaded on another shup or if the radius of the bullet is bigger than the radius of the Ship
+     * 		The bullet that has to be verified.
+     * @return	False if and only if the bullet is null, the bullet is already loaded into the ship,
+     * 			if the bullet is already loaded on another ship or if the radius of the bullet is 
+     * 			bigger than the radius of the ship, true otherwise.
      * 			|  @see implementation
-     * 		true if the bullet fits into the ship
-     * 			| @See implementation
      */		
     @Basic
    	public boolean canHaveAsBullet(Bullet bullet){
-   		if (bullet == null)
-   			return false;
-   		if (loadedBullets.contains(bullet))
-   			return false;
-   		if (bullet.getShip() != null)
-   			return false;
-   		if (bullet.getRadius() >= getRadius())
-   			return false;
-   		else
-   			return true;	
+   		return !(bullet == null || loadedBullets.contains(bullet) || bullet.getShip() != null ||
+   				 bullet.getRadius() >= getRadius());	
    	}
    	
    	/**
-   	 * Loads the given bullets into the ship
+   	 * Load the given bullets into the ship.
+   	 * 
    	 * @param bullets
-   	 * @Post the given bullets will be loaded into the ship if possible
-   	 * 			| for all bullets in bullets: bullet.getShip() == this
-   	 * @Post the given bullets will have the same centers and velocities as the ship
-   	 * 			|for all bullets in bullets: bullet.get(velocity) == this.getVelocity()
-   	 * 			| for all bullets in bullets: bullet.getPosition() == this.getPosition()
+   	 * 			The bullet(s) that have to be loaded on this ship.
+   	 * @Post 	The given bullet(s) will be loaded into the ship if possible.
+   	 * 			| for (all bullets in bullets):
+   	 * 			|		new.bullet.getShip() == this
+   	 * @Post 	The given bullet(s) have the same centers and velocities as their ship.
+   	 * 			| for (all bullets in bullets): 
+   	 * 			|		bullet.get(velocity) == this.getVelocity()
+   	 * 			| for (all bullets in bullets): 
+   	 * 			|		bullet.getPosition() == this.getPosition()
    	 * @throws NullPointerException
-   	 * 			if any of the given bullets are Null
+   	 * 			If any of the given bullets are Null.
    	 * 			| if for one bullet in bullets: bullet == null
    	 * @throws IllegalArgumentException
-   	 * 			if any of the given bullets can't be loaded into the ship
-   	 * 			| if for one bullet in bullets: bullet.canHaveAsShip() == false
+   	 * 			If any of the given bullets can't be loaded into the ship.
+   	 * 			| for (a bullet in bullets): bullet.canHaveAsShip() == false
    	 */
    	public void loadBullets(Bullet...bullets)throws NullPointerException,IllegalArgumentException{
    		for(Bullet bullet:bullets){
@@ -551,8 +578,9 @@ public class Ship extends Entity {
    	
 	
    	/**
-   	 * returns the bullets loaded on this ship
-   	 * @returns a set with the bullets loaded on this Ship
+   	 * Return the bullets loaded on this ship.
+   	 * 
+   	 * @returns A HashSet containing all bullets loaded on this ship.
    	 */
    	@Basic
    	public Set<Bullet> getBullets(){
@@ -560,17 +588,25 @@ public class Ship extends Entity {
    	}
    	
    	/**
-   	 * removes a bullet from a Ship
-   	 * @param bullet
-   	 * @throws IllegalArgumentException
-   	 * 			if the bullet is not loaded in the ship
-   	 * 			| if (!getBullets().contains(bullet)
-   	 * @throws NullPointerException
-   	 * 			when the bullet is null or terminated
+   	 * Remove a bullet from this ship.
    	 * 
+   	 * @param bullet
+   	 * 			The bullet that has to be removed.
+   	 * @post	The bullet is removed from this ship.
+   	 * 			| new.getBullets().contains(bullet) == false
+   	 * 			| new.bullet.getShip() == null
+   	 * @throws IllegalArgumentException
+   	 * 			If the bullet is not present in the ship.
+   	 * 			| !getBullets().contains(bullet)
+   	 * @throws NullPointerException
+   	 * 			When the bullet is null.
+   	 * 			| bullet == null
+   	 * @throws	NullPointerException
+   	 * 			If the bullet is terminated.
+   	 * 			| bullet.isDead()
    	 */
    	public void removeBullet(Bullet bullet)throws IllegalArgumentException, NullPointerException {
-		if (bullet == null || bullet.isTerminated)
+		if (bullet == null || bullet.isDead())
 			throw new NullPointerException("bullet that is terminated can't be in loaded in a ship");
 		if (!(loadedBullets.contains(bullet)))
 			throw new IllegalArgumentException("the given bullet is not loaded in the Ship");
@@ -579,12 +615,13 @@ public class Ship extends Entity {
 	}	
    	
    	/**
-   	 * A set registering all the bullet that are loaded in this spaceship.
+   	 * A set registering all the bullet that are loaded in this ship.
    	 */
    	private List<Bullet> loadedBullets = new ArrayList<Bullet>();
 	
    	/**
    	 * Get the initial speed of a bullet when fired from this ship.
+   	 * 
    	 * @see implementation
    	 */
    	@Basic
@@ -593,7 +630,8 @@ public class Ship extends Entity {
    	}
    	
    	/**
-   	 * get the number of bullets in a ship
+   	 * Get the number of bullets in a ship.
+   	 * 
    	 * @see implementation
    	 */
    	@Basic

@@ -209,19 +209,16 @@ public class WorldTests {
 	// -*-*- getEntityAtPosition tests -*-*-
 	@Test
 	public void getEntityAtPositionTests(){
-		//TODO: uncomment when working
-//		World testWorld = new World(150, 150);
-//		Entity testEntity = new Ship(50, 50, 0, 0, 10, 0);
-//		testWorld.addEntity(testEntity);
-//		
-//		double[] position = {50, 50};
-//
-//		Entity resultEntity = testWorld.getEntityAtPosition(position);
-//		assertTrue(resultEntity == testEntity);
-//		
-//		position[0] = 100;
-//		resultEntity = testWorld.getEntityAtPosition(position);
-//		assertTrue(resultEntity == null);
+		World testWorld = new World(150, 150);
+		Entity testEntity = new Ship(50, 50, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity);
+	
+
+		Entity resultEntity = testWorld.getEntityAtPosition(50, 50);
+		assertTrue(resultEntity == testEntity);
+		
+		resultEntity = testWorld.getEntityAtPosition(100, 50);
+		assertTrue(resultEntity == null);
 	}
 
 	// -*-*- contains tests -*-*-
