@@ -563,10 +563,10 @@ public class Ship extends Entity {
    	 */
    	public void loadBullets(Bullet...bullets)throws NullPointerException,IllegalArgumentException,IllegalStateException{
    		for(Bullet bullet:bullets){
-   			if (bullet.isDead())
-   				throw new IllegalStateException("can't add dead bullet to Ship");
    			if(bullet == null)
    				throw new NullPointerException();
+   			if (bullet.isDead())
+   				throw new IllegalStateException("can't add dead bullet to Ship");
    			if (!bullet.canHaveAsShip(this))
    				throw new IllegalArgumentException();
    			else {
@@ -613,10 +613,10 @@ public class Ship extends Entity {
    	 * 			| bullet.isDead()
    	 */
    	public void removeBullet(Bullet bullet)throws IllegalArgumentException, NullPointerException,IllegalStateException {
-   		if (bullet.isDead())
-   			throw new IllegalStateException("bullet that is dead can't be added to a Ship");
    		if (bullet == null)
 			throw new NullPointerException("bullet that is null can't be in loaded in a ship");
+   		if (bullet.isDead())
+   			throw new IllegalStateException("bullet that is dead can't be added to a Ship");
 		if (!(loadedBullets.contains(bullet)))
 			throw new IllegalArgumentException("the given bullet is not loaded in the Ship");
 		this.loadedBullets.remove(bullet);
