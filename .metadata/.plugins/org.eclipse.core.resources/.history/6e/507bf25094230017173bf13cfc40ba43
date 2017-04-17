@@ -263,7 +263,6 @@ public class Bullet extends Entity {
 	@Basic
 	public boolean canHaveAsShip(Ship ship){
 		// Ship becomes null when the bullet is fired.
-		
 		if (ship == null)
 			return true;
 		return ship.canHaveAsBullet(this);

@@ -240,9 +240,13 @@ public class Bullet extends Entity {
 	 * @post
 	 * 			| if (canHaveAsShip())
 	 * 			| then new.getShip() == ship
+	 * @throws IllegalStateException
+	 * 			| if (ship.isDead())
 	 */
 	@Basic
-	public void setShip(Ship ship){
+	public void setShip(Ship ship)throws IllegalStateException{
+		if (ship.isDead())
+			throw new IllegalStateException("bullet can't be associated with terminated ships");
 		if (canHaveAsShip(ship)){
 			this.ship = ship;
 		}
@@ -263,7 +267,6 @@ public class Bullet extends Entity {
 	@Basic
 	public boolean canHaveAsShip(Ship ship){
 		// Ship becomes null when the bullet is fired.
-		
 		if (ship == null)
 			return true;
 		return ship.canHaveAsBullet(this);
