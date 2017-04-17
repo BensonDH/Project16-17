@@ -344,7 +344,7 @@ public class World {
 		
 		// If the given entity is not moving or does not lie in this world,
 		// it will never collide with the boundaries.
-		if (!isInWorld(entity) || (current_vel.getX() == 0 && current_vel.getY() == 0))
+		if (!isInWorld(entity) || current_vel.getX() == 0 || current_vel.getY() == 0)
 			return Double.POSITIVE_INFINITY;
 		double x_time;
 		double y_time;

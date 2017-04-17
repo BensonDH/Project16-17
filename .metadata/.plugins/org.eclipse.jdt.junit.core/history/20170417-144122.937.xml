@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Part2TestPartial" project="OGP1617-Asteroids" tests="3" started="3" failures="0" errors="0" ignored="0">
+  <testsuite name="asteroids.tests.Part2TestPartial" time="0.0">
+    <testcase name="testCreateWorld" classname="asteroids.tests.Part2TestPartial" time="0.0"/>
+    <testcase name="testLoadBulletOnShipOverlappingBullets" classname="asteroids.tests.Part2TestPartial" time="0.0"/>
+    <testcase name="testEvolveShipWithActiveThruster" classname="asteroids.tests.Part2TestPartial" time="0.0"/>
+  </testsuite>
+</testrun>

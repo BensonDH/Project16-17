@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="Rerun asteroids.tests.WorldTests.evolveWithShipCollisionTest" project="OGP1617-Asteroids" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testcase name="evolveWithShipCollisionTest" classname="asteroids.tests.WorldTests" time="0.0"/>
+</testrun>

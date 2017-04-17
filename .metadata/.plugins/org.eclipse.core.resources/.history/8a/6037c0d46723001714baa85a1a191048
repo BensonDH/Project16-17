@@ -372,78 +372,27 @@ public class WorldTests {
 		
 		assertFalse(testWorld.isInWorld(testBullet));
 		assertFalse(testWorld.isInWorld(testShip));
-	}
-	
-	@Test
-	public void evolveWithBulletSourceShipCollisionTest(){
-		// A ship will collide with a bullet that was fired by this ship
-		World testWorld = new World(150, 150);
 		
-		Bullet testBullet = new Bullet(50, 50, 5, 5, 10);
+		// A ship will collide with a bullet that was fired by this ship
+		testWorld = new World(150, 150);
+		
+		testBullet = new Bullet(50, 50, 5, 5, 10);
 		testWorld.addEntity(testBullet);
-		Ship testShip = new Ship(120, 120, -10, -10, 15, 0);
-		testWorld.addEntity(testShip);
+		testShip = new Ship(120, 120, -10, -10, 10, 0);
+
 		testBullet.setSourceShip(testShip);
 		
-		// getTimeToCollision test
-		double time = testBullet.getTimeToCollision(testShip);
-		assertEquals(14/3.0-(5*Math.sqrt(2))/6.0, time, EPSILON);
-		
-		testWorld.evolve(14/3.0-(5*Math.sqrt(2))/6.0, null);
+		testWorld.evolve((70-10*Math.sqrt(2))/15.0, null);
 		
 		// Both bullet and ship must still live
 		assertFalse(testBullet.isDead());
 		assertFalse(testShip.isDead());
-		
-		// The bullet has to be removed from the world
-		assertFalse(testWorld.isInWorld(testBullet));
-		assertNull(testBullet.getWorld());
-		assertTrue(testWorld.isInWorld(testShip));
 		
 		// The bullet has to be reloaded on the ship
 		assertTrue(testShip.getBullets().contains(testBullet));
 		assertTrue(testBullet.getShip() == testShip);
 	}
 	
-	@Test
-	public void evolveWithBoundaryCollisionTest(){
-		// A bullet will collide with a boundary
-		World testWorld = new World(150, 150);
-		
-		Bullet testBullet = new Bullet(11, 10, -5, 0, 1);
-		testWorld.addEntity(testBullet);
-		
-		// getTimeToCollisionTest
-		double time = testWorld.getTimeToCollisionWithBoundaries(testBullet);
-		assertEquals(2, time, EPSILON);
-		
-		testWorld.evolve(2, null);
-		
-		// The bullet's X-component of velocity has to be flipped
-		assertEquals(5, testBullet.getVelocity().getX(), EPSILON);
-		
-		// The bullet's bounce counter has to be added with 1
-		assertEquals(testBullet.getNbTimesBounced(), 1);
-		
-		// A bullet will collide with a boundary but it will die because it has bounced off
-		// a boundary to many times.
-		testWorld = new World(150, 150);
-		
-		testBullet = new Bullet(11, 10, -5, 0, 1);
-		testBullet.setNbTimesBounced(testBullet.getMaxTimesBounced());
-		testWorld.addEntity(testBullet);
-		
-		// getTimeToCollisionTest
-		time = testWorld.getTimeToCollisionWithBoundaries(testBullet);
-		assertEquals(2, time, EPSILON);
-		
-		testWorld.evolve(2, null);
-		
-		// The bullet has to be terminated
-		assertTrue(testBullet.isDead());
-		assertFalse(testWorld.isInWorld(testBullet));
-		assertNull(testBullet.getWorld());
-	}
 	// -*-*- Termination tests -*-*-
 	@Test
 	public void terminationTests(){
