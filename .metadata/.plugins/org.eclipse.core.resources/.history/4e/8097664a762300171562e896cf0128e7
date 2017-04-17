@@ -20,8 +20,6 @@ import be.kuleuven.cs.som.annotate.*;
  * 		  entity.
  * 		  | isValidPositionComponent(positionX)
  * 		  | isValidPositionComponent(positionY)
- * @invar Every entity's speed limit must be valid
- * 		  | isValidSpeedLimit(speedLimit)
  * 
  * @version	1.0
  * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
@@ -492,9 +490,7 @@ public abstract class Entity {
 			throw new NullPointerException("otherEntity is null");
 		return getDistanceBetween(otherEntity) <= 0;
 	}
-	/**
-
-	*/
+	
 	/**
 	 * Calculate the time it takes for this entity and the given otherEntity to collide.
 	 * 
@@ -502,13 +498,11 @@ public abstract class Entity {
 	 * 			The other entity that collides with this entity.
 	 * @return The resulting double will be the time in seconds that it takes for the 
 	 * 			two entities to collide.
-     * 			| if( this.move(result) && otherEntity.move(result) 
-	 * 			|	then let result == new.getDistanceBetween(newOtherEntity) == 0
-	 * @return The resulting double will be the time to the first collision 
-	 * to occur between the two ships
-	 * 			| for all doubles where 
-	 * 			|		this.move(double).overlapSignificantly(otherEntity.move(double)):
-	 * 			| 	then let double >= result
+	 * 			| let
+	 * 			| 	new = this.move(result)
+	 * 			|   newOtherEntity = otherEntity.move(result)
+	 * 			| in
+	 * 			|	new.getDistanceBetween(newOtherEntity) == 0
 	 * @throws	NullPointerException
 	 * 			If otherEntity is null
 	 * 			| otherEntity == null
@@ -516,8 +510,7 @@ public abstract class Entity {
 	 * 			If both entities already collided (if they overlap)
 	 * 			| overlapSignificantly(otherEntity)
 	 */
-	public double getTimeToCollision(Entity otherEntity) 
-			throws NullPointerException,IllegalArgumentException{
+	public double getTimeToCollision(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
 			throw new NullPointerException("otherEntity is null");
 		if(overlapSignificantly(otherEntity))

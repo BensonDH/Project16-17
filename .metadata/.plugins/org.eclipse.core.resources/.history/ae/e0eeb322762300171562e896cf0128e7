@@ -21,11 +21,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 
  * 
  * @invar	The X- and Y-component of every bullet's position
- * 			must be valid.
+ * 			must be valid
  * 			| isValidPositionComponent(positionX)
  * 			| isValidPositionComponent(positionY)
- * @invar	Every bullet's speed limit must be valid.
- * 			| isValidSpeedLimit(speedLimit)
  * @invar	The radius of every bullet must be valid.
  * 			| isValidRadius(radius)
  *  

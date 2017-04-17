@@ -23,8 +23,13 @@ import be.kuleuven.cs.som.annotate.*;
  * - Ships can load, carry and fire bullets, ships can carry multiple bullets. 
  * - Ships can be located in a world. Each ship can only be in one game world at the same time.
  * 
- * @invar	The orientation angle of each spaceship must be a valid angle.
+ * @invar	Both X- and Y-components of each ship must be valid.
+ * 			| isValidPositionComponent(positionX)
+ * 			| isValidPositionComponent(positionY)
+ * @invar	The orientation angle of each ship must be a valid angle.
  *  		| isValidAngle(angle)
+ *  @invar	The speed limit of each ship must be valid
+ *  		| isValidSpeedLimit(speedLimit)
  * 
  * @version	2.0
  * @author 	De Heel Benson (burgerlijk ingenieur computerwetenschappen - elektrotechniek, 
