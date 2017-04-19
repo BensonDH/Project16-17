@@ -560,11 +560,20 @@ public class Ship extends Entity {
    	 * @throws IllegalArgumentException
    	 * 			If any of the given bullets can't be loaded into the ship.
    	 * 			| for (a bullet in bullets): bullet.canHaveAsShip() == false
+   	 * @throws	IllegalStateException
+   	 * 			If the bullet is terminated.
+   	 * 			| bullet.isDead()
    	 */
    	public void loadBullets(Bullet...bullets)throws NullPointerException,IllegalArgumentException{
    		for(Bullet bullet:bullets){
    			if(bullet == null)
    				throw new NullPointerException();
+   			if (bullet.isDead())
+   				throw new IllegalStateException("can't add dead bullet to Ship");
+   	   		if (bullet.isDead())
+   	   			throw new IllegalStateException("bullet that is dead can't be added to a Ship");
+   			if (!(loadedBullets.contains(bullet)))
+   				throw new IllegalArgumentException("the given bullet is not loaded in the Ship");
    			if (!bullet.canHaveAsShip(this))
    				throw new IllegalArgumentException();
    			else {

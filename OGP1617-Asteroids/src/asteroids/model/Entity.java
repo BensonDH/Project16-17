@@ -341,6 +341,8 @@ public abstract class Entity {
    	public void setWorld(World world) throws IllegalStateException {
    		if (!(getWorld() == null))
    			throw new IllegalStateException("This entity already has a world.");
+   		if (this.isDead())
+			throw new IllegalStateException("this entity is terminated and can't have a world");
    		if (canHaveAsWorld(world))
    			this.world = world;
    			
@@ -460,6 +462,8 @@ public abstract class Entity {
 	public double getDistanceBetween(Entity otherEntity)throws NullPointerException{
 		if (otherEntity == null)
 			throw new NullPointerException();
+		if (this.isDead() || otherEntity.isDead())
+			throw new IllegalStateException("can't get distance between an terminated entity");
 		if (this == otherEntity)
 			return 0;
 		
@@ -490,6 +494,8 @@ public abstract class Entity {
 	public boolean overlap(Entity otherEntity) throws NullPointerException{
 		if (otherEntity == null)
 			throw new NullPointerException("otherEntity is null");
+		if (this.isDead() || otherEntity.isDead())
+			throw new IllegalStateException("can't get distance between an terminated entity");
 		return getDistanceBetween(otherEntity) <= 0;
 	}
 	/**
@@ -515,6 +521,8 @@ public abstract class Entity {
 	 * @throws	IllegalArgumentException
 	 * 			If both entities already collided (if they overlap)
 	 * 			| overlapSignificantly(otherEntity)
+	 * @throws IllegalStateException
+	 * 			| if (this.isDead() || otherEntity.isDead())
 	 */
 	public double getTimeToCollision(Entity otherEntity) 
 			throws NullPointerException,IllegalArgumentException{
@@ -522,6 +530,8 @@ public abstract class Entity {
 			throw new NullPointerException("otherEntity is null");
 		if(overlapSignificantly(otherEntity))
 			throw new IllegalArgumentException("The entities overlap significantly");
+		if (this.isDead() || otherEntity.isDead())
+			throw new IllegalStateException("can't get time to colission between an terminated entity");
 		// if one of the two entities is not in a world, the two entities will never collide
 		if (getWorld() == null || otherEntity.getWorld() == null)
 			return Double.POSITIVE_INFINITY;
@@ -565,12 +575,16 @@ public abstract class Entity {
 	 * @throws IllegalArgumentException
 	 * 			the entity overlaps with the other entity
 	 * 			| this.overlapSignificantly(otherEntity)
+	 * @throws IllegalStateException
+	 * 			| if (this.isDead() || otherEntity.isDead())
 	 */
 	public Vector getCollisionPosition(Entity otherEntity) throws NullPointerException,IllegalArgumentException{
 		if (otherEntity == null)
 			throw new NullPointerException("otherEntity is null");
 		if (overlapSignificantly(otherEntity))
 			throw new IllegalArgumentException("This entity overlaps significantly with otherEntity");
+		if (this.isDead() || otherEntity.isDead())
+			throw new IllegalStateException("can't get distance between an terminated entity");
 		// if one of the two entities is not in a world, the two entities will never collide
 		if (getWorld() == null || otherEntity.getWorld() == null)
 			return null;

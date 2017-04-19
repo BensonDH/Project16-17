@@ -25,4 +25,5 @@
 <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
 <fullyQualifiedTypeName name="asteroids.model.Collision"/>
 <fullyQualifiedTypeName name="java.lang.NullPointerException"/>
+<fullyQualifiedTypeName name="asteroids.model.Program"/>
 </qualifiedTypeNameHistroy>
