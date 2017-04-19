@@ -1,0 +1,24 @@
+package asteroids.model;
+
+/**
+ * A Class that contains all the information about the next collision that
+ * will happen in a game World
+ * 
+ */
+public class FirstCollision {
+	
+	public FirstCollision(Entity firstInvolvedEntity, Entity secondInvolvedEntity, 
+					Vector collisionPosition, double timeToCollision){
+		
+		this.firstInvolvedEntity = firstInvolvedEntity;
+		this.secondInvolvedEntity = secondInvolvedEntity;
+		this.collisionPosition = collisionPosition;
+		this.timeToCollision = timeToCollision;
+	}
+	
+	private final Entity firstInvolvedEntity;
+	private final Entity secondInvolvedEntity;
+	private final Vector collisionPosition;
+	private final double timeToCollision;
+	
+}

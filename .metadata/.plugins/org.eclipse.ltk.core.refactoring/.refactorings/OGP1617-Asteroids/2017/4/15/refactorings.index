@@ -1,0 +1,22 @@
+1491843866072	Delete element
+1491848283123	Delete element
+1491941359823	Delete element
+1492023214641	Rename method 'getMass'
+1492113975925	Rename method 'getRadiusMinimum'
+1492113997375	Rename field 'radiusMinimum'
+1492114405578	Rename method 'getMinimalRadius'
+1492117805939	Delete element
+1492172619106	Delete element
+1492269333680	Rename field 'glob_ship1'
+1492298921622	Rename method 'addBullet'
+1492339579261	Rename type 'FirstCollision'
+1492369938043	Rename local variable 'ship1'
+1492369946083	Rename local variable 'ship2'
+1492370042176	Rename local variable 'ship1'
+1492370049221	Rename local variable 'ship2'
+1492370109552	Rename local variable 'ship1'
+1492370118101	Rename local variable 'ship2'
+1492370174950	Rename local variable 'ship1'
+1492370182535	Rename local variable 'ship2'
+1492370230814	Rename local variable 'ship1'
+1492370241394	Rename local variable 'ship2'

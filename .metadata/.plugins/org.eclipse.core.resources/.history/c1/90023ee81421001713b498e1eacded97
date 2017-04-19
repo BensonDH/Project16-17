@@ -1,0 +1,101 @@
+package asteroids.model;
+
+/**
+ * A Class that contains all the information about the next collision that
+ * will happen in a game World
+ * 
+ */
+public class FirstCollision {
+	
+	/**
+	 * Initialize this new firstCollision object.
+	 * 
+	 * @param firstInvolvedEntity
+	 * 			The first involved Entity of this collision
+	 * @param secondInvolvedEntity
+	 * 			The second involved Entity of this collision
+	 * 			if secondInvolvedEntity is null, firstInvolvedEntity will collide
+	 * 			with a boundary of its world.
+	 * @param collisionPosition
+	 * 			The position where this collision will happen.
+	 * @param timeToCollision
+	 * 			The time until this collision will happen, seen at the moment of creation of this object.
+	 * 
+	 * @throws NullPointerException
+	 * 			When firstInvolvedEntity is null.
+	 * 			| firstInvolvedEntity == null
+	 */
+	public FirstCollision(Entity firstInvolvedEntity, Entity secondInvolvedEntity, 
+					Vector collisionPosition, double timeToCollision){
+		if (firstInvolvedEntity == null)
+			throw new NullPointerException("firstInvolvedEntity cannot be null.");
+		
+		this.firstInvolvedEntity = firstInvolvedEntity;
+		this.secondInvolvedEntity = secondInvolvedEntity;
+		this.collisionPosition = collisionPosition;
+		this.timeToCollision = timeToCollision;
+	}
+	
+	/**
+	 * Get the first Entity that is involved in this collision.
+	 * @see implementation
+	 */
+	public Entity getFistInvolvedEntity(){
+		return firstInvolvedEntity;
+	}
+	
+	/**
+	 * A variable registering the first involved entity of this collision
+	 */
+	private final Entity firstInvolvedEntity;
+	
+	
+	/**
+	 * Get the second Entity that is involved in this collision
+	 * When secondInvolvedEntity is null, firstInvolvedEntity will
+	 * collide with a boundary of its world.
+	 * 
+	 * @return The second involved Entity of this collision.
+	 * 			if (result == null) then getFistInvolvedEntity() will
+	 * 			collide with a boundary of getFirstInvolvedEntity().getWorld()
+	 */
+	public Entity getSecondInvolvedEntity(){
+		return this.secondInvolvedEntity;
+	}
+	
+	/**
+	 * A variable registering the second involved entity of this collision.
+	 */
+	private final Entity secondInvolvedEntity;
+	
+	/**
+	 * Get the position where this collision will happen.
+	 * @see implementation
+	 */
+	public Vector getCollisionPosition(){
+		return this.collisionPosition;
+	}
+	
+	/**
+	 * A variable registering the position of this collision
+	 */
+	private final Vector collisionPosition;
+	
+	
+	/**
+	 * Get the time until this collision will happen.
+	 * I.e. the time until this collision when this FirstCollision object
+	 * was created.
+	 * 
+	 * @see implementation
+	 */
+	public double getTimeToCollision(){
+		return this.timeToCollision;
+	}
+	
+	/**
+	 * A variable registering the time until this collision.
+	 */
+	private final double timeToCollision;
+	
+}

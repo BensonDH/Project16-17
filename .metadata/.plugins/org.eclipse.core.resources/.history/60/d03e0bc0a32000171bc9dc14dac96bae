@@ -1,0 +1,15 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import org.junit.*;
+import org.junit.Test;
+import asteroids.model.Ship;
+import asteroids.model.Vector;
+import asteroids.model.World;
+
+
+
+public class VectorTests {
+
+}
