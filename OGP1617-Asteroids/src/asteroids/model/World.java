@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.filters.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -244,39 +245,51 @@ public class World {
 		return linkedEntities.contains(entity);
 	}
 	
+	
 	// Queries
 	/**
-	 * Return the set of all the ships that lie in this game world.
+	 * Query the Entities that lie in this world after
+	 * after they have been filtered by the given extractor.
 	 * 
-	 * @return	A HashSet containing all ships that lie in this world.
+	 * @param extractor
+	 * 			The extractor to be used as a filter.
+	 * @return	A HashSet containing entities that lie in this world
+	 * 			filtered by applying the given extractor on these 
+	 * 			entities.
+	 * 			|result ==
+	 * 			|		HashSet({entity in getAllEntities() : extractor.getItem(entity)})
+	 * @throws IllegalArgumentException
+	 * 			If the given extractor is null
+	 * 			| extractor == null
+	 * @throws IllegalStateException
+	 * 			If this world is terminated
+	 * 			| isTerminated()
 	 */
-	public Set<Ship> queryShips(){
-		Set<Ship> result = new HashSet<Ship>();
-		for (Entity entity: linkedEntities)
-			if (entity instanceof Ship)
-				result.add((Ship)entity);
+	//TODO: iets vinden voor die Set<...> => Zien we nog later in de les? Generic types
+	public Set<? extends Entity> query(Extractor extractor) 
+			throws IllegalArgumentException, IllegalStateException{
+		if (extractor == null)
+			throw new IllegalArgumentException("The extractor cannot be null.");
+		if (isTerminated())
+			throw new IllegalStateException("This world is terminated.");
+		Set<Entity> result = new HashSet<Entity>();
+		
+		for (Entity entity: linkedEntities) {
+			Entity extractorResult = extractor.getItem(entity);
+			if (extractorResult != null)
+				result.add(extractorResult);
+		}
+		
 		return result;
 	}
 	
-	/**
-	 * Return the set of all the bullets that lie in this game world.
-	 * 
-	 * @return A HashSet containing all the bullets that lie in this world.
-	 */
-	public Set<Bullet> queryBullets(){
-		Set<Bullet> result = new HashSet<Bullet>();
-		for (Entity entity: linkedEntities)
-			if (entity instanceof Bullet)
-				result.add((Bullet)entity);
-		return result;
-	}
 	
 	/**
 	 * Return the set of all entities that lie in this world.
 	 * 
 	 * @return A HashSet which contains all the entities that lie in this world.
 	 */
-	public Set<Entity> queryEntities(){
+	public Set<Entity> getAllEntities(){
 		return new HashSet<Entity>(linkedEntities);
 	}
 	

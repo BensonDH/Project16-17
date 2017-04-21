@@ -1,5 +1,0 @@
-package exc;
-
-public class TerminatedException extends Exception {
-
-}

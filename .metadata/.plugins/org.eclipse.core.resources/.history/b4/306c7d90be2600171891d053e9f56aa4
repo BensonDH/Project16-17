@@ -1,0 +1,11 @@
+package asteroids.model;
+
+
+
+public class EntityExtractor {
+
+	public Entity getEntity(Object object){
+		
+		
+	}
+}

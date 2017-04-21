@@ -1,0 +1,475 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.Set;
+import org.junit.*;
+
+import asteroids.filters.*;
+import asteroids.model.World;
+import asteroids.model.Bullet;
+import asteroids.model.Entity;
+import asteroids.model.Collision;
+import asteroids.model.Ship;
+import asteroids.model.Vector;
+
+
+public class WorldTests {
+	private static final double EPSILON = 0.0001;
+	
+	
+	World globWorld;
+	@Before
+	public void SetUp(){
+		globWorld = new World(100, 100);
+	}
+	
+	// -*-*- Constructor tests (+ Basic getters and setters) -*-*-
+	@Test
+	public void validConstructorTest(){
+		World world = new World(50, 70);
+		
+		assertEquals(50, world.getWidth(), EPSILON);
+		assertEquals(70, world.getHeight(), EPSILON);
+	}
+	
+	@Test
+	public void invalidConstructorTest(){
+		World testWorld = new World(Double.POSITIVE_INFINITY, -20);
+		
+		assertEquals(World.getDefaultWidth(), testWorld.getWidth(), EPSILON);
+		assertEquals(World.getDefaultHeight(), testWorld.getHeight(), EPSILON);
+	}
+	
+	@Test
+	public void defaultconstructorTest(){
+		World testWorld = new World();
+		
+		assertEquals(World.getDefaultWidth(),testWorld.getWidth(), EPSILON);
+		assertEquals(World.getDefaultHeight(), testWorld.getHeight(), EPSILON);
+	}
+	
+	// -*-*- addEntity, queryEntities, removeEntity tests -*-*-
+	// Valid addEntity, queryEntities, removeEntity cases
+	@Test
+	public void addAndRemoveEntityValidCases(){
+		World testWorld = new World(100, 100);
+		// Adding a ship
+		Ship testShip = new Ship(50, 50, 0, 0, 10, 0);
+		
+		testWorld.addEntity(testShip);
+		
+		Set<Entity> entities = testWorld.queryEntities();
+		World linkedWorld = testShip.getWorld();
+		
+		assertTrue(entities.contains(testShip));
+		assertTrue(entities.size() == 1);
+		assertTrue(linkedWorld == testWorld);
+		
+		// Adding a Bullet
+		Bullet testBullet = new Bullet(25, 25, 0, 0, 10);
+		
+		testWorld.addEntity(testBullet);
+		
+		entities = testWorld.queryEntities();
+		linkedWorld = testBullet.getWorld();
+		
+		assertTrue(entities.contains(testBullet));
+		assertTrue(entities.size() == 2);
+		assertTrue(linkedWorld == testWorld);
+		
+		// Removing a Ship
+		testWorld.removeEntity(testShip);
+		
+		entities = testWorld.queryEntities();
+		linkedWorld = testShip.getWorld();
+		
+		assertFalse(entities.contains(testShip));
+		assertTrue(entities.size() == 1);
+		assertTrue(linkedWorld == null);
+		
+		// Removing a bullet
+		testWorld.removeEntity(testBullet);
+		
+		entities = testWorld.queryEntities();
+		linkedWorld = testBullet.getWorld();
+		
+		assertFalse(entities.contains(testBullet));
+		assertTrue(entities.size() == 0);
+		assertTrue(linkedWorld == null);
+	}
+	
+	// Invalid addEntity cases
+	@Test (expected=NullPointerException.class)
+	public void addEntityWithNull() {
+		globWorld.addEntity(null);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void addEntityThatAlreadyHasAWorld(){
+		World testWorld = new World(150, 150);
+		Entity testEntity = new Bullet(25, 25, 0, 0, 10);
+		testWorld.addEntity(testEntity);
+		
+		World testWorld2 = new World(150, 150);
+		
+		testWorld2.addEntity(testEntity);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void addEntityThatAlreadyLiesInThisWorld(){
+		World testWorld = new World(150, 150);
+		Entity testEntity = new Ship(25, 25, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity);
+		
+		testWorld.addEntity(testEntity);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void addEntityThatLiesOutsideBoundaries(){
+		World testWorld = new World(150, 150);
+		Entity testEntity = new Bullet(-100, 100, 0, 0, 10);
+		
+		testWorld.addEntity(testEntity);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void addEntityThatOverlaps(){
+		World testWorld = new World(150, 150);
+		Entity testEntity = new Ship(25, 25, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity);
+		
+		Entity testEntity2 = new Ship(20, 20, 0, 0, 10, 0);
+		
+		testWorld.addEntity(testEntity2);
+	}
+
+	// Invalid removeEntity case
+	@Test (expected=NullPointerException.class)
+	public void RemoveNullEntity(){
+		globWorld.removeEntity(null);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void RemoveEntityThatLiesInAnotherWorld(){
+		World testWorld1 = new World(150, 150);
+		Entity testEntity = new Bullet(50, 50, 0, 0, 10);
+		testWorld1.addEntity(testEntity);
+		
+		World testWorld2 = new World(150, 150);
+		
+		testWorld2.removeEntity(testEntity);
+	}
+
+	// -*-*- queryShips, queryBullets, queryEntities tests -*-*-
+	@Test
+	public void query(){
+		World testWorld = new World(150,150);
+		// Add 3 Bullets and 3 Ships to the testWorld in a random order
+		Entity testEntity1 = new Bullet(10, 10, 0, 0, 10);
+		testWorld.addEntity(testEntity1);
+		Entity testEntity2 = new Ship(30, 30, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity2);
+		Entity testEntity3 = new Ship(50, 50, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity3);
+		Entity testEntity4 = new Ship(70, 70, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity4);
+		Entity testEntity5 = new Bullet(90, 90, 0, 0, 10);
+		testWorld.addEntity(testEntity5);
+		Entity testEntity6 = new Bullet(110, 110, 0, 0, 10);
+		testWorld.addEntity(testEntity6);
+		
+		// queryEntities
+		Set<Entity> entities = testWorld.query(new EntityExtractor());
+		
+		assertTrue(entities.size() == 6);
+		assertTrue(entities.contains(testEntity1));
+		assertTrue(entities.contains(testEntity2));
+		assertTrue(entities.contains(testEntity3));
+		assertTrue(entities.contains(testEntity4));
+		assertTrue(entities.contains(testEntity5));
+		assertTrue(entities.contains(testEntity6));
+		
+		// queryBullets
+		Set<Entity> bullets = testWorld.query(new BulletExtractor());
+		
+		assertTrue(bullets.size() == 3);
+		assertTrue(bullets.contains(testEntity1));
+		assertTrue(bullets.contains(testEntity5));
+		assertTrue(bullets.contains(testEntity6));
+		
+		// queryShips
+		Set<Entity> ships = testWorld.query(new ShipExtractor());
+
+		assertTrue(ships.size() == 3);
+		assertTrue(ships.contains(testEntity2));
+		assertTrue(ships.contains(testEntity3));
+		assertTrue(ships.contains(testEntity4));
+	}
+
+	// -*-*- getEntityAtPosition tests -*-*-
+	@Test
+	public void getEntityAtPositionTests(){
+		World testWorld = new World(150, 150);
+		Entity testEntity = new Ship(50, 50, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity);
+	
+
+		Entity resultEntity = testWorld.getEntityAtPosition(50, 50);
+		assertTrue(resultEntity == testEntity);
+		
+		resultEntity = testWorld.getEntityAtPosition(100, 50);
+		assertTrue(resultEntity == null);
+	}
+
+	// -*-*- contains tests -*-*-
+	@Test
+	public void containsTest(){
+		World testWorld = new World(150, 150);
+		
+		// Entity that lies between the boundaries
+		Entity testEntity1 = new Ship(50, 50, 0, 0, 10, 0);
+		assertTrue(testWorld.contains(testEntity1));
+		
+		// Entity that lies right against a boundary
+		Entity testEntity2 = new Ship(10, 10, 0, 0, 10, 0);
+		assertTrue(testWorld.contains(testEntity2));
+		
+		// Entity that lies outside the boundaries
+		Entity testEntity3 = new Ship(250, 250, 0, 0, 10, 0);
+		assertFalse(testWorld.contains(testEntity3));
+		
+		// Entity that lies just outside the boundaries
+		Entity testEntity4 = new Ship(9, 9, 0, 0, 10, 0);
+		assertFalse(testWorld.contains(testEntity4));
+	}
+
+	// -*-*- getTimeToCollisionWithBoundaries + getPositionToCollisionWithBoundaries tests -*-*-
+	@Test
+	public void getTimeAndPositionToCollisionWithBoundariesTests(){
+		World testWorld = new World(150, 50);
+		// Test 1: Collision in Upper-Right Quadrant
+		Entity ship1 = new Ship(30, 15, 15, 20, 10, 0);
+		testWorld.addEntity(ship1);
+		
+		assertEquals(1.25, testWorld.getTimeToCollisionWithBoundaries(ship1), EPSILON);
+		
+		Vector resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship1);
+		assertEquals(48.75, resultPosition.getX(), EPSILON);
+		assertEquals(50, resultPosition.getY(), EPSILON);
+		
+		testWorld.removeEntity(ship1);
+		// Test 2: Collision in Upper-Left Quadrant
+		Entity ship2 = new Ship(30, 15, -15, 10, 10, 0);
+		testWorld.addEntity(ship2);
+		
+		assertEquals(4.0/3,testWorld.getTimeToCollisionWithBoundaries(ship2), EPSILON);
+		 
+		resultPosition = testWorld.getPositionToCollisionWithBoundaries(ship2);
+		assertEquals(0, resultPosition.getX(), EPSILON);
+		assertEquals(85.0/3, resultPosition.getY(), EPSILON);
+		 
+		testWorld.removeEntity(ship2);
+		// Test 3: Collision in Lower-Left Quadrant
+		Entity bullet1 = new Bullet(70, 30, -12,-5, 10);
+		testWorld.addEntity(bullet1);
+		
+		assertEquals(4.0, testWorld.getTimeToCollisionWithBoundaries(bullet1), EPSILON);
+		
+		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet1);
+		assertEquals(22.0, resultPosition.getX(), EPSILON);
+		assertEquals(0, resultPosition.getY(), EPSILON);
+		
+		testWorld.removeEntity(bullet1);
+		// Test 4: Collision in the Lower-Right Quadrant
+		Entity bullet2 = new Bullet(90, 20, 15, -5, 10);
+		testWorld.addEntity(bullet2);
+		
+		assertEquals(2, testWorld.getTimeToCollisionWithBoundaries(bullet2), EPSILON);
+		
+		resultPosition = testWorld.getPositionToCollisionWithBoundaries(bullet2);
+		assertEquals(120, resultPosition.getX(), EPSILON);
+		assertEquals(0, resultPosition.getY(), EPSILON);
+		
+	}
+	
+	// -*-*- evolve tests -*-*-
+	@Test
+	public void evolveWithShipCollisionTest(){
+		World testWorld = new World(150, 150);
+		
+		Ship ship1 = new Ship(50, 50, 5, 5, 10, 0);
+		testWorld.addEntity(ship1);
+		Ship ship2 = new Ship(120, 120, -10, -10, 10, 0);
+		testWorld.addEntity(ship2);
+		
+		// Time/PositionToCollision tests
+		assertEquals((70-10*Math.sqrt(2))/15.0, ship1.getTimeToCollision(ship2), EPSILON);
+		Vector correctCollisionPosition = new Vector((220+5*Math.sqrt(2))/3.0, (220+5*Math.sqrt(2))/3.0);
+		Vector returnedPosition = ship1.getCollisionPosition(ship2);
+		
+		assertEquals(correctCollisionPosition.getX(), returnedPosition.getX(), EPSILON);
+		assertEquals(correctCollisionPosition.getY(), returnedPosition.getY(), EPSILON);
+		
+		// Helper method test
+		Collision firstCollision = testWorld.getFirstCollision();
+		returnedPosition = firstCollision.getCollisionPosition();
+		assertEquals((70-10*Math.sqrt(2))/15.0, firstCollision.getTimeToCollision(), EPSILON);
+		assertEquals(correctCollisionPosition.getX(), returnedPosition.getX(), EPSILON);
+		assertEquals(correctCollisionPosition.getY(), returnedPosition.getY(), EPSILON);
+		
+		// Evolve test
+
+		Vector oldVelocity2 = ship2.getVelocity();
+		Vector oldVelocity1 = ship1.getVelocity();
+		Vector deltaV = oldVelocity2.subtract(oldVelocity1);
+
+		testWorld.evolve((70-10*Math.sqrt(2))/15.0, null);
+		
+			// position
+			Vector newPosition = ship1.getPosition();
+			assertEquals((22-Math.sqrt(2))*10/3.0, newPosition.getX(), EPSILON);
+			assertEquals((22-Math.sqrt(2))*10/3.0, newPosition.getY(), EPSILON);
+			
+			newPosition = ship2.getPosition();
+			assertEquals((11+Math.sqrt(2))*20/3.0, newPosition.getX(), EPSILON);
+			assertEquals((11+Math.sqrt(2))*20/3.0, newPosition.getY(), EPSILON);
+			
+			// Velocity
+			double mi = ship1.getTotalMass();
+			double mj = ship2.getTotalMass();
+			double sigma = ship1.getRadius()+ship2.getRadius();
+			Vector deltaX = ship2.getPosition().subtract(ship1.getPosition());
+
+			
+			double J = (2*mi*mj*deltaX.dot(deltaV))/(sigma*(mi+mj));
+			double JxAndy = (J*deltaX.getX())/sigma;
+			
+			assertEquals(oldVelocity1.getX()+JxAndy/mi, ship1.getVelocity().getX(), EPSILON);
+			assertEquals(oldVelocity1.getY()+JxAndy/mi, ship1.getVelocity().getY(), EPSILON);
+			
+			assertEquals(oldVelocity2.getX()-JxAndy/mi, ship2.getVelocity().getX(), EPSILON);
+			assertEquals(oldVelocity2.getY()-JxAndy/mi, ship2.getVelocity().getY(), EPSILON);
+	}
+	
+	@Test
+	public void evolveWithBulletShipCollisionTest(){
+		World testWorld = new World(150, 150);
+		
+		Bullet testBullet = new Bullet(50, 50, 5, 5, 10);
+		testWorld.addEntity(testBullet);
+		Ship testShip = new Ship(120, 120, -10, -10, 10, 0);
+		testWorld.addEntity(testShip);
+		// Both entities have the same position, velocity and radius as the entities
+		// in evolveWithShipCollisionTest(), hence testing the time and position until collision
+		// would be pointless.
+		
+		// A ship will collide with a bullet that was not fired by this ship
+		testWorld.evolve((70-10*Math.sqrt(2))/15.0, null);
+		
+		// Both bullet and ship have to be terminated
+		assertTrue(testBullet.isDead());
+		assertTrue(testShip.isDead());
+		
+		assertFalse(testWorld.isInWorld(testBullet));
+		assertFalse(testWorld.isInWorld(testShip));
+	}
+	
+	@Test
+	public void evolveWithBulletSourceShipCollisionTest(){
+		// A ship will collide with a bullet that was fired by this ship
+		World testWorld = new World(150, 150);
+		
+		Bullet testBullet = new Bullet(50, 50, 5, 5, 10);
+		testWorld.addEntity(testBullet);
+		Ship testShip = new Ship(120, 120, -10, -10, 15, 0);
+		testWorld.addEntity(testShip);
+		testBullet.setSourceShip(testShip);
+		
+		// getTimeToCollision test
+		double time = testBullet.getTimeToCollision(testShip);
+		assertEquals(14/3.0-(5*Math.sqrt(2))/6.0, time, EPSILON);
+		
+		testWorld.evolve(14/3.0-(5*Math.sqrt(2))/6.0, null);
+		
+		// Both bullet and ship must still live
+		assertFalse(testBullet.isDead());
+		assertFalse(testShip.isDead());
+		
+		// The bullet has to be removed from the world
+		assertFalse(testWorld.isInWorld(testBullet));
+		assertNull(testBullet.getWorld());
+		assertTrue(testWorld.isInWorld(testShip));
+		
+		// The bullet has to be reloaded on the ship
+		assertTrue(testShip.getBullets().contains(testBullet));
+		assertTrue(testBullet.getShip() == testShip);
+	}
+	
+	@Test
+	public void evolveWithBoundaryCollisionTest(){
+		// A bullet will collide with a boundary
+		World testWorld = new World(150, 150);
+		
+		Bullet testBullet = new Bullet(11, 10, -5, 0, 1);
+		testWorld.addEntity(testBullet);
+		
+		// getTimeToCollisionTest
+		double time = testWorld.getTimeToCollisionWithBoundaries(testBullet);
+		assertEquals(2, time, EPSILON);
+		
+		testWorld.evolve(2, null);
+		
+		// The bullet's X-component of velocity has to be flipped
+		assertEquals(5, testBullet.getVelocity().getX(), EPSILON);
+		
+		// The bullet's bounce counter has to be added with 1
+		assertEquals(testBullet.getNbTimesBounced(), 1);
+		
+		// A bullet will collide with a boundary but it will die because it has bounced off
+		// a boundary to many times.
+		testWorld = new World(150, 150);
+		
+		testBullet = new Bullet(11, 10, -5, 0, 1);
+		testBullet.setNbTimesBounced(testBullet.getMaxTimesBounced());
+		testWorld.addEntity(testBullet);
+		
+		// getTimeToCollisionTest
+		time = testWorld.getTimeToCollisionWithBoundaries(testBullet);
+		assertEquals(2, time, EPSILON);
+		
+		testWorld.evolve(2, null);
+		
+		// The bullet has to be terminated
+		assertTrue(testBullet.isDead());
+		assertFalse(testWorld.isInWorld(testBullet));
+		assertNull(testBullet.getWorld());
+	}
+	// -*-*- Termination tests -*-*-
+	@Test
+	public void terminationTests(){
+		assertFalse(globWorld.isTerminated());
+		
+		// Create a testWorld with 3 random entities
+		World testWorld = new World(150, 150);
+		Entity testEntity1 = new Ship(10,10, 0, 0, 10, 0);
+		testWorld.addEntity(testEntity1);
+		Entity testEntity2 = new Bullet(30, 30, 0, 0, 10);
+		testWorld.addEntity(testEntity2);
+		Entity testEntity3 = new Bullet(50, 50, 0, 0, 10);
+		testWorld.addEntity(testEntity3);
+		
+		// terminate the world
+		testWorld.destroy();
+		
+		// Check whether testWorld is well terminated
+		Set<Entity> entities = testWorld.queryEntities();
+		assertTrue(entities.size() == 0);
+		
+		assertTrue(testEntity1.getWorld() == null);
+		assertTrue(testEntity2.getWorld() == null);
+		assertTrue(testEntity3.getWorld() == null);
+		
+		assertTrue(testWorld.isTerminated());
+	}
+}

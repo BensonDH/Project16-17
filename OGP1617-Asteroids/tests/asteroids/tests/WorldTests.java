@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Set;
 import org.junit.*;
 
+import asteroids.filters.*;
 import asteroids.model.World;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
@@ -58,7 +59,7 @@ public class WorldTests {
 		
 		testWorld.addEntity(testShip);
 		
-		Set<Entity> entities = testWorld.queryEntities();
+		Set<Entity> entities = testWorld.getAllEntities();
 		World linkedWorld = testShip.getWorld();
 		
 		assertTrue(entities.contains(testShip));
@@ -70,7 +71,7 @@ public class WorldTests {
 		
 		testWorld.addEntity(testBullet);
 		
-		entities = testWorld.queryEntities();
+		entities = testWorld.getAllEntities();
 		linkedWorld = testBullet.getWorld();
 		
 		assertTrue(entities.contains(testBullet));
@@ -80,7 +81,7 @@ public class WorldTests {
 		// Removing a Ship
 		testWorld.removeEntity(testShip);
 		
-		entities = testWorld.queryEntities();
+		entities = testWorld.getAllEntities();
 		linkedWorld = testShip.getWorld();
 		
 		assertFalse(entities.contains(testShip));
@@ -90,7 +91,7 @@ public class WorldTests {
 		// Removing a bullet
 		testWorld.removeEntity(testBullet);
 		
-		entities = testWorld.queryEntities();
+		entities = testWorld.getAllEntities();
 		linkedWorld = testBullet.getWorld();
 		
 		assertFalse(entities.contains(testBullet));
@@ -162,7 +163,7 @@ public class WorldTests {
 
 	// -*-*- queryShips, queryBullets, queryEntities tests -*-*-
 	@Test
-	public void queryShipsAndBullets(){
+	public void query(){
 		World testWorld = new World(150,150);
 		// Add 3 Bullets and 3 Ships to the testWorld in a random order
 		Entity testEntity1 = new Bullet(10, 10, 0, 0, 10);
@@ -179,7 +180,7 @@ public class WorldTests {
 		testWorld.addEntity(testEntity6);
 		
 		// queryEntities
-		Set<Entity> entities = testWorld.queryEntities();
+		Set<? extends Entity> entities = testWorld.query(new EntityExtractor());
 		
 		assertTrue(entities.size() == 6);
 		assertTrue(entities.contains(testEntity1));
@@ -190,7 +191,7 @@ public class WorldTests {
 		assertTrue(entities.contains(testEntity6));
 		
 		// queryBullets
-		Set<Bullet> bullets = testWorld.queryBullets();
+		Set<? extends Entity> bullets = testWorld.query(new BulletExtractor());
 		
 		assertTrue(bullets.size() == 3);
 		assertTrue(bullets.contains(testEntity1));
@@ -198,7 +199,7 @@ public class WorldTests {
 		assertTrue(bullets.contains(testEntity6));
 		
 		// queryShips
-		Set<Ship> ships = testWorld.queryShips();
+		Set<? extends Entity> ships = testWorld.query(new ShipExtractor());
 
 		assertTrue(ships.size() == 3);
 		assertTrue(ships.contains(testEntity2));
@@ -462,7 +463,7 @@ public class WorldTests {
 		testWorld.destroy();
 		
 		// Check whether testWorld is well terminated
-		Set<Entity> entities = testWorld.queryEntities();
+		Set<Entity> entities = testWorld.getAllEntities();
 		assertTrue(entities.size() == 0);
 		
 		assertTrue(testEntity1.getWorld() == null);
