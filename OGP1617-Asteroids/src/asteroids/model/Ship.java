@@ -663,13 +663,6 @@ public class Ship extends Entity {
    	 * A variable registering the initial speed of a bullet when fired from this ship.
    	 */
    	private double fireSpeed = 250;
-   	
-   	
-	/**
-	 * Variable registering the Speed of light.
-	 */
-   	static double c = 300000.0;
-
 
 	 
 }

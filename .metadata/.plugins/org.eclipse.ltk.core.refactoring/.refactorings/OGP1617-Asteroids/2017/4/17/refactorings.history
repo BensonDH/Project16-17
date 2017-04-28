@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Extract method &apos;public void setDistanceTravelled(double distanceTravelled)&apos; from &apos;asteroids.model.Planetoid.Planetoid()&apos; to &apos;asteroids.model.Planetoid&apos;&#x0D;&#x0A;- Original project: &apos;OGP1617-Asteroids&apos;&#x0D;&#x0A;- Method name: &apos;setDistanceTravelled&apos;&#x0D;&#x0A;- Destination type: &apos;asteroids.model.Planetoid&apos;&#x0D;&#x0A;- Declared visibility: &apos;public&apos;" comments="false" description="Extract method &apos;setDistanceTravelled&apos;" destination="0" exceptions="false" flags="786434" id="org.eclipse.jdt.ui.extract.method" input="/src&lt;asteroids.model{Planetoid.java" name="setDistanceTravelled" replace="false" selection="392 137" stamp="1493133080346" version="1.0" visibility="1"/>
+</session>

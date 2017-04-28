@@ -1,0 +1,41 @@
+package asteroids.model;
+
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+
+public class Planetoid extends MinorPlanet {
+	
+	public Planetoid(double positionX,double positionY,double velocityX,double velocityY,double radius,double mass, double speedLimit){
+		super(positionX,positionY,velocityX,velocityY,radius,speedLimit);
+	}
+	
+
+	
+	// Mass [TOTAL]
+	/**
+	 * Return the mass of this bullet.
+	 * 
+	 * @return The total mass of this bullet, which is equal to the
+	 * 		   volume of this bullet (a sphere) times the density of this 
+	 * 		   bullet.
+	 * 		   | result == (4/3)*PI*getDensity()*getRadius()^3
+	 */
+	@Basic
+	public double getTotalMass(){
+		return (4.0/3)* Math.PI* Math.pow(this.getRadius(), 3.0)*getDensity();
+	}
+	
+	/**
+	 * Return the density of the bullet.
+	 */
+	@Basic
+	public double getDensity(){
+		return Planetoid.density;
+	}
+	
+	/**
+	 * Variable registering the density of bullets.
+	 */
+	private static double density = 0.917E12;
+	
+}

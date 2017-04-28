@@ -337,9 +337,4 @@ public class Bullet extends Entity {
 		this.isTerminated = true;
 	}
 	
-	
-	/**
-	 * Variable registering the Speed of light.
-	 */
-   	static double c = 300000.0;	 
 }

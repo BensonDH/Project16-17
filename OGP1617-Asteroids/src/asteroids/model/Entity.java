@@ -643,7 +643,7 @@ public abstract class Entity {
 	/**
 	 * Variable registering the Speed of light [km/s].
 	 */
-   	private static double c = 300000.0;
+   	protected static double c = 300000.0;
 
 }
  
