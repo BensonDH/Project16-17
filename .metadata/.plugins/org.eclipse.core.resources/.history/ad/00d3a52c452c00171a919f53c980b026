@@ -1,0 +1,5 @@
+package asteroids.tests;
+
+public interface Collision1 {
+
+}

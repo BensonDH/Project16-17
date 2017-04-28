@@ -1,9 +1,0 @@
-package asteroids.filters;
-
-import asteroids.model.Entity;
-
-
-public abstract class Extractor {
-
-	public abstract Entity getItem();
-}

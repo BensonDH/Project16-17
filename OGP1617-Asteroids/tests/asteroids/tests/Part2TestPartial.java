@@ -29,6 +29,7 @@ public class Part2TestPartial {
 		World world = facade.createWorld(1000, 800);
 		assertEquals(1000, facade.getWorldSize(world)[0], EPSILON);
 		assertEquals(800, facade.getWorldSize(world)[1], EPSILON);
+		System.out.println(facade.getWorldShips(world));
 		assertTrue(facade.getWorldShips(world).isEmpty());
 		assertTrue(facade.getWorldBullets(world).isEmpty());
 	}
