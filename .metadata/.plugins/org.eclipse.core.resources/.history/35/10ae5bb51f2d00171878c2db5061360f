@@ -4,34 +4,14 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
 public class Asteroid extends MinorPlanet {
-	/**
-	 * TODO Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @param speedLimit
-	 */
 	public Asteroid(double positionX,double positionY,double velocityX,double velocityY,double radius, double speedLimit){
 		super(positionX,positionY,velocityX,velocityY,radius,speedLimit);
 	}
 	
-	/**
-	 * TODO Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 */
 	public Asteroid(double positionX,double positionY,double velocityX,double velocityY,double radius){
 		this(positionX,positionY,velocityX,velocityY,radius,c);
 	}
 	
-	/**
-	 * TODO Documentation
-	 */
 	public Asteroid(){
 		this(0,0,0,0,5,c);
 	}

@@ -42,8 +42,8 @@ public class Planetoid extends MinorPlanet {
 		this(0,0,0,0,5,0,c);
 	}
 	
-	
 	// move [TOTAL]
+	
 	/**
 	 * TODO Documentation
 	 * @param duration

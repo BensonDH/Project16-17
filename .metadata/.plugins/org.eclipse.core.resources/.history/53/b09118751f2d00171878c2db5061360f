@@ -5,51 +5,23 @@ import be.kuleuven.cs.som.annotate.Immutable;
 
 public class Planetoid extends MinorPlanet {
 	
-	/**
-	 * TODO Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @param distanceTravelled
-	 * @param speedLimit
-	 */
-	public Planetoid(double positionX, double positionY, double velocityX, double velocityY,
-					 double radius, double distanceTravelled, double speedLimit) {
+	
+
+	public Planetoid(double positionX,double positionY,double velocityX,double velocityY,double radius,double distanceTravelled, double speedLimit){
 		super(positionX,positionY,velocityX,velocityY,radius,speedLimit);
 		setDistanceTravelled(distanceTravelled);
 	}
 	
-	/**
-	 * TODO Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @param distaneTravelled
-	 */
-	public Planetoid(double positionX, double positionY, double velocityX, double velocityY, 
-					 double radius, double distaneTravelled) {
+	public Planetoid(double positionX,double positionY, double velocityX, double velocityY,double radius,double distaneTravelled){
 		this(positionX,positionY,velocityX,velocityY,radius,distaneTravelled,c);
 	}
 	
-	/**
-	 * TODO Documentation
-	 */
 	public Planetoid(){
 		this(0,0,0,0,5,0,c);
 	}
 	
-	
-	// move [TOTAL]
-	/**
-	 * TODO Documentation
-	 * @param duration
-	 * @throws IllegalArgumentException
-	 */
-	@Override
+	// move total
+	@Override 
 	public void move(double duration)throws IllegalArgumentException{
 		if (Double.isNaN(duration))
 			throw new IllegalArgumentException("Duration cannot be NaN");
@@ -59,35 +31,25 @@ public class Planetoid extends MinorPlanet {
 		Vector new_pos = getPosition();
 		double distanceTravelled = new_pos.subtract(current_pos).norm();
 		setDistanceTravelled(getDistanceTravelled() + distanceTravelled);
-		
-		// This planetoid dissolves when its radius becomes smaller than the minimal radius possible
-		if (getPlanetoidRadius() < MinorPlanet.getMinimalRadius())
-			this.die();
+	
 	}
+	
+		
 	
 	
 	// Radius [DEFENSIVE]
-	/**
-	 * TODO Documentation
-	 * @return
-	 */
+	
 	public double getPlanetoidRadius(){
 		return getRadius() - getDistanceTravelled()*0.0001;
 	}
 
-	//DistanceTravelled [we decided to program this in a TOTAL way]
-	/**
-	 * TODO Documentation
-	 * @return
-	 */
 	public double getDistanceTravelled() {
 		return this.distanceTravelled;
 	}
+
+
+	//DistanceTravelled [we decided to program this in a TOTAL way]
 	
-	/**
-	 * TODO Documentation
-	 * @param distanceTravelled
-	 */
 	public void setDistanceTravelled(double distanceTravelled) {
 		if (Double.isNaN(distanceTravelled))
 			this.distanceTravelled = 0;
@@ -97,9 +59,7 @@ public class Planetoid extends MinorPlanet {
 			this.distanceTravelled = distanceTravelled;
 	}	
 	
-	/**
-	 * A variable registering the distance that this Planetoid has traveled.
-	 */
+	
 	private double distanceTravelled;
 
 

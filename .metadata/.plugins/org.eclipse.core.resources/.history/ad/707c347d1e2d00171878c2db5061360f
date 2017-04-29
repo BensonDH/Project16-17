@@ -2,16 +2,6 @@ package asteroids.model;
 
 public abstract class MinorPlanet extends Entity {
 	
-	/**
-	 * TODO Documentation
-	 * @param positionX
-	 * @param positionY
-	 * @param velocityX
-	 * @param velocityY
-	 * @param radius
-	 * @param speedLimit
-	 * @throws IllegalArgumentException
-	 */
 	public MinorPlanet(double positionX,double positionY,double velocityX, double velocityY,double radius, double speedLimit)throws IllegalArgumentException{
 		super(positionX,positionY,velocityX,velocityY,speedLimit);
 		if (!isValidRadius(radius))
@@ -19,39 +9,28 @@ public abstract class MinorPlanet extends Entity {
 		this.radius = radius;
 	}
 	
-	/**
-	 * TODO Documentation
-	 */
 	public MinorPlanet(){
-		this(0,0,0,0, getMinimalRadius(),c);
+		this(0,0,0,0, rMin,c);
 	}
 	
 	public boolean isValidRadius(double radius){
 		if (Double.isNaN(radius)|| Double.isInfinite(radius))
 			return false;
-		else if ( radius < getMinimalRadius())
+		else if ( radius < rMin)
 			return false;
 		return true;
 	}
 	
-	/**
-	 * TODO Documentation
-	 */
 	@Override
 	public double getRadius(){
 		return this.radius;
 	}
 
-	/**
-	 * TODO Documentation
-	 */
 	@Override
 	public abstract double getTotalMass();
 	
 	
-	/**
-	 * Variable registering the radius of this MinorPlanet
-	 */
+	
 	private double radius;
 
 	
@@ -73,14 +52,6 @@ public abstract class MinorPlanet extends Entity {
 		
 		}
 		this.isTerminated = true;
-	}
-	
-	/**
-	 * TODO Documentation
-	 * @return
-	 */
-	public static double getMinimalRadius(){
-		return MinorPlanet.rMin;
 	}
 	
 	/**
