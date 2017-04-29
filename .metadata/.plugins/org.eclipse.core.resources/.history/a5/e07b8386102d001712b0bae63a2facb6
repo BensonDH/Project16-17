@@ -1,0 +1,244 @@
+package programs;
+
+import java.util.List;
+
+import asteroids.part3.programs.IProgramFactory;
+import asteroids.part3.programs.SourceLocation;
+
+public class ProgramFactory implements IProgramFactory<Expression, S, F, P> {
+
+	@Override
+	public P createProgram(List<F> functions, S main) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public F createFunctionDefinition(String functionName, S body, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createAssignmentStatement(String variableName, Expression value, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createWhileStatement(Expression condition, S body, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createBreakStatement(SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createReturnStatement(Expression value, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createIfStatement(Expression condition, S ifBody, S elseBody, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createPrintStatement(Expression value, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createSequenceStatement(List<S> statements, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createReadVariableExpression(String variableName, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createReadParameterExpression(String parameterName, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createFunctionCallExpression(String functionName, List<Expression> actualArgs, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createChangeSignExpression(Expression expression, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createNotExpression(Expression expression, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createDoubleLiteralExpression(double value, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createNullExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createSelfExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createShipExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createAsteroidExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createPlanetoidExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createBulletExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createPlanetExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createAnyExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createGetXExpression(Expression e, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createGetYExpression(Expression e, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createGetVXExpression(Expression e, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createGetVYExpression(Expression e, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createGetRadiusExpression(Expression e, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createLessThanExpression(Expression e1, Expression e2, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createEqualityExpression(Expression e1, Expression e2, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createAdditionExpression(Expression e1, Expression e2, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createMultiplicationExpression(Expression e1, Expression e2, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createSqrtExpression(Expression e, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression createGetDirectionExpression(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createThrustOnStatement(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createThrustOffStatement(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createFireStatement(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createTurnStatement(Expression angle, SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public S createSkipStatement(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -11,11 +11,11 @@ import asteroids.model.Planetoid;
 import asteroids.model.Ship;
 import asteroids.model.Vector;
 import asteroids.model.World;
-import asteroids.model.Program;
 import asteroids.filters.*;
 
 import asteroids.part2.CollisionListener;
 import asteroids.part3.programs.IProgramFactory;
+import asteroids.programs.Program;
 import asteroids.util.ModelException;
 
 public class Facade implements asteroids.part3.facade.IFacade{

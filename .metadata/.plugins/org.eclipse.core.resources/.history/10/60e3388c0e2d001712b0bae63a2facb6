@@ -1,0 +1,7 @@
+package asteroids.model;
+
+import asteroids.part3.programs.IProgramFactory;
+
+public class ProgramFactory implements IProgramFactory<E, S, F, P> {
+
+}

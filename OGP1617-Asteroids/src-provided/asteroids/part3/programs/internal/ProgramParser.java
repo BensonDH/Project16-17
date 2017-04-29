@@ -13,10 +13,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-import asteroids.model.Program;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.internal.generated.AsteroidsProgramLexer;
 import asteroids.part3.programs.internal.generated.AsteroidsProgramParser;
+import asteroids.programs.Program;
 import asteroids.util.internal.ResourceUtils;
 
 /**
@@ -59,9 +59,9 @@ import asteroids.util.internal.ResourceUtils;
  * errors during parsing.
  * 
  *
- * @param E
+ * @param Expression
  *            The type of expressions
- * @param S
+ * @param Statement
  *            The type of statements
  * @param T
  *            The type of types

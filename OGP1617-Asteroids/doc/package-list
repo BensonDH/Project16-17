@@ -1,1 +1,15 @@
+asteroids.part1
+asteroids.part1.facade
+asteroids.part1.internal
+asteroids.part2
+asteroids.part2.facade
+asteroids.part2.internal
+asteroids.part3
 asteroids.part3.facade
+asteroids.part3.internal
+asteroids.part3.programs
+asteroids.part3.programs.internal
+asteroids.part3.programs.internal.example
+asteroids.part3.programs.internal.generated
+asteroids.util
+asteroids.util.internal

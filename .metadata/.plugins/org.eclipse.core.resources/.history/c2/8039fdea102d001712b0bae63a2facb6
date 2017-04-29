@@ -1,0 +1,8 @@
+package programs;
+
+/**
+ * A class representing an expression
+ */
+public class Expression {
+
+}

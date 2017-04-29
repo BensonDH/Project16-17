@@ -5,6 +5,7 @@ import java.util.Set;
 
 import asteroids.model.*;
 import asteroids.part3.programs.IProgramFactory;
+import asteroids.programs.Program;
 import asteroids.util.ModelException;
 
 /**

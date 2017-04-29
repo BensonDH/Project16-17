@@ -1,0 +1,8 @@
+package programs;
+
+/**
+ * A class representing a statement
+ */
+public class S {
+
+}
