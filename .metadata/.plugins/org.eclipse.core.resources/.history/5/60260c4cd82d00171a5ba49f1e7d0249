@@ -1,0 +1,7 @@
+package asteroids.programs.statements;
+
+import asteroids.programs.Statement;
+
+public class WhileStatement extends Statement{
+
+}

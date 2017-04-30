@@ -4,6 +4,8 @@ import java.util.List;
 
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.expressions.Expression;
+import asteroids.programs.statements.Statement;
 
 public class ProgramFactory implements IProgramFactory<Expression, Statement, Function, Program> {
 

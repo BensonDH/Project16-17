@@ -1,0 +1,8 @@
+package asteroids.programs.expressions;
+
+/**
+ * A class representing an expression
+ */
+public class Expression {
+
+}

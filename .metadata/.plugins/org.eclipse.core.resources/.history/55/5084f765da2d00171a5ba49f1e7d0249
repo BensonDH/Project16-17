@@ -1,0 +1,23 @@
+package asteroids.programs.statements;
+
+import asteroids.programs.*;
+import asteroids.programs.expressions.Expression;
+
+public class PrintStatement extends Statement {
+	
+	public PrintStatement(Expression E){
+		this.expression = E;
+	}
+	
+	/**
+	 * Get the expression that will be printed out.
+	 */
+	public Expression getExpression(){
+		return this.expression;
+	}
+	
+	/**
+	 * Variable registering the printed expression.
+	 */
+	private Expression expression;
+}

@@ -1,0 +1,24 @@
+package asteroids.programs.statements;
+
+public class WhileStatement extends Statement{
+	
+	
+	
+	/**
+	 * Terminate this whileStatement.
+	 */
+	public void terminate(){
+		this.isTerminated = true;
+	}
+	
+	/**
+	 * Check whether this while statement is terminated.
+	 */
+	public boolean isTerminated(){
+		return this.isTerminated;
+	}
+	/**
+	 * A variable registering whether this while statement is terminated.
+	 */
+	private boolean isTerminated = false;
+}

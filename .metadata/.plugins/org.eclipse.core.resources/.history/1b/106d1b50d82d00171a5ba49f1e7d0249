@@ -1,0 +1,7 @@
+package asteroids.programs;
+
+import asteroids.programs.statements.Statement;
+
+public class PrintStatement extends Statement {
+
+}
