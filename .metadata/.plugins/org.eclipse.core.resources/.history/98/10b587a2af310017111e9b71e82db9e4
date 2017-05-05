@@ -1,0 +1,13 @@
+package asteroids.filters;
+
+import asteroids.model.Entity;
+
+public class AsteroidExtractor extends Extractor {
+
+	@Override
+	public Entity getItem(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

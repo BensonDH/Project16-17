@@ -171,18 +171,22 @@ public class Collision{
 		if (collisionListener != null){
 			collisionListener.objectCollision(firstEntity, secondEntity, getCollisionPosition().getX(), getCollisionPosition().getY());
 		}
-		if (firstEntity instanceof Ship && secondEntity instanceof Ship)
-			resolveCollision((Ship)getFirstInvolvedEntity(), (Ship)getSecondInvolvedEntity());
-		else if (firstEntity instanceof MinorPlanet && secondEntity instanceof MinorPlanet)
-			resolveCollision((MinorPlanet)firstEntity, (MinorPlanet)secondEntity);
-		else if (firstEntity instanceof Bullet && secondEntity instanceof Bullet){
-			firstEntity.die();
-			secondEntity.die();
-		}
-		else if (firstEntity instanceof Ship && secondEntity instanceof Bullet)
+		// Collisions with bullets
+		// ship-bullet has to be resolved in a separate way because the bullet could belong to the ship.
+		if (firstEntity instanceof Ship && secondEntity instanceof Bullet)
 			resolveCollision((Ship)firstEntity, (Bullet)secondEntity);
 		else if (firstEntity instanceof Bullet && secondEntity instanceof Ship)
 			resolveCollision((Ship)secondEntity, (Bullet)firstEntity);
+		// other bullet-related collisions
+		else if (firstEntity instanceof Bullet || secondEntity instanceof Bullet){
+			firstEntity.die();
+			secondEntity.die();
+		}
+		// other collisions
+		else if (firstEntity instanceof MinorPlanet && secondEntity instanceof MinorPlanet)
+			resolveCollision((MinorPlanet)firstEntity, (MinorPlanet)secondEntity);
+		else if (firstEntity instanceof Ship && secondEntity instanceof Ship)
+			resolveCollision((Ship)firstEntity, (Ship)secondEntity);
 		else if (firstEntity instanceof Ship && secondEntity instanceof Asteroid)
 			resolveCollision((Ship)firstEntity, (Asteroid) secondEntity);
 		else if (firstEntity instanceof Asteroid && secondEntity instanceof Ship)
@@ -320,14 +324,14 @@ public class Collision{
 	private void resolveCollision(Ship ship, Planetoid planetoid){
 		World gameWorld = ship.getWorld();
 		double shipRadius = ship.getRadius();
-		ship.removeWorld();
+		gameWorld.removeEntity(ship);
 		
 		double worldWidth = gameWorld.getWidth();
 		double worldHeight = gameWorld.getHeight();
 		
-		Random random = new Random();
-		double newXPosition = shipRadius+(worldWidth-2*shipRadius)*random.nextDouble();
-		double newYPosition = shipRadius+(worldHeight-2*shipRadius)*random.nextDouble();
+		
+		double newXPosition = shipRadius+(worldWidth-2*shipRadius)*Math.random();
+		double newYPosition = shipRadius+(worldHeight-2*shipRadius)*Math.random();
 		
 		ship.setPosition(newXPosition, newYPosition);
 		
@@ -367,7 +371,6 @@ public class Collision{
 			bullet.die();
 		}
 	}
-
 	
 	/**
 	 * Return a textual representation of this collision

@@ -1,6 +1,6 @@
 package asteroids.programs.statements;
 
-import asteroids.programs.expressions.Expression;
+import asteroids.programs.expressions.*;
 
 
 public class WhileStatement extends Statement{
@@ -22,7 +22,7 @@ public class WhileStatement extends Statement{
 	 * 			If expression or body is null
 	 * 			| if (expression == null || body == null)
 	 */
-	public WhileStatement(Expression expression, Statement body) throws NullPointerException{
+	public WhileStatement(LogicalExpression expression, Statement body) throws NullPointerException{
 		if (expression == null || body == null)
 			throw new NullPointerException();
 		this.expression = expression;
@@ -42,18 +42,26 @@ public class WhileStatement extends Statement{
 	 * Get the expression that has to be evaluated at the beginning
 	 * of every new cycle of this while statement.
 	 */
-	public Expression getExpression(){
+	public LogicalExpression getExpression(){
 		return this.expression;
 	}
+	
+	/**
+	 * Change the while statement's expression to the given newExpression.
+	 */
+	public void changeExpression(LogicalExpression newExpression){
+		this.expression = newExpression;
+	}
+	
 	/**
 	 * The expression that has to be evaluated in every cycle of
 	 * this while statement.
 	 */
-	private final Expression expression;
+	private LogicalExpression expression;
 	
 	/**
 	 * Get the body of this while statement represented
-	 * by a statement
+	 * by a statement.
 	 */
 	public Statement getBody(){
 		return this.body;
@@ -68,7 +76,7 @@ public class WhileStatement extends Statement{
 	 * Execute this while statement
 	 */
 	public Object execute(){
-		while ((boolean)getExpression().eval() && isTerminated()){
+		while (getExpression().eval()){
 			getBody().execute();
 		}
 		return null;

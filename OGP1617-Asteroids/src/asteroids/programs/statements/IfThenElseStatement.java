@@ -1,6 +1,6 @@
 package asteroids.programs.statements;
 
-import asteroids.programs.expressions.Expression;
+import asteroids.programs.expressions.*;
 
 public class IfThenElseStatement extends Statement {
 
@@ -21,7 +21,7 @@ public class IfThenElseStatement extends Statement {
 	 * 			If the given Expression or ifBody is null
 	 * 			| if (E == null || ifBody == null)
 	 */
-	public IfThenElseStatement(Expression expression, Statement ifBody, Statement elseBody)
+	public IfThenElseStatement(LogicalExpression expression, Statement ifBody, Statement elseBody)
 					throws NullPointerException{
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
@@ -45,7 +45,7 @@ public class IfThenElseStatement extends Statement {
 	 * 			If the given expression or ifBody is null
 	 * 			| if (expression == null || ifBody == null)
 	 */
-	public IfThenElseStatement(Expression expression, Statement ifBody) throws NullPointerException{
+	public IfThenElseStatement(LogicalExpression expression, Statement ifBody) throws NullPointerException{
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
 		
@@ -67,14 +67,14 @@ public class IfThenElseStatement extends Statement {
 	 * Get the expression that comes after the
 	 * if statement
 	 */
-	public Expression getExpression(){
+	public LogicalExpression getExpression(){
 		return this.expression;
 	}
 	
 	/**
 	 * Variable registering the expression that comes after the if statement
 	 */
-	private final Expression expression;	
+	private final LogicalExpression expression;	
 
 	/**
 	 * Get the body that belongs to the if statement of
@@ -104,10 +104,10 @@ public class IfThenElseStatement extends Statement {
 	private final Statement elseBody;
 	
 	public Object execute(){
-		if ((boolean)getExpression().eval())
+		if (getExpression().eval())
 			getIfBody().execute();
 		
-		if (getElseBody() != null)
+		else if (getElseBody() != null)
 			getElseBody().execute();
 		
 		return null;

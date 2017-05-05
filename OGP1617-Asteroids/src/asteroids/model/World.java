@@ -164,7 +164,7 @@ public class World {
 		if (entity == null)
 			throw new NullPointerException();
 		if (!canHaveAsEntity(entity))
-			throw new IllegalArgumentException("This entity cannot be added.");
+			throw new IllegalArgumentException("This entity cannot be added."+entity.getClass().toString());
 		else {
 			entity.setWorld(this);
 			linkedEntities.add(entity);
@@ -225,11 +225,9 @@ public class World {
 		if (!contains(entity) || !(entity.getWorld() == null))
 			return false;
 		// Check whether entity does not overlap with any of the existing entities in this world
-		for (Entity existingEntity: linkedEntities){
-			if (entity.overlapSignificantly(existingEntity)){	
-				return false;
-			}		
-		}
+		if (overlapsWithAnyEntity(entity))
+			return false;
+		
 		return true;
 	}
 	
@@ -505,10 +503,13 @@ public class World {
 		if (firstCollisionTime > deltaT) {
 			//if it is, advance all the entities deltaT seconds
 			advanceEntities(deltaT);
+			System.out.println("===== EXIT METHOD ====");
 		} 
 		else {
 			firstCollision.handleCollision(collisionListener);
 			// -- Step 3: recursive call
+			System.out.println("Recursive call,");
+			System.out.println(deltaT-firstCollisionTime);;
 			evolve(deltaT-firstCollisionTime, collisionListener);
 		}
 	}
@@ -587,9 +588,9 @@ public class World {
 				((Ship)entity).thrust(deltaT);
 			// Move the entity.
 			entity.move(deltaT);
-			// Update the coordEntities map
-			updateCoordMap();
 		}
+		// Update the coordEntities map
+		updateCoordMap();
 	}	
 	
 	/**

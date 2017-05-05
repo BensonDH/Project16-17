@@ -163,7 +163,7 @@ public class WorldTests {
 
 	// -*-*- queryShips, queryBullets, queryEntities tests -*-*-
 	@Test
-	public void query(){
+	public void queryTest(){
 		World testWorld = new World(150,150);
 		// Add 3 Bullets and 3 Ships to the testWorld in a random order
 		Entity testEntity1 = new Bullet(10, 10, 0, 0, 10);
@@ -191,7 +191,7 @@ public class WorldTests {
 		assertTrue(entities.contains(testEntity6));
 		
 		// queryBullets
-		Set<? extends Entity> bullets = testWorld.query(new BulletExtractor());
+		Set<? extends Bullet> bullets = (Set<? extends Bullet>) testWorld.query(new BulletExtractor());
 		
 		assertTrue(bullets.size() == 3);
 		assertTrue(bullets.contains(testEntity1));
@@ -199,7 +199,7 @@ public class WorldTests {
 		assertTrue(bullets.contains(testEntity6));
 		
 		// queryShips
-		Set<? extends Entity> ships = testWorld.query(new ShipExtractor());
+		Set<? extends Ship> ships = (Set<? extends Ship>) testWorld.query(new ShipExtractor());
 
 		assertTrue(ships.size() == 3);
 		assertTrue(ships.contains(testEntity2));

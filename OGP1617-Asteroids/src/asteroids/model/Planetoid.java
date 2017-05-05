@@ -61,7 +61,7 @@ public class Planetoid extends MinorPlanet {
 		setDistanceTravelled(getDistanceTravelled() + distanceTravelled);
 		
 		// This planetoid dissolves when its radius becomes smaller than the minimal radius possible
-		if (getPlanetoidRadius() < MinorPlanet.getMinimalRadius())
+		if (getRadius() < MinorPlanet.getMinimalRadius())
 			this.die();
 	}
 	
@@ -71,8 +71,8 @@ public class Planetoid extends MinorPlanet {
 	 * TODO Documentation
 	 * @return
 	 */
-	public double getPlanetoidRadius(){
-		return getRadius() - getDistanceTravelled()*0.0001;
+	public double getRadius(){
+		return super.getRadius() - getDistanceTravelled()*0.000001;
 	}
 
 	//DistanceTravelled [we decided to program this in a TOTAL way]

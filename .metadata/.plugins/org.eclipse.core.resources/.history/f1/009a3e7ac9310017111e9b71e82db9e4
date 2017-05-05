@@ -1,0 +1,8 @@
+package asteroids.programs.expressions;
+
+public abstract class BinaryExpression extends Expression {
+	
+	@Override
+	public abstract Object eval();
+
+}

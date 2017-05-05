@@ -1,5 +1,5 @@
 package asteroids.programs.statements;
 
-public class ActionStatement extends Statement {
+public abstract class ActionStatement extends Statement {
 
 }

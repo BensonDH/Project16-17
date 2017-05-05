@@ -5,5 +5,4 @@ package asteroids.programs.expressions;
  */
 public abstract class Expression {
 
-		public abstract Object eval();
 }

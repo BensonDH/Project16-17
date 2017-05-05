@@ -22,7 +22,6 @@
 <fullyQualifiedTypeName name="java.nio.channels.IllegalSelectorException"/>
 <fullyQualifiedTypeName name="asteroids.model.Bullet"/>
 <fullyQualifiedTypeName name="asteroids.filters.EntityExtractor"/>
-<fullyQualifiedTypeName name="asteroids.filters.BulletExtractor"/>
 <fullyQualifiedTypeName name="asteroids.filters.ShipExtractor"/>
 <fullyQualifiedTypeName name="java.lang.Double"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
@@ -30,7 +29,10 @@
 <fullyQualifiedTypeName name="asteroids.part2.CollisionListener"/>
 <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
 <fullyQualifiedTypeName name="asteroids.programs.Expression"/>
-<fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.Expression"/>
 <fullyQualifiedTypeName name="java.lang.NullPointerException"/>
+<fullyQualifiedTypeName name="asteroids.filters.BulletExtractor"/>
+<fullyQualifiedTypeName name="asteroids.model.Asteroid"/>
+<fullyQualifiedTypeName name="asteroids.model.Planetoid"/>
+<fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
 </qualifiedTypeNameHistroy>

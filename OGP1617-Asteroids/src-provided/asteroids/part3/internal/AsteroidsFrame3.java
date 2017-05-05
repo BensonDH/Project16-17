@@ -59,8 +59,9 @@ public class AsteroidsFrame3 extends AsteroidsFrame2<IFacade> {
 			handleError(e);
 			return;
 		}
-
-		for (int i = 1; i < 50; i++) {
+		
+		// TODO Changed "i<50" to "i<15" so that the ship is faster
+		for (int i = 1; i < 25; i++) {
 			try {
 				Bullet bullet = facade.createBullet(width / 2.0, height / 2.0, 0, 0, Math.random() + 2);
 				facade.loadBulletOnShip(player, bullet);
