@@ -599,8 +599,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	@Override
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
 		try {
-			return (Set<? extends Ship>) world.query(new ShipExtractor());
-
+			return (Set<? extends Ship>)world.query(new ShipExtractor());
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
@@ -614,7 +613,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	@Override
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
 		try {
-			return (Set<? extends Bullet>) world.query(new BulletExtractor());
+			return (Set<? extends Bullet>)world.query(new BulletExtractor());
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
@@ -853,16 +852,16 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		//try {
+		try {
 			world.evolve(dt, collisionListener);
-//		} catch (IllegalArgumentException E){
-//			throw new ModelException("IllegalArgumentException");
-//		} catch (AssertionError E){
-//			throw new ModelException("AssertionError");
-//		} catch (NullPointerException E){
-//			throw new ModelException("NullPointerException");
-	//	} catch (IllegalStateException E){
-		//	throw new ModelException("IllegalStateException");}
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		} catch (IllegalStateException E){
+			throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
@@ -900,124 +899,352 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public Set<? extends Asteroid> getWorldAsteroids(World world) throws ModelException {
-		return (Set<? extends Asteroid>) world.query(new AsteroidExtractor());
+		try {
+			return (Set<? extends Asteroid>)world.query(new AsteroidExtractor());
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		} catch (IllegalStateException E){
+			throw new ModelException("IllegalStateException");}
 	}
+	
 
 	@Override
 	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException {
-		world.addEntity(asteroid);
-	}
-
-	@Override
-	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException {
-		world.removeEntity(asteroid);
+		try {
+			world.addEntity(asteroid);
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 		
 	}
 
 	@Override
-	public Set<? extends Planetoid> getWorldPlanetoids(World world) throws ModelException {
-		return (Set<? extends Planetoid>) world.query(new PlanetoidExtractor());
+	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException {
+		try {
+			world.removeEntity(asteroid);
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}		
 	}
 
 	@Override
+	public Set<? extends Planetoid> getWorldPlanetoids(World world) throws ModelException {
+		try {
+			return (Set<? extends Planetoid>)world.query(new PlanetoidExtractor());
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		} catch (IllegalStateException E){
+			throw new ModelException("IllegalStateException");}
+	}
+	
+
+	@Override
 	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException {
-		world.addEntity(planetoid);
+		try {
+			world.addEntity(planetoid);
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 		
 	}
 
 	@Override
 	public void removePlanetoidFromWorld(World world, Planetoid planetoid) throws ModelException {
-		world.removeEntity(planetoid);
+		try {
+			world.removeEntity(planetoid);
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 		
 	}
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws ModelException {
-		return new Asteroid(x, y, xVelocity, yVelocity, radius);
+		try {
+			return new Asteroid(x,y,xVelocity,yVelocity,radius);
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public void terminateAsteroid(Asteroid asteroid) throws ModelException {
-		asteroid.die();
+		try {
+			asteroid.die();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 		
 	}
 
 	@Override
 	public boolean isTerminatedAsteroid(Asteroid asteroid) throws ModelException {
-		return asteroid.isDead();
+		try {
+			return asteroid.isDead();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double[] getAsteroidPosition(Asteroid asteroid) throws ModelException {
-		return asteroid.getPosition().toDoubleArray();
+		try {
+			return asteroid.getPosition().toDoubleArray();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double[] getAsteroidVelocity(Asteroid asteroid) throws ModelException {
-		return asteroid.getVelocity().toDoubleArray();
+		try {
+			return asteroid.getVelocity().toDoubleArray();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double getAsteroidRadius(Asteroid asteroid) throws ModelException {
-		return asteroid.getRadius();
+		try {
+			return asteroid.getRadius();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double getAsteroidMass(Asteroid asteroid) throws ModelException {
-		return asteroid.getTotalMass();
+		try {
+			return asteroid.getTotalMass();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public World getAsteroidWorld(Asteroid asteroid) throws ModelException {
-		return asteroid.getWorld();
+		try {
+			return asteroid.getWorld();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public Planetoid createPlanetoid(double x, double y, double xVelocity, double yVelocity, double radius,
 			double totalTraveledDistance) throws ModelException {
-		return new Planetoid(x, y, xVelocity, yVelocity, radius, totalTraveledDistance);
+		try {
+			return new Planetoid(x,y,xVelocity,yVelocity,radius,totalTraveledDistance);
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public void terminatePlanetoid(Planetoid planetoid) throws ModelException {
-		planetoid.die();
+		try {
+			planetoid.die();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 		
 	}
 
 	@Override
 	public boolean isTerminatedPlanetoid(Planetoid planetoid) throws ModelException {
-		return planetoid.isDead();
+		try {
+			return planetoid.isDead();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double[] getPlanetoidPosition(Planetoid planetoid) throws ModelException {
-		return planetoid.getPosition().toDoubleArray();
+		try {
+			return planetoid.getPosition().toDoubleArray();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double[] getPlanetoidVelocity(Planetoid planetoid) throws ModelException {
-		return planetoid.getVelocity().toDoubleArray();
+		try {
+			return planetoid.getVelocity().toDoubleArray();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double getPlanetoidRadius(Planetoid planetoid) throws ModelException {
-		return planetoid.getRadius();
+		try {
+			return planetoid.getRadius();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double getPlanetoidMass(Planetoid planetoid) throws ModelException {
-		return planetoid.getTotalMass();
+		try {
+			return planetoid.getTotalMass();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public double getPlanetoidTotalTraveledDistance(Planetoid planetoid) throws ModelException {
-		return planetoid.getDistanceTravelled();
+		try {
+			return planetoid.getDistanceTravelled();
+			
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public World getPlanetoidWorld(Planetoid planetoid) throws ModelException {
-		return planetoid.getWorld();
+		try {
+			return planetoid.getWorld();
+			} catch (IllegalArgumentException E){
+				throw new ModelException("IllegalArgumentException");
+			} catch (AssertionError E){
+				throw new ModelException("AssertionError");
+			} catch (NullPointerException E){
+				throw new ModelException("NullPointerException");
+			} catch (IllegalStateException E){
+				throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
@@ -1044,3 +1271,4 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		return null;
 	}
 }
+

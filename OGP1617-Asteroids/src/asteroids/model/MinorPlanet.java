@@ -3,14 +3,20 @@ package asteroids.model;
 public abstract class MinorPlanet extends Entity {
 	
 	/**
-	 * TODO Documentation
+	 * Most extended constructor of MinorPlanet class. initializes a minor planet with the given arguments
 	 * @param positionX
 	 * @param positionY
 	 * @param velocityX
 	 * @param velocityY
 	 * @param radius
 	 * @param speedLimit
+	 * @effect
+	 * 		|super(positionX,positionY,velocityX,velocityY,speedLimit)
+	 * @post
+	 * 		|if isValidRadius(radius)
+	 * 		| then new.getRadius = radius
 	 * @throws IllegalArgumentException
+	 *      | !isValidRadius
 	 */
 	public MinorPlanet(double positionX,double positionY,double velocityX, double velocityY,double radius, double speedLimit)throws IllegalArgumentException{
 		super(positionX,positionY,velocityX,velocityY,speedLimit);
@@ -20,7 +26,9 @@ public abstract class MinorPlanet extends Entity {
 	}
 	
 	/**
-	 * TODO Documentation
+	 * default constructor of the MinorPlanet class. initializes this minorplanet with default settings
+	 * @effect
+	 * 			| this(0,0,0,0, getMinimalRadius(),c)
 	 */
 	public MinorPlanet(){
 		this(0,0,0,0, getMinimalRadius(),c);
@@ -35,7 +43,7 @@ public abstract class MinorPlanet extends Entity {
 	}
 	
 	/**
-	 * TODO Documentation
+	 * gets the radius of this minorplanet
 	 */
 	@Override
 	public double getRadius(){
@@ -43,7 +51,7 @@ public abstract class MinorPlanet extends Entity {
 	}
 
 	/**
-	 * TODO Documentation
+	 * get the total mass of this minorplanet
 	 */
 	@Override
 	public abstract double getTotalMass();
@@ -76,7 +84,7 @@ public abstract class MinorPlanet extends Entity {
 	}
 	
 	/**
-	 * TODO Documentation
+	 * get the minimalRadius of this minorplanet
 	 * @return
 	 */
 	public static double getMinimalRadius(){

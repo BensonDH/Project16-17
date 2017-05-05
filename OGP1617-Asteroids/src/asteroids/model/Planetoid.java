@@ -6,7 +6,7 @@ import be.kuleuven.cs.som.annotate.Immutable;
 public class Planetoid extends MinorPlanet {
 	
 	/**
-	 * TODO Documentation
+	 * Most extended constructor of the Planetoid class.
 	 * @param positionX
 	 * @param positionY
 	 * @param velocityX
@@ -14,6 +14,10 @@ public class Planetoid extends MinorPlanet {
 	 * @param radius
 	 * @param distanceTravelled
 	 * @param speedLimit
+	 * @effect 
+	 * 			|super(positionX,positionY,velocityX,velocityY,radius,speedLimit);
+	 * @effect
+	 * 			| setDistanceTravelled(distanceTravelled)
 	 */
 	public Planetoid(double positionX, double positionY, double velocityX, double velocityY,
 					 double radius, double distanceTravelled, double speedLimit) {
@@ -22,13 +26,16 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	/**
-	 * TODO Documentation
+	 * the constructor whhich initializes the planetoid with the default speedlimit being the speed of light
 	 * @param positionX
 	 * @param positionY
 	 * @param velocityX
 	 * @param velocityY
 	 * @param radius
 	 * @param distaneTravelled
+	 * @effect
+	 * 			| this(positionX,positionY,velocityX,velocityY,radius,distaneTravelled,c)
+	 * 
 	 */
 	public Planetoid(double positionX, double positionY, double velocityX, double velocityY, 
 					 double radius, double distaneTravelled) {
@@ -36,7 +43,9 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	/**
-	 * TODO Documentation
+	 * default constructor of the Planetoid class
+	 * @effect
+	 * 			|this(0,0,0,0,5,0,c)
 	 */
 	public Planetoid(){
 		this(0,0,0,0,5,0,c);
@@ -45,9 +54,16 @@ public class Planetoid extends MinorPlanet {
 	
 	// move [TOTAL]
 	/**
-	 * TODO Documentation
+	 * moves the planetoid for the given duration, if the planetoid gets too small it dies
 	 * @param duration
-	 * @throws IllegalArgumentException
+	 * @Post
+	 * 			| if new.getPlanetoidRadius() < MinorPlanet.getMinimalRadius()
+	 * 			| 	then new.isTerminated == true
+	 *@effect	| else
+	 *			|	setPosition(getPosition().getX()+duration*getVelocity().getX(), 
+	 * 			|			  	getPosition().getY()+duration*getVelocity().getY())
+	 *@throws IllegalArgumentException
+	 * 			| if double.isNaN(duration)
 	 */
 	@Override
 	public void move(double duration)throws IllegalArgumentException{
@@ -68,8 +84,8 @@ public class Planetoid extends MinorPlanet {
 	
 	// Radius [DEFENSIVE]
 	/**
-	 * TODO Documentation
-	 * @return
+	 * returns the radius of the planetoid
+	 * @see implementation
 	 */
 	public double getRadius(){
 		return super.getRadius() - getDistanceTravelled()*0.000001;
@@ -77,16 +93,22 @@ public class Planetoid extends MinorPlanet {
 
 	//DistanceTravelled [we decided to program this in a TOTAL way]
 	/**
-	 * TODO Documentation
-	 * @return
+	 * returns the total distance travelled
 	 */
 	public double getDistanceTravelled() {
 		return this.distanceTravelled;
 	}
 	
 	/**
-	 * TODO Documentation
+	 * sets the distance travelled to the distance travelled
 	 * @param distanceTravelled
+	 * @post
+	 * 		|if (Double.isNaN(distanceTravelled))
+	 *		| then this.distanceTravelled = 0;
+	 *		|else if (Double.isInfinite(distanceTravelled))
+	 *		| then this.distanceTravelled = Double.MAX_VALUE
+	 *		|else
+	 *		| then this.distanceTravelled = distanceTravelled
 	 */
 	public void setDistanceTravelled(double distanceTravelled) {
 		if (Double.isNaN(distanceTravelled))
@@ -106,12 +128,12 @@ public class Planetoid extends MinorPlanet {
 
 	// Mass [TOTAL]
 	/**
-	 * Return the mass of this bullet.
+	 * Return the mass of this planetoid.
 	 * 
-	 * @return The total mass of this bullet, which is equal to the
-	 * 		   volume of this bullet (a sphere) times the density of this 
-	 * 		   bullet.
-	 * 		   | result == (4/3)*PI*getDensity()*getRadius()^3
+	 * @return The total mass of this planetoid, which is equal to the
+	 * 		   volume of this planetoid (a sphere) times the density of this 
+	 * 		   planetoid.
+	 * 		   | @See implementation
 	 */
 	@Basic
 	public double getTotalMass(){
@@ -119,7 +141,7 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	/**
-	 * Return the density of the bullet.
+	 * Return the density of the Planetoid.
 	 */
 	@Basic
 	public double getDensity(){
