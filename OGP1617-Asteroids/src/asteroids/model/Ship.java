@@ -244,14 +244,6 @@ public class Ship extends Entity {
 	 */
 	@Basic
 	public boolean isShipThrusterActive(){
-		return getThrust();
-	}
-	
-	/**
-	 * Return the mode of the thruster, false meaning off and true meaning on.
-	 */
-	@Basic
-	private boolean getThrust() {
 		return this.thrust;
 	}
 	

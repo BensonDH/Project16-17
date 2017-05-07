@@ -503,13 +503,10 @@ public class World {
 		if (firstCollisionTime > deltaT) {
 			//if it is, advance all the entities deltaT seconds
 			advanceEntities(deltaT);
-			System.out.println("===== EXIT METHOD ====");
 		} 
 		else {
 			firstCollision.handleCollision(collisionListener);
 			// -- Step 3: recursive call
-			System.out.println("Recursive call,");
-			System.out.println(deltaT-firstCollisionTime);;
 			evolve(deltaT-firstCollisionTime, collisionListener);
 		}
 	}
