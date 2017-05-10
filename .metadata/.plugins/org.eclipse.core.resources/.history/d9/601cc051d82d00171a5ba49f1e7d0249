@@ -1,7 +1,0 @@
-package asteroids.programs;
-
-import asteroids.programs.statements.Statement;
-
-public class IfThenElseStatement extends Statement {
-
-}

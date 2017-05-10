@@ -1,5 +1,9 @@
 package asteroids.programs.statements;
 
+import java.util.List;
+
+import asteroids.programs.Function;
+import asteroids.programs.Program;
 import asteroids.programs.expressions.*;
 
 
@@ -75,11 +79,11 @@ public class WhileStatement extends Statement{
 	/**
 	 * Execute this while statement
 	 */
-	public Object execute(){
-		while (getExpression().eval()){
-			getBody().execute();
+	public void execute(Program parentProgram){
+		// A break statement might terminate this while loop
+		while ((boolean)getExpression().eval() && !isTerminated()){
+			getBody().execute(parentProgram);
 		}
-		return null;
 	}
 	
 	/**

@@ -1,5 +1,0 @@
-package asteroids.programs.statements;
-
-public class PrintStatement extends Statement {
-
-}

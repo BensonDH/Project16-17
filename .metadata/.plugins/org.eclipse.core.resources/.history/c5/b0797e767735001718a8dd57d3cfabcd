@@ -1,0 +1,32 @@
+package asteroids.programs.statements;
+
+import java.util.List;
+
+import asteroids.programs.*;
+
+/**
+ * A class representing a statement
+ */
+public abstract class Statement {
+	public Statement(Program parentProgram, PrintedValues printedValues){
+		this.parentProgram = parentProgram;
+		this.printedValues = printedValues;
+	}
+	
+	
+	public abstract void execute(List<Function> functions, Program parentProgram, PrintedValues printedValues);
+	
+	
+	public Program getParentProgram(){
+		return this.parentProgram;
+	}
+	
+	private final Program parentProgram;
+	
+	
+	public PrintedValues getPrintedValues(){
+		return this.printedValues;
+	}
+	
+	private final PrintedValues printedValues;
+}

@@ -1,0 +1,25 @@
+package asteroids.model;
+
+import java.util.*;
+
+/**
+ * A class keeping up all the values that a program has printed out.
+ */
+public class PrintedValues {
+	
+	
+	
+	public void addValues(Object... values){
+		for (Object value: values){
+			printedValues.add(value);
+		}
+	}
+	
+	public List<Object> getPrintedValues(){
+		return this.printedValues;
+	}
+	/**
+	 * A List containing all the values that were printed.
+	 */
+	private List<Object> printedValues;
+}

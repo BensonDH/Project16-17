@@ -40,6 +40,7 @@ thrusterFoce
 --
 isShipThrusterActive()
 turn()
+loadBullets()
 getTotalMass()
 fireBullet()
 
@@ -95,12 +96,13 @@ GetTotalMass()</panel_attributes>
       <x>1410</x>
       <y>650</y>
       <w>130</w>
-      <h>70</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>Planetoid
 --
 distanceTravelled
 --
+getTotalMass()
 move()
 </panel_attributes>
     <additional_attributes/>
@@ -168,8 +170,8 @@ move()
       <w>150</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-LoadBullets
+    <panel_attributes>lt=&lt;-&gt;
+load
 m1=0..1
 m2=0..*</panel_attributes>
     <additional_attributes>10.0;20.0;130.0;20.0</additional_attributes>
@@ -200,15 +202,14 @@ destroy()</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>770</x>
-      <y>210</y>
+      <y>220</y>
       <w>350</w>
-      <h>50</h>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-Entity lies in World
+    <panel_attributes>lt=&lt;-&gt;
 m1=0..1
 m2=0..*</panel_attributes>
-    <additional_attributes>10.0;20.0;330.0;20.0</additional_attributes>
+    <additional_attributes>10.0;10.0;330.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -263,11 +264,24 @@ toString()
       <x>140</x>
       <y>120</y>
       <w>1430</w>
-      <h>620</h>
+      <h>660</h>
     </coordinates>
     <panel_attributes>asteroids.model
 --
 bg=orange</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>970</x>
+      <y>560</y>
+      <w>150</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+fired by
+m1=0..1</panel_attributes>
+    <additional_attributes>10.0;20.0;130.0;20.0</additional_attributes>
   </element>
 </diagram>

@@ -2,6 +2,10 @@ package asteroids.programs.statements;
 
 import asteroids.programs.expressions.*;
 
+import java.util.List;
+
+import asteroids.programs.*;
+
 public class IfThenElseStatement extends Statement {
 
 	/**
@@ -21,11 +25,11 @@ public class IfThenElseStatement extends Statement {
 	 * 			If the given Expression or ifBody is null
 	 * 			| if (E == null || ifBody == null)
 	 */
-	public IfThenElseStatement(LogicalExpression expression, Statement ifBody, Statement elseBody)
+	public IfThenElseStatement(LogicalExpression expression, Statement ifBody, Statement elseBody) 
 					throws NullPointerException{
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
-		
+	
 		this.expression = expression;
 		this.ifBody = ifBody;
 		this.elseBody= elseBody;
@@ -42,10 +46,11 @@ public class IfThenElseStatement extends Statement {
 	 * @param ifBody
 	 * 			The body that belongs to the if statement.
 	 * @throws NullPointerException
-	 * 			If the given expression or ifBody is null
+	 * 			If the given parentProgram, printedValues, expression or ifBody is null
 	 * 			| if (expression == null || ifBody == null)
 	 */
-	public IfThenElseStatement(LogicalExpression expression, Statement ifBody) throws NullPointerException{
+	public IfThenElseStatement(LogicalExpression expression, 
+							   Statement ifBody) throws NullPointerException{
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
 		
@@ -63,6 +68,7 @@ public class IfThenElseStatement extends Statement {
 	public IfThenElseStatement(){
 		throw new IllegalStateException("Cannot create an IfThenElseStatement withouth an expression and ifBody!");
 	}
+	
 	/**
 	 * Get the expression that comes after the
 	 * if statement
@@ -103,13 +109,11 @@ public class IfThenElseStatement extends Statement {
 	 */
 	private final Statement elseBody;
 	
-	public Object execute(){
-		if (getExpression().eval())
-			getIfBody().execute();
+	public void execute(Program parentProgram){
+		if ((boolean)getExpression().eval())
+			getIfBody().execute(parentProgram);
 		
 		else if (getElseBody() != null)
-			getElseBody().execute();
-		
-		return null;
+			getElseBody().execute(parentProgram);
 	}
 }

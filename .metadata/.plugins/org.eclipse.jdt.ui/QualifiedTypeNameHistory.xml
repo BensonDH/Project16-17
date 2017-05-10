@@ -11,7 +11,6 @@
 <fullyQualifiedTypeName name="java.util.Map"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="java.lang.Object"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="asteroids.model.FirstCollision"/>
 <fullyQualifiedTypeName name="asteroids.model.Entity"/>
@@ -29,10 +28,15 @@
 <fullyQualifiedTypeName name="asteroids.part2.CollisionListener"/>
 <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
 <fullyQualifiedTypeName name="asteroids.programs.Expression"/>
-<fullyQualifiedTypeName name="asteroids.programs.expressions.Expression"/>
-<fullyQualifiedTypeName name="java.lang.NullPointerException"/>
 <fullyQualifiedTypeName name="asteroids.filters.BulletExtractor"/>
 <fullyQualifiedTypeName name="asteroids.model.Asteroid"/>
 <fullyQualifiedTypeName name="asteroids.model.Planetoid"/>
+<fullyQualifiedTypeName name="asteroids.part3.facade.IFacade"/>
+<fullyQualifiedTypeName name="asteroids.programs.ProgramFactory"/>
+<fullyQualifiedTypeName name="java.lang.NullPointerException"/>
+<fullyQualifiedTypeName name="asteroids.programs.Program"/>
+<fullyQualifiedTypeName name="asteroids.programs.statements.Statement"/>
 <fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="asteroids.programs.expressions.Expression"/>
 </qualifiedTypeNameHistroy>

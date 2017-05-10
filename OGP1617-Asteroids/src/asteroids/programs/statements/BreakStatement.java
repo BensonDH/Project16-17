@@ -1,5 +1,10 @@
 package asteroids.programs.statements;
 
+import java.util.List;
+
+import asteroids.programs.Function;
+import asteroids.programs.Program;
+
 public class BreakStatement extends Statement {
 
 	/**
@@ -36,9 +41,7 @@ public class BreakStatement extends Statement {
 	/**
 	 * Execute this BreakStatement by terminating its rootWhileStatement.
 	 */
-	public Object execute(){
+	public void execute(Program parentProgram){
 		getRootWhileStatement().terminate();
-		
-		return null;
 	}
 }

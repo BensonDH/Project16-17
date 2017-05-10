@@ -52,7 +52,7 @@ public class Equals extends LogicalExpression {
 	private final Expression rightHandOperator;
 	
 	@Override
-	public boolean eval() {
+	public Object eval() {
 		// TODO Auto-generated method stub
 		return false;
 	}

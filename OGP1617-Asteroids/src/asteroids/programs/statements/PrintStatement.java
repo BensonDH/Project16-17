@@ -1,5 +1,9 @@
 package asteroids.programs.statements;
 
+import java.util.List;
+
+import asteroids.programs.Function;
+import asteroids.programs.Program;
 import asteroids.programs.expressions.*;
 
 public class PrintStatement extends Statement {
@@ -37,10 +41,9 @@ public class PrintStatement extends Statement {
 	/**
 	 * Print and return the evaluation of this PrintStatement's expression.
 	 */
-	public Object execute(){
+	public void execute(Program parentProgram){
 		Object result = getExpression().eval();
 		System.out.println(result.toString());
-		
-		return result;
+		parentProgram.addPrintedValues(result);
 	}
 }

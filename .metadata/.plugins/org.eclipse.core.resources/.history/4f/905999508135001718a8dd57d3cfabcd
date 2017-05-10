@@ -1,0 +1,64 @@
+package asteroids.programs;
+
+import java.util.*;
+
+/**
+ * A class representing the runtime of a program
+ * This class contains all the global variables that are present
+ * during the execution of a program
+ */
+public class RunTime {
+	
+	
+	public void addVariables(Object... variables){
+		for (Object variable: variables){
+			runTimeVariables.add(variable);
+		}
+	}
+	
+	/**
+	 * List containing all the global variables that are present during
+	 * this runTime
+	 */
+	private List<Object> runTimeVariables= new ArrayList<Object>();
+	
+	/**
+	 * Add a value that was printed during this runTime
+	 */
+	public void addPrintedValues(Object... values){
+		for (Object value: values){
+			printedValues.add(value);
+		}
+	}
+	
+	/**
+	 * Get all the values that were printed during this runTime. 
+	 */
+	public List<Object> getPrintedValues(){
+		return this.printedValues;
+	}
+	
+	/**
+	 * A List containing all the values that were printed.
+	 */
+	private List<Object> printedValues = new ArrayList<Object>();
+	
+	/**
+	 * Terminate this runTime.
+	 */
+	public void Terminate() {
+		this.terminated = true;
+	}
+	
+	/**
+	 * Check whether this runTime is terminated.
+	 */
+	public boolean isTerminated(){
+		return this.terminated;
+	}
+	
+	/**
+	 * Variable registering whether this runTime has been terminated.
+	 */
+	private boolean terminated = false;
+}

@@ -1,0 +1,17 @@
+package asteroids.programs.statements;
+
+import java.util.List;
+
+import asteroids.programs.Function;
+import asteroids.programs.PrintedValues;
+import asteroids.programs.Program;
+
+public class AssignmentStatement extends Statement {
+
+	@Override
+	public void execute(List<Function> functions, Program parentProgram, PrintedValues printedValues) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
