@@ -168,7 +168,7 @@ public class Bullet extends Entity {
 	/**
 	 * Variable registering the density of bullets.
 	 */
-	private static double density = 7.12*Math.pow(10.0, 12.0);
+	private static double density = 7.8E12;
 	
 	
 	// Bounce counter
@@ -333,7 +333,6 @@ public class Bullet extends Entity {
 			getShip().removeBullet(this);
 			setShip(null);
 		}
-		setSourceShip(null);
 		this.isTerminated = true;
 	}
 	

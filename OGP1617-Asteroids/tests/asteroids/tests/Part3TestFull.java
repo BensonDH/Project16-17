@@ -192,6 +192,7 @@ public class Part3TestFull {
     max_score += 1;
     Ship ship = facade.createShip(100, 120, 10, 5, 50, 0, -4);
     double minimalMass = Math.PI * 4 / 3. * Math.pow(50, 3) * 1.42E12;
+    
     assertTrue(Double.isFinite(facade.getShipMass(ship)));
     assertTrue(minimalMass - BIG_EPSILON <= facade.getShipMass(ship));
     score += 1;
@@ -1070,7 +1071,7 @@ public class Part3TestFull {
     Ship ship2 = facade.createShip(400, 120, 0, -5, 50, 0, 1.0E20);
     facade.addShipToWorld(world, ship1);
     facade.addShipToWorld(world, ship2);
-    facade.evolve(world, 1, null);
+    facade.evolve(world, 1.0, null);
     assertEquals(2, facade.getWorldShips(world).size());
     assertEquals(110, facade.getShipPosition(ship1)[0], EPSILON);
     assertEquals(125, facade.getShipPosition(ship1)[1], EPSILON);

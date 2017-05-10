@@ -168,7 +168,7 @@ public abstract class Entity {
 	 * @see implementation
 	 */
 	public boolean isValidPositionComponent(double value){
-		return !(Double.isNaN(value) || Double.isInfinite(value));
+		return !(Double.isNaN(value));
 	}
 	
 	/**

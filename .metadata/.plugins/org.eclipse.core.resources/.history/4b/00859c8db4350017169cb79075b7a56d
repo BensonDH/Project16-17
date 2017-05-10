@@ -1,0 +1,157 @@
+package asteroids.model;
+
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+
+public class Planetoid extends MinorPlanet {
+	
+	/**
+	 * Most extended constructor of the Planetoid class.
+	 * @param positionX
+	 * @param positionY
+	 * @param velocityX
+	 * @param velocityY
+	 * @param radius
+	 * @param distanceTravelled
+	 * @param speedLimit
+	 * @effect 
+	 * 			|super(positionX,positionY,velocityX,velocityY,radius,speedLimit);
+	 * @effect
+	 * 			| setDistanceTravelled(distanceTravelled)
+	 */
+	public Planetoid(double positionX, double positionY, double velocityX, double velocityY,
+					 double radius, double distanceTravelled, double speedLimit) {
+		super(positionX,positionY,velocityX,velocityY,radius,speedLimit);
+		setDistanceTravelled(distanceTravelled);
+	}
+	
+	/**
+	 * the constructor whhich initializes the planetoid with the default speedlimit being the speed of light
+	 * @param positionX
+	 * @param positionY
+	 * @param velocityX
+	 * @param velocityY
+	 * @param radius
+	 * @param distaneTravelled
+	 * @effect
+	 * 			| this(positionX,positionY,velocityX,velocityY,radius,distaneTravelled,c)
+	 * 
+	 */
+	public Planetoid(double positionX, double positionY, double velocityX, double velocityY, 
+					 double radius, double distaneTravelled) {
+		this(positionX,positionY,velocityX,velocityY,radius,distaneTravelled,c);
+	}
+	
+	/**
+	 * default constructor of the Planetoid class
+	 * @effect
+	 * 			|this(0,0,0,0,5,0,c)
+	 */
+	public Planetoid(){
+		this(0,0,0,0,5,0,c);
+	}
+	
+	
+	// move [TOTAL]
+	/**
+	 * moves the planetoid for the given duration, if the planetoid gets too small it dies
+	 * @param duration
+	 * @Post
+	 * 			| if new.getPlanetoidRadius() < MinorPlanet.getMinimalRadius()
+	 * 			| 	then new.isTerminated == true
+	 *@effect	| else
+	 *			|	setPosition(getPosition().getX()+duration*getVelocity().getX(), 
+	 * 			|			  	getPosition().getY()+duration*getVelocity().getY())
+	 *@throws IllegalArgumentException
+	 * 			| if double.isNaN(duration)
+	 */
+	@Override
+	public void move(double duration)throws IllegalArgumentException{
+		if (Double.isNaN(duration))
+			throw new IllegalArgumentException("Duration cannot be NaN");
+		Vector current_pos = getPosition();
+		Vector current_vel = getVelocity();
+		setPosition(current_pos.getX()+current_vel.getX()*duration, current_pos.getY()+current_vel.getY()*duration);
+		Vector new_pos = getPosition();
+		double distanceTravelled = new_pos.subtract(current_pos).norm();
+		setDistanceTravelled(getDistanceTravelled() + distanceTravelled);
+		
+		// This planetoid dissolves when its radius becomes smaller than the minimal radius possible
+		if (getRadius() < MinorPlanet.getMinimalRadius())
+			this.die();
+	}
+	
+	
+	// Radius [DEFENSIVE]
+	/**
+	 * returns the radius of the planetoid
+	 * @see implementation
+	 */
+	public double getRadius(){
+		return super.getRadius() - getDistanceTravelled()*0.000001;
+	}
+
+	//DistanceTravelled [we decided to program this in a TOTAL way]
+	/**
+	 * returns the total distance travelled
+	 */
+	public double getDistanceTravelled() {
+		return this.distanceTravelled;
+	}
+	
+	/**
+	 * sets the distance travelled to the distance travelled
+	 * @param distanceTravelled
+	 * @post
+	 * 		|if (Double.isNaN(distanceTravelled))
+	 *		| then this.distanceTravelled = 0;
+	 *		|else if (Double.isInfinite(distanceTravelled))
+	 *		| then this.distanceTravelled = Double.MAX_VALUE
+	 *		|else
+	 *		| then this.distanceTravelled = distanceTravelled
+	 */
+	public void setDistanceTravelled(double distanceTravelled) {
+		if (Double.isNaN(distanceTravelled))
+			this.distanceTravelled = 0;
+		else if (Double.isInfinite(distanceTravelled))
+			this.distanceTravelled = Double.MAX_VALUE;
+		else
+			this.distanceTravelled = distanceTravelled;
+	}	
+	
+	/**
+	 * A variable registering the distance that this Planetoid has traveled.
+	 */
+	private double distanceTravelled;
+
+
+
+	// Mass [TOTAL]
+	/**
+	 * Return the mass of this planetoid.
+	 * 
+	 * @return The total mass of this planetoid, which is equal to the
+	 * 		   volume of this planetoid (a sphere) times the density of this 
+	 * 		   planetoid.
+	 * 		   | @See implementation
+	 */
+	@Basic
+	public double getTotalMass(){
+		return (4.0/3)* Math.PI* Math.pow(this.getRadius(), 3.0)*getDensity();
+	}
+	
+	/**
+	 * Return the density of the Planetoid.
+	 */
+	@Basic
+	public double getDensity(){
+		return Planetoid.density;
+	}
+	
+	/**
+	 * Variable registering the density of planetoids.
+	 */
+	private static double density = 0.917E12;
+	
+	
+}

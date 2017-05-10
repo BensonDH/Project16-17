@@ -75,12 +75,7 @@ public class Planetoid extends MinorPlanet {
 		Vector new_pos = getPosition();
 		double distanceTravelled = new_pos.subtract(current_pos).norm();
 		setDistanceTravelled(getDistanceTravelled() + distanceTravelled);
-		
-		// This planetoid dissolves when its radius becomes smaller than the minimal radius possible
-		if (getRadius() < MinorPlanet.getMinimalRadius())
-			this.die();
 	}
-	
 	
 	// Radius [DEFENSIVE]
 	/**
@@ -117,6 +112,8 @@ public class Planetoid extends MinorPlanet {
 			this.distanceTravelled = Double.MAX_VALUE;
 		else
 			this.distanceTravelled = distanceTravelled;
+		if (getRadius() < getMinimalRadius())
+			this.die();
 	}	
 	
 	/**

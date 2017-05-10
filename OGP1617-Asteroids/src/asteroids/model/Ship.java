@@ -232,7 +232,7 @@ public class Ship extends Entity {
 	/**
 	 * variable registering the force of this ship's thruster.
 	 */
-	private double force = 1.1 * Math.pow(10, 20);
+	private double force = 1.1 * Math.pow(10, 18);
 	
 	
 	// Thrusters total
@@ -427,7 +427,7 @@ public class Ship extends Entity {
      */
    	@Basic
     public double getMinimalMass(){
-    	return (4/3)*Math.PI*Math.pow(getRadius(), 3.0)*getDensity();
+    	return Math.PI * 4 / 3. * Math.pow(getRadius(), 3) * getDensity();
     }
     
     /**
@@ -450,7 +450,8 @@ public class Ship extends Entity {
      */
    	@Basic
     public boolean isValidBaseMass(double mass){
-    	return mass >= getMinimalMass();
+   		
+    	return (mass >= getMinimalMass() && !Double.isNaN(mass)) ;
     }
     
     /**
@@ -464,14 +465,14 @@ public class Ship extends Entity {
      */
     @Basic
     public double getDensity(){
-    	return this.density;
+    	return Ship.density;
     }
     	
     
     /**
      * Variable registering the density of this ship.
      */
-    private final double density = 1.42 * Math.pow(10,12);	
+    private static double density = 1.42E12;	
     	
    	
   	//-----------ASSOCIATIONS-------------
