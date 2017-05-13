@@ -4,18 +4,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import asteroids.model.Asteroid;
-import asteroids.model.Bullet;
-import asteroids.model.Entity;
-import asteroids.model.Planetoid;
-import asteroids.model.Ship;
-import asteroids.model.Vector;
-import asteroids.model.World;
+import asteroids.model.*;
 import asteroids.filters.*;
+import asteroids.programs.*;
 
 import asteroids.part2.CollisionListener;
 import asteroids.part3.programs.IProgramFactory;
-import asteroids.programs.Program;
 import asteroids.util.ModelException;
 
 public class Facade implements asteroids.part3.facade.IFacade{
@@ -1249,26 +1243,22 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public Program getShipProgram(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getLoadedProgram();
 	}
 
 	@Override
 	public void loadProgramOnShip(Ship ship, Program program) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.loadProgram(program);
 	}
 
 	@Override
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.executeProgram(dt);
 	}
 
 	@Override
 	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return new ProgramFactory();
 	}
 }
 

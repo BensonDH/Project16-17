@@ -1,0 +1,19 @@
+package asteroids.programs.statements;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.Program;
+
+public class FireBulletStatement extends ActionStatement {
+
+	public FireBulletStatement(SourceLocation sourceLocation) {
+		super(sourceLocation);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void execute(Program parentProgram) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

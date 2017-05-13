@@ -1,0 +1,41 @@
+package asteroids.programs.statements;
+
+import java.util.List;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+
+public class BreakStatement extends Statement {
+
+	/**
+	 * Initialize this BreakStatement.
+	 * A BreakStatement can only occur in a WhileStatement's body.
+	 * 
+	 * @param rootWhileStatement
+	 * 			The WhileStatement where this BreakStatement belong to.
+	 * @throws NullPointerException
+	 *			If the given rootWhileStatement is null
+	 *			| if (rootWhileStatement == null)
+	 */
+	public BreakStatement(SourceLocation sourceLocation) throws NullPointerException{
+		super(sourceLocation);
+	}
+	
+	/**
+	 * This constructor should not be used
+	 * @throws IllegalStateException
+	 * 			Always
+	 * 			| true
+	 */
+	public BreakStatement(){
+		super();
+		throw new IllegalStateException();
+	}
+	
+	/**
+	 * Execute this BreakStatement by terminating its rootWhileStatement.
+	 */
+	public void execute(Program parentProgram){
+		// TODO find implementation
+	}
+}

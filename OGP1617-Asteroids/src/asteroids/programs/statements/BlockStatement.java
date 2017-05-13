@@ -2,6 +2,7 @@ package asteroids.programs.statements;
 
 import java.util.*;
 
+import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
 
 public class BlockStatement extends Statement {
@@ -9,7 +10,8 @@ public class BlockStatement extends Statement {
 	/**
 	 * Create a blockStatement with the given statements.
 	 */
-	public BlockStatement(List<Statement> statements){
+	public BlockStatement(List<Statement> statements, SourceLocation sourceLocation){
+		super(sourceLocation);
 		this.statements = statements;
 	}
 	
@@ -21,7 +23,7 @@ public class BlockStatement extends Statement {
 	 * 			| true
 	 */
 	public BlockStatement(){
-		throw new IllegalStateException("Cannot initialize an empty block statement");
+		super();
 	}
 	
 	/**

@@ -4,39 +4,34 @@ import java.util.List;
 
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.expressions.Expression;
-import asteroids.programs.statements.Statement;
+import asteroids.programs.expressions.*;
+import asteroids.programs.statements.*;
 
 public class ProgramFactory implements IProgramFactory<Expression, Statement, Function, Program> {
 
 	@Override
 	public Program createProgram(List<Function> functions, Statement main) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Program(functions, main);
 	}
 
 	@Override
 	public Function createFunctionDefinition(String functionName, Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Function(functionName, body, sourceLocation);
 	}
 
 	@Override
 	public Statement createAssignmentStatement(String variableName, Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new AssignmentStatement(variableName, value, sourceLocation);
 	}
 
 	@Override
 	public Statement createWhileStatement(Expression condition, Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new WhileStatement(condition, body, sourceLocation);
 	}
 
 	@Override
 	public Statement createBreakStatement(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new BreakStatement(sourceLocation);
 	}
 
 	@Override
@@ -47,20 +42,17 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Fu
 
 	@Override
 	public Statement createIfStatement(Expression condition, Statement ifBody, Statement elseBody, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IfThenElseStatement(condition, ifBody, elseBody, sourceLocation);
 	}
 
 	@Override
 	public Statement createPrintStatement(Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new PrintStatement(value, sourceLocation);
 	}
 
 	@Override
 	public Statement createSequenceStatement(List<Statement> statements, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new BlockStatement(statements, sourceLocation);
 	}
 
 	@Override
@@ -215,32 +207,27 @@ public class ProgramFactory implements IProgramFactory<Expression, Statement, Fu
 
 	@Override
 	public Statement createThrustOnStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SetThrustStatement(true, location);
 	}
 
 	@Override
 	public Statement createThrustOffStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SetThrustStatement(false, location);
 	}
 
 	@Override
 	public Statement createFireStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new FireBulletStatement(location);
 	}
 
 	@Override
 	public Statement createTurnStatement(Expression angle, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new TurnStatement(angle, location);
 	}
 
 	@Override
 	public Statement createSkipStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SkipStatement(location);
 	}
 
 }

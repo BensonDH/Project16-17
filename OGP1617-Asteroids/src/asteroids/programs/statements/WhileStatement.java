@@ -1,9 +1,9 @@
 package asteroids.programs.statements;
 
-import java.util.List;
+import java.util.*;
 
-import asteroids.programs.Function;
-import asteroids.programs.Program;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
 import asteroids.programs.expressions.*;
 
 
@@ -26,9 +26,14 @@ public class WhileStatement extends Statement{
 	 * 			If expression or body is null
 	 * 			| if (expression == null || body == null)
 	 */
-	public WhileStatement(LogicalExpression expression, Statement body) throws NullPointerException{
+	public WhileStatement(Expression expression, Statement body,
+						  SourceLocation sourceLocation) throws NullPointerException{
+		super(sourceLocation);
 		if (expression == null || body == null)
 			throw new NullPointerException();
+		else if (!(expression instanceof LogicalExpression))
+			throw new IllegalArgumentException("The given expression cannot be evaluated logically, thus it does not belong in a WhileStatement's condition.");
+		
 		this.expression = expression;
 		this.body = body;
 	}
@@ -39,6 +44,7 @@ public class WhileStatement extends Statement{
 	 * 									| true
 	 */
 	public WhileStatement() throws IllegalStateException{
+		super();
 		throw new IllegalStateException("Cannot initialize a while statement without an expression and a body!");
 	}
 
@@ -46,14 +52,14 @@ public class WhileStatement extends Statement{
 	 * Get the expression that has to be evaluated at the beginning
 	 * of every new cycle of this while statement.
 	 */
-	public LogicalExpression getExpression(){
+	public Expression getExpression(){
 		return this.expression;
 	}
 	
 	/**
 	 * Change the while statement's expression to the given newExpression.
 	 */
-	public void changeExpression(LogicalExpression newExpression){
+	public void changeExpression(Expression newExpression){
 		this.expression = newExpression;
 	}
 	
@@ -61,7 +67,7 @@ public class WhileStatement extends Statement{
 	 * The expression that has to be evaluated in every cycle of
 	 * this while statement.
 	 */
-	private LogicalExpression expression;
+	private Expression expression;
 	
 	/**
 	 * Get the body of this while statement represented
@@ -80,10 +86,16 @@ public class WhileStatement extends Statement{
 	 * Execute this while statement
 	 */
 	public void execute(Program parentProgram){
+		// First we add this whileLoop as a new activeLoop to the program
+		parentProgram.addActiveLoop(this);
+		
 		// A break statement might terminate this while loop
 		while ((boolean)getExpression().eval() && !isTerminated()){
 			getBody().execute(parentProgram);
 		}
+		
+		// This loop is finished, remove it again from the active loop list of this program
+		parentProgram.deleteActiveLoop(this);
 	}
 	
 	/**

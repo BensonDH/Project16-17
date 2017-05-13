@@ -8,7 +8,8 @@ import asteroids.model.*;
 public class RandomTests {
 	@Test
 	public void test(){
-	Planetoid planetoid = new Planetoid(0, 0, 0, 0, 20, 1000);
+	double first = 11*Math.PI;
+	System.out.println(first%(2*Math.PI));
 
 
 	}

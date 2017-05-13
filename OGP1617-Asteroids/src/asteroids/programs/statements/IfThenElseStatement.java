@@ -2,8 +2,9 @@ package asteroids.programs.statements;
 
 import asteroids.programs.expressions.*;
 
-import java.util.List;
+import java.util.*;
 
+import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
 
 public class IfThenElseStatement extends Statement {
@@ -25,11 +26,14 @@ public class IfThenElseStatement extends Statement {
 	 * 			If the given Expression or ifBody is null
 	 * 			| if (E == null || ifBody == null)
 	 */
-	public IfThenElseStatement(LogicalExpression expression, Statement ifBody, Statement elseBody) 
-					throws NullPointerException{
+	public IfThenElseStatement(Expression expression, Statement ifBody, Statement elseBody, 
+							   SourceLocation sourceLocation) throws NullPointerException{
+		super(sourceLocation);
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
-	
+		else if (!(expression instanceof LogicalExpression))
+			throw new IllegalArgumentException("The given expression cannot be evaluated logically and thus does not belong in an IfThenElseStatement's condition.");
+		
 		this.expression = expression;
 		this.ifBody = ifBody;
 		this.elseBody= elseBody;
@@ -49,8 +53,9 @@ public class IfThenElseStatement extends Statement {
 	 * 			If the given parentProgram, printedValues, expression or ifBody is null
 	 * 			| if (expression == null || ifBody == null)
 	 */
-	public IfThenElseStatement(LogicalExpression expression, 
-							   Statement ifBody) throws NullPointerException{
+	public IfThenElseStatement(LogicalExpression expression, Statement ifBody,
+								SourceLocation sourceLocation) throws NullPointerException{
+		super(sourceLocation);
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
 		
@@ -66,6 +71,7 @@ public class IfThenElseStatement extends Statement {
 	 * 									| true
 	 */
 	public IfThenElseStatement(){
+		super();
 		throw new IllegalStateException("Cannot create an IfThenElseStatement withouth an expression and ifBody!");
 	}
 	
@@ -73,14 +79,14 @@ public class IfThenElseStatement extends Statement {
 	 * Get the expression that comes after the
 	 * if statement
 	 */
-	public LogicalExpression getExpression(){
+	public Expression getExpression(){
 		return this.expression;
 	}
 	
 	/**
 	 * Variable registering the expression that comes after the if statement
 	 */
-	private final LogicalExpression expression;	
+	private final Expression expression;	
 
 	/**
 	 * Get the body that belongs to the if statement of

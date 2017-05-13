@@ -2,6 +2,7 @@ package asteroids.programs;
 
 import java.util.*;
 
+import asteroids.model.Ship;
 import asteroids.programs.expressions.*;
 import asteroids.programs.statements.*;
 
@@ -16,6 +17,49 @@ public class Program {
 	}
 	
 	/**
+	 * Get all the functions that are defined within this Program.
+	 */
+	public List<Function> getFunctions(){
+		return this.functions;
+	}
+	
+	/**
+	 * A List containing all the functions defined in this Program
+	 */
+	private List<Function> functions;
+	
+	/**
+	 * Get the body of this Program.
+	 */
+	public Statement getBody(){
+		return this.body;
+	}
+	
+	/**
+	 * Variable representing the body of this Program.
+	 */
+	private Statement body;
+	
+	/**
+	 * Set the associated ship of this program to the given ship.
+	 */
+	public void setAssociatedShip(Ship ship){
+		this.associatedShip = ship;
+	}
+	
+	/**
+	 * Return the ship that has this program loaded.
+	 */
+	public Ship getAssociatedShip(){
+		return this.associatedShip;
+	}
+	
+	/**
+	 * Variable registering the ship that has this program loaded.
+	 */
+	private Ship associatedShip;
+	
+	/**
 	 * Execute this program.
 	 * 
 	 * @param executionTime
@@ -23,9 +67,7 @@ public class Program {
 	 * @return
 	 * 			All the values that were printed during execution of this program.
 	 */
-	public List<Object> execute(double executionTime){
-		setExecutionTimeLeft(executionTime);
-		
+	public List<Object> execute(){
 		getBody().execute(this);
 		
 		return getPrintedValues();
@@ -56,48 +98,57 @@ public class Program {
 	/**
 	 * Get the time that this program has left to run.
 	 */
-	public double getExecutionTimeLeft(){
+	public double getExecutionTime(){
 		return this.executionTimeLeft;
 	}
 	
 	/**
 	 * Set the ExecutionTimeLeft of this program to the given value.
 	 */
-	public void setExecutionTimeLeft(double time){
-		if ( 0 <= time)
-			this.executionTimeLeft = time;
-		else
-			this.executionTimeLeft = 0;
+	public void addExecutionTime(double time){
+		this.executionTimeLeft += time;
 	}
 	
 	/**
 	 * Variable registering the time this program has left to run.
 	 */
-	private double executionTimeLeft = Double.POSITIVE_INFINITY;
+	private double executionTimeLeft = 0;
 	
 	/**
-	 * Get all the functions that are defined within this Program.
+	 * Remove the loop positioned at the end of the activeLoop array.
 	 */
-	public List<Function> getFunctions(){
-		return this.functions;
+	public void deleteActiveLoop(WhileStatement loop){
+		activeLoops.remove(loop);
 	}
 	
 	/**
-	 * A List containing all the functions defined in this Program
+	 * Add a new active loop to this program.
+	 * The given newLoop will be added at the end of the ActiveLoops list.
 	 */
-	private List<Function> functions;
-	
-	/**
-	 * Get the body of this Program.
-	 */
-	public Statement getBody(){
-		return this.body;
+	public void addActiveLoop(WhileStatement newLoop){
+		activeLoops.add(newLoop);
 	}
 	
 	/**
-	 * Variable representing the body of this Program.
+	 * Returns the last active loop in the activeLoops list.
 	 */
-	private Statement body;
+	public WhileStatement getLastActiveLoop(){
+		return this.activeLoops.get(this.activeLoops.size()-1);
+	}
+	
+	/**
+	 * Get the loops that are currently active within this program
+	 */
+	public List<WhileStatement> getActiveLoops(){
+		return this.activeLoops;
+	}
+	
+	/**
+	 * A list keeping up the loops that are present right now.
+	 * This is used so that the break statements can find their parent
+	 * WhileStatement efficiently.
+	 */
+	private List<WhileStatement> activeLoops = new ArrayList<WhileStatement>();
 
 	/**
 	 * Add a value that was printed during this program's execution.

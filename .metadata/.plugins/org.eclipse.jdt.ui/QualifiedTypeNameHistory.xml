@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.lang.Math"/>
-<fullyQualifiedTypeName name="java.lang.IllegalAccessError"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
 <fullyQualifiedTypeName name="asteroids.util.ModelException"/>
 <fullyQualifiedTypeName name="java.lang.AssertionError"/>
@@ -26,17 +25,23 @@
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
 <fullyQualifiedTypeName name="asteroids.part2.CollisionListener"/>
-<fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
 <fullyQualifiedTypeName name="asteroids.programs.Expression"/>
 <fullyQualifiedTypeName name="asteroids.filters.BulletExtractor"/>
 <fullyQualifiedTypeName name="asteroids.model.Asteroid"/>
 <fullyQualifiedTypeName name="asteroids.model.Planetoid"/>
 <fullyQualifiedTypeName name="asteroids.part3.facade.IFacade"/>
-<fullyQualifiedTypeName name="asteroids.programs.ProgramFactory"/>
-<fullyQualifiedTypeName name="java.lang.NullPointerException"/>
-<fullyQualifiedTypeName name="asteroids.programs.Program"/>
 <fullyQualifiedTypeName name="asteroids.programs.statements.Statement"/>
-<fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.Expression"/>
+<fullyQualifiedTypeName name="asteroids.part3.programs.SourceLocation"/>
+<fullyQualifiedTypeName name="java.lang.IndexOutOfBoundsException"/>
+<fullyQualifiedTypeName name="jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException"/>
+<fullyQualifiedTypeName name="asteroids.model.Ship"/>
+<fullyQualifiedTypeName name="asteroids.programs.Program"/>
+<fullyQualifiedTypeName name="asteroids.programs.ProgramFactory"/>
+<fullyQualifiedTypeName name="java.lang.IllegalAccessError"/>
+<fullyQualifiedTypeName name="java.lang.NullPointerException"/>
+<fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
+<fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
+<fullyQualifiedTypeName name="asteroids.programs.statements.SkipStatement"/>
 </qualifiedTypeNameHistroy>

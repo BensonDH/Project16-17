@@ -1,0 +1,9 @@
+package asteroids.programs;
+
+import asteroids.part3.programs.SourceLocation;
+
+public interface Locatable {
+	
+	
+	
+}

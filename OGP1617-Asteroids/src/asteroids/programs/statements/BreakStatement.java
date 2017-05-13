@@ -2,8 +2,9 @@ package asteroids.programs.statements;
 
 import java.util.List;
 
-import asteroids.programs.Function;
-import asteroids.programs.Program;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 public class BreakStatement extends Statement {
 
@@ -17,31 +18,31 @@ public class BreakStatement extends Statement {
 	 *			If the given rootWhileStatement is null
 	 *			| if (rootWhileStatement == null)
 	 */
-	public BreakStatement(WhileStatement rootWhileStatement) throws NullPointerException{
-		if (rootWhileStatement == null)
-			throw new NullPointerException("rootWhileStatement cannot be null.");
-		this.rootWhileStatement = rootWhileStatement;
-	}
-	
-	
-	/**
-	 * Get the root while statement where this BreakStatement
-	 * belongs to.
-	 */
-	public WhileStatement getRootWhileStatement(){
-		return this.rootWhileStatement;
+	public BreakStatement(SourceLocation sourceLocation) throws NullPointerException{
+		super(sourceLocation);
 	}
 	
 	/**
-	 * Variable registering the WhileStatement where this 
-	 * BreakStatement occurs.
+	 * This constructor should not be used
+	 * @throws IllegalStateException
+	 * 			Always
+	 * 			| true
 	 */
-	private final WhileStatement rootWhileStatement;
+	public BreakStatement(){
+		super();
+		throw new IllegalStateException();
+	}
 	
 	/**
 	 * Execute this BreakStatement by terminating its rootWhileStatement.
 	 */
 	public void execute(Program parentProgram){
-		getRootWhileStatement().terminate();
+		try {
+		// All we have to do is terminate the last loop in the activeLoop list of the given program.
+		parentProgram.getLastActiveLoop().terminate();
+		} catch (IndexOutOfBoundsException e) {
+			assert (parentProgram.getActiveLoops().size() == 0);
+			throw new SyntaxException("Syntax error: break statement not in a while statement.");
+		}
 	}
 }

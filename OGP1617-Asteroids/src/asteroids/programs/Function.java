@@ -3,6 +3,7 @@ package asteroids.programs;
 import java.util.*;
 
 import asteroids.programs.statements.*;
+import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.expressions.*;
 
 
@@ -18,9 +19,10 @@ public class Function {
 	 * @param body
 	 * 			The body of this function.
 	 */
-	public Function(String functionName, Statement body){
+	public Function(String functionName, Statement body, SourceLocation sourceLocation){
 		this.functionName = functionName;
 		this.functionBody = body;
+		this.sourceLocation = sourceLocation;
 	}
 
 	/**
@@ -59,12 +61,25 @@ public class Function {
 	private Statement functionBody;
 	
 	/**
+	 * Get the location where this function is located in the program.
+	 */
+	public SourceLocation getSourceLocation(){
+		return this.sourceLocation;
+	}
+	
+	/**
+	 * Variable registering where this function is located in the program.
+	 */
+	private SourceLocation sourceLocation;
+	
+	/**
 	 * Get the local variables that are initialized within this function
 	 * at the time of invocation.
 	 */
 	public List<Expression> getFunctionVariables(){
 		return this.variables;
 	}
+	
 	/**
 	 * A list representing the local variables used in this function.
 	 */

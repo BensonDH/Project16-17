@@ -1,0 +1,22 @@
+package asteroids.programs.statements;
+
+import asteroids.part3.programs.SourceLocation;
+
+public abstract class ActionStatement extends Statement {
+	
+	public ActionStatement(SourceLocation sourceLocation){
+		super(sourceLocation);
+	}
+	
+	/**
+	 * Get the time it takes to execute this ActionStatement.
+	 */
+	public double getExecutionTime(){
+		return this.executionTime;
+	}
+	
+	/**
+	 * Variable registering the execution time of an ActionStatement
+	 */
+	private final double executionTime = 0.2;
+}

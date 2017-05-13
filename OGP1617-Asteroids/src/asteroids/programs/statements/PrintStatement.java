@@ -1,9 +1,9 @@
 package asteroids.programs.statements;
 
-import java.util.List;
+import java.util.*;
 
-import asteroids.programs.Function;
-import asteroids.programs.Program;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
 import asteroids.programs.expressions.*;
 
 public class PrintStatement extends Statement {
@@ -11,7 +11,8 @@ public class PrintStatement extends Statement {
 	/**
 	 * Only this constructor should be used.
 	 */
-	public PrintStatement(Expression E){
+	public PrintStatement(Expression E, SourceLocation sourceLocation){
+		super(sourceLocation);
 		this.expression = E;
 	}
 	

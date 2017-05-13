@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import asteroids.programs.Program;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -656,7 +657,53 @@ public class Ship extends Entity {
    	 * A variable registering the initial speed of a bullet when fired from this ship.
    	 */
    	private double fireSpeed = 250;
-
-	 
+   	
+   	/**
+   	 * Load the given program on this ship.
+   	 * 
+   	 * @param program 
+   	 * 			The program that has to be loaded.
+   	 * @post	The program loaded on this ship will be equal to the given program.
+   	 * 			| new.getLoadedProgram() == program
+   	 */
+   	public void loadProgram(Program program){
+   		this.loadedProgram = program;
+   		// if the given program is null, the current program (if any) would have to
+   		// be removed from this ship.
+   		if (program == null && !(getLoadedProgram() == null))
+   			getLoadedProgram().setAssociatedShip(null);
+   		else
+   			program.setAssociatedShip(this);
+   	}
+   	
+   	/**
+   	 * Return the program that is loaded on this ship.
+   	 * 
+   	 * @see implementation
+   	 */
+	public Program getLoadedProgram(){
+		return this.loadedProgram;
+	}
+   	
+   	/**
+   	 * Variable registering the program that is loaded on this ship.
+   	 */
+   	private Program loadedProgram;
+   	
+   	/**
+   	 * Execute the program that is loaded on this ship.
+   	 * 
+   	 * @param executionTime
+   	 * 			The time that has to be added to the program's execution time
+   	 * @return
+   	 * 			A list of all values that were printed out during the program's execution.
+   	 */
+   	public List<Object> executeProgram(double executionTime){
+   		if (getLoadedProgram() == null)
+   			throw new NullPointerException("There is no program loaded on this ship.");
+   		
+   		getLoadedProgram().addExecutionTime(executionTime);
+   		return getLoadedProgram().execute();
+   	}
 }
 

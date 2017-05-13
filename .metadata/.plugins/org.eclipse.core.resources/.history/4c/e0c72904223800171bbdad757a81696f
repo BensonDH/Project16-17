@@ -1,0 +1,18 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import org.junit.*;
+import asteroids.model.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	double first = 1.2;
+	int second = 1;
+	
+	System.out.println(first+second);
+
+
+	}
+}
