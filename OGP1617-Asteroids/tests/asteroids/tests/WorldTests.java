@@ -2,10 +2,8 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
-import java.util.Set;
+import java.util.*;
 import org.junit.*;
-
-import asteroids.filters.*;
 import asteroids.model.World;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
@@ -180,7 +178,7 @@ public class WorldTests {
 		testWorld.addEntity(testEntity6);
 		
 		// queryEntities
-		Set<? extends Entity> entities = testWorld.query(new EntityExtractor());
+		Set<? extends Entity> entities = testWorld.query(Entity.class);
 		
 		assertTrue(entities.size() == 6);
 		assertTrue(entities.contains(testEntity1));
@@ -191,15 +189,14 @@ public class WorldTests {
 		assertTrue(entities.contains(testEntity6));
 		
 		// queryBullets
-		Set<? extends Bullet> bullets = (Set<? extends Bullet>) testWorld.query(new BulletExtractor());
-		
+		Set<? extends Bullet> bullets = (Set<? extends Bullet>) testWorld.query(Bullet.class);
 		assertTrue(bullets.size() == 3);
 		assertTrue(bullets.contains(testEntity1));
 		assertTrue(bullets.contains(testEntity5));
 		assertTrue(bullets.contains(testEntity6));
 		
 		// queryShips
-		Set<? extends Ship> ships = (Set<? extends Ship>) testWorld.query(new ShipExtractor());
+		Set<? extends Ship> ships = (Set<? extends Ship>) testWorld.query(Ship.class);
 
 		assertTrue(ships.size() == 3);
 		assertTrue(ships.contains(testEntity2));

@@ -1,0 +1,19 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+		Bullet testBullet = new Bullet(0,0,0,0,20);
+		
+		Class<? extends Entity> toBeFiltered = Bullet.class; 
+	System.out.println(toBeFiltered.getClass().isInstance(testBullet.getClass()));
+	}
+}

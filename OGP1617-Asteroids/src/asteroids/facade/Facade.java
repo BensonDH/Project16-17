@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import asteroids.model.*;
-import asteroids.filters.*;
 import asteroids.programs.*;
 
 import asteroids.part2.CollisionListener;
@@ -593,7 +592,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	@Override
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
 		try {
-			return (Set<? extends Ship>)world.query(new ShipExtractor());
+			return (Set<? extends Ship>)world.query(Ship.class);
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
@@ -607,7 +606,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	@Override
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
 		try {
-			return (Set<? extends Bullet>)world.query(new BulletExtractor());
+			return (Set<? extends Bullet>)world.query(Bullet.class);
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
@@ -894,7 +893,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	@Override
 	public Set<? extends Asteroid> getWorldAsteroids(World world) throws ModelException {
 		try {
-			return (Set<? extends Asteroid>)world.query(new AsteroidExtractor());
+			return (Set<? extends Asteroid>)world.query(Asteroid.class);
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){
@@ -940,7 +939,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 	@Override
 	public Set<? extends Planetoid> getWorldPlanetoids(World world) throws ModelException {
 		try {
-			return (Set<? extends Planetoid>)world.query(new PlanetoidExtractor());
+			return (Set<? extends Planetoid>)world.query(Planetoid.class);
 		} catch (IllegalArgumentException E){
 			throw new ModelException("IllegalArgumentException");
 		} catch (AssertionError E){

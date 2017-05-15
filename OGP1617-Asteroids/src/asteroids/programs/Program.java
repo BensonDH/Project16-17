@@ -76,9 +76,11 @@ public class Program {
 	/**
 	 * Add global variables that exist during the runtime of this program.
 	 */
-	public void addGlobalVariables(Expression... variables){
+	public void addGlobalVariables(Expression... variables) throws IllegalArgumentException {
 		for (Expression variable: variables){
-			runTimeVariables.add(variable);
+			if (!(variable instanceof Variable))
+				throw new IllegalArgumentException("The given expression is not a variable.");
+			runTimeVariables.put(((Variable)variable).getName(), variable);
 		}
 	}
 	
@@ -86,14 +88,14 @@ public class Program {
 	 * Get the global variables that are present in this
 	 * program at this time.
 	 */
-	public List<Expression> getGlobalVariables(){
+	public Map<String, Expression> getGlobalVariables(){
 		return this.runTimeVariables;
 	}
 	/**
 	 * List containing all the global variables that are present during
 	 * execution of this Program.
 	 */
-	private List<Expression> runTimeVariables= new ArrayList<Expression>();
+	private Map<String, Expression> runTimeVariables= new HashMap<String, Expression>();
 	
 	/**
 	 * Get the time that this program has left to run.

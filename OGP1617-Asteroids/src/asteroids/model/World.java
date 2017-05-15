@@ -1,12 +1,11 @@
 package asteroids.model;
 
-import asteroids.filters.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.*;
 
 import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
@@ -263,22 +262,13 @@ public class World {
 	 * 			If this world is terminated
 	 * 			| isTerminated()
 	 */
-	//TODO: iets vinden voor die Set<...> => Zien we nog later in de les? Generic types
-	public Set<? extends Entity> query(Extractor extractor) 
+	public Set<? extends Entity> query(Class<? extends Entity> toBeFiltered) 
 			throws IllegalArgumentException, IllegalStateException{
-		if (extractor == null)
-			throw new IllegalArgumentException("The extractor cannot be null.");
 		if (isTerminated())
 			throw new IllegalStateException("This world is terminated.");
-		Set<Entity> result = new HashSet<Entity>();
 		
-		for (Entity entity: linkedEntities) {
-			Entity extractorResult = extractor.getItem(entity);
-			if (extractorResult != null)
-				result.add(extractorResult);
-		}
-		
-		return result;
+		return linkedEntities.stream().filter(entity -> toBeFiltered.isInstance(entity))
+				.collect(Collectors.toSet());
 	}
 	
 	
