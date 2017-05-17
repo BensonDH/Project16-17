@@ -9,7 +9,7 @@ import be.kuleuven.cs.som.annotate.*;
  * Values returned have to be doubles.
  */
 @Value
-public class Vector {
+public class Vector implements Cloneable {
 	/**
 	 * This constructor will initialize a new vector with two doubles given
 	 * @param x

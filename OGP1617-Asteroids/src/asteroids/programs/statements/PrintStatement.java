@@ -43,8 +43,15 @@ public class PrintStatement extends Statement {
 	 * Print and return the evaluation of this PrintStatement's expression.
 	 */
 	public void execute(Program parentProgram){
+		// If this PrintStatement has already been executed, we don't have to do anything.
+		if (isFinished())
+			return;
+		
 		Object result = getExpression().eval();
 		System.out.println(result.toString());
 		parentProgram.addPrintedValues(result);
+		
+		// This PrintStatement is finished.
+		setFinished(true);
 	}
 }

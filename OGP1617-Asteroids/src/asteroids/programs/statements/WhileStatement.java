@@ -86,15 +86,31 @@ public class WhileStatement extends Statement{
 	 * Execute this while statement
 	 */
 	public void execute(Program parentProgram){
+		// If this WhilseStatement has already been executed, we don't have to do anything.
+		if (isFinished())
+			return;
+		
 		// First we add this whileLoop as a new activeLoop to the program
 		parentProgram.addActiveLoop(this);
 		
 		// A break statement might terminate this while loop
 		while ((boolean)getExpression().eval() && !isTerminated()){
 			getBody().execute(parentProgram);
+			
+			// If the parentProgram was paused by the WhileStatement's body, we don't have to do anything anymore
+			if (parentProgram.isPaused()){
+				break;
+			}
+			// If we have to do another loop in this WhileStatement, we have to reset the WhileStatement's body again.
+			else if ((boolean)getExpression().eval() && !isTerminated())
+				getBody().reset();
+	
 		}
 		
-		// This loop is finished, remove it again from the active loop list of this program
+		// If the parentProgram is not paused, this WhileStatement was fully executed.
+		if (!(parentProgram.isPaused()))
+			setFinished(true);
+		
 		parentProgram.deleteActiveLoop(this);
 	}
 	
@@ -115,4 +131,13 @@ public class WhileStatement extends Statement{
 	 * A variable registering whether this while statement is terminated.
 	 */
 	private boolean isTerminated = false;
+	
+	@Override
+	public void reset(){
+		// Reset the WhileStatement itself
+		super.reset();
+		
+		// Reset the WhileStatement's body
+		getBody().reset();
+	}
 }

@@ -33,9 +33,32 @@ public class BlockStatement extends Statement {
 	
 	@Override
 	public void execute(Program parentProgram) {
+		// If this BlockStatement had already been executed, we can skip this.
+		if (isFinished())
+			return;
+		
 		for (Statement statement: statements){
 			statement.execute(parentProgram);
+			
+			// If the parentProgram was paused by this statement, we don't have to do anything anymore.
+			if (parentProgram.isPaused())
+				return;
+		}
+		
+		// If we executed all the statements within this BlockStatement and the
+		// parentProgram was not paused, then this BlockStatement is executed successfully.
+		if (!(parentProgram.isPaused()))
+			setFinished(true);
+	}	
+	
+	@Override
+	public void reset(){
+		// Reset this blockStatement itself
+		super.reset();
+		
+		// Reset all the statements within this blockStatement
+		for (Statement statement: statements){
+			statement.reset();
 		}
 	}
-
 }

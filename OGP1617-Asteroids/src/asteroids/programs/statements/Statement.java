@@ -38,6 +38,32 @@ public abstract class Statement {
 	 */
 	private final SourceLocation sourceLocation;
 	
+	/**
+	 * Check whether this statement has been executed or not.
+	 */
+	public boolean isFinished(){
+		return this.isFinished;
+	}
+	
+	/**
+	 * Set the isFinished status of this statement on the given status.
+	 * - true meaning this statement was executed.
+	 * - false meaning this statement hasn't been executed yet. 
+	 */
+	public void setFinished(boolean status){
+		this.isFinished = status;
+	}
+	
+	/**
+	 * Variable registering whether this statement has been executed.
+	 */
+	private boolean isFinished = false;
+	
+	
+	public void reset(){
+		setFinished(false);
+	}
 	
 	public abstract void execute(Program parentProgram);
+
 }

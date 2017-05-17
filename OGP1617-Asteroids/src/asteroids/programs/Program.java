@@ -68,8 +68,18 @@ public class Program {
 	 * 			All the values that were printed during execution of this program.
 	 */
 	public List<Object> execute(){
+		// if this program was paused, resume it again
+		if (isPaused())
+			resume();
+		
 		getBody().execute(this);
 		
+		// If this program isn't paused, then it was executed successfully, meaning we can
+		// reset it's body again for further use.
+		if (!isPaused())
+			getBody().reset();
+		
+		// Return all values that were printed so far.
 		return getPrintedValues();
 	}
 	
@@ -78,9 +88,9 @@ public class Program {
 	 */
 	public void addGlobalVariables(Expression... variables) throws IllegalArgumentException {
 		for (Expression variable: variables){
-			if (!(variable instanceof Variable))
+			if (!(variable instanceof ReadVariableExpression))
 				throw new IllegalArgumentException("The given expression is not a variable.");
-			runTimeVariables.put(((Variable)variable).getName(), variable);
+			runTimeVariables.put(((ReadVariableExpression)variable).getVariableName(), variable);
 		}
 	}
 	

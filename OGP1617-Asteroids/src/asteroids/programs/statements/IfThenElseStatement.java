@@ -115,11 +115,32 @@ public class IfThenElseStatement extends Statement {
 	 */
 	private final Statement elseBody;
 	
+	@Override
 	public void execute(Program parentProgram){
+		// If this IfThenElseStatement has already been executed, we don't have to do anything.
+		if (isFinished())
+			return;
+		
 		if ((boolean)getExpression().eval())
 			getIfBody().execute(parentProgram);
 		
 		else if (getElseBody() != null)
 			getElseBody().execute(parentProgram);
+		
+		// If at this stage the parentProgram isn't paused, then this IfThenElseStatement was executed successfully.
+		if (!(parentProgram.isPaused()))
+			setFinished(true);
+	}
+	
+	@Override
+	public void reset(){
+		// Reset this IfThenElseStatement itself
+		super.reset();
+		
+		// Reset the ifBody and elseBody (if any)
+		getIfBody().reset();
+		
+		if (!(getElseBody() == null))
+			getElseBody().reset();
 	}
 }

@@ -10,6 +10,7 @@ import asteroids.programs.*;
 import asteroids.part2.CollisionListener;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.util.ModelException;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 public class Facade implements asteroids.part3.facade.IFacade{
 
@@ -1242,22 +1243,61 @@ public class Facade implements asteroids.part3.facade.IFacade{
 
 	@Override
 	public Program getShipProgram(Ship ship) throws ModelException {
-		return ship.getLoadedProgram();
+		try {
+			return ship.getLoadedProgram();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		} catch (IllegalStateException E){
+			throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public void loadProgramOnShip(Ship ship, Program program) throws ModelException {
-		ship.loadProgram(program);
+		try {
+			ship.loadProgram(program);
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		} catch (IllegalStateException E){
+			throw new ModelException("IllegalStateException");}
 	}
 
 	@Override
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException {
-		return ship.executeProgram(dt);
+		try {
+			return ship.executeProgram(dt);
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		} catch (IllegalStateException E){
+			throw new ModelException("IllegalStateException");
+		} catch (SyntaxException E) {
+			throw new ModelException("SyntaxException");
+		}
 	}
 
 	@Override
 	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException {
-		return new ProgramFactory();
+		try {
+			return new ProgramFactory();
+		} catch (IllegalArgumentException E){
+			throw new ModelException("IllegalArgumentException");
+		} catch (AssertionError E){
+			throw new ModelException("AssertionError");
+		} catch (NullPointerException E){
+			throw new ModelException("NullPointerException");
+		} catch (IllegalStateException E){
+			throw new ModelException("IllegalStateException");}
 	}
 }
 

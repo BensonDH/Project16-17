@@ -1,5 +1,7 @@
 package asteroids.programs.expressions;
 
+import asteroids.part3.programs.SourceLocation;
+
 public class Equals extends LogicalExpression {
 
 	/**
@@ -12,7 +14,8 @@ public class Equals extends LogicalExpression {
 	 * @param rightHandOperator
 	 * 			The right hand operator of this comparison.
 	 */
-	public Equals(Expression leftHandOperator, Expression rightHandOperator){
+	public Equals(Expression leftHandOperator, Expression rightHandOperator, SourceLocation sourceLocation){
+		super(sourceLocation);
 		this.leftHandOperator = leftHandOperator;
 		this.rightHandOperator = rightHandOperator;
 	}
@@ -24,6 +27,7 @@ public class Equals extends LogicalExpression {
 	 * 			| true
 	 */
 	public Equals(){
+		super(null);
 		throw new IllegalStateException("Cannot create an equals expression without any operants.");
 	}
 	

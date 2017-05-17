@@ -1,0 +1,29 @@
+package asteroids.programs.expressions;
+
+import asteroids.part3.programs.SourceLocation;
+
+public class ChangeSignExpression extends Expression {
+	
+	public ChangeSignExpression(Expression expression, SourceLocation sourceLocation) {
+		super(sourceLocation);
+	}
+	
+	/**
+	 * Return the expression whose sign has to be changed.
+	 */
+	public Expression getExpression(){
+		return this.expression;
+	}
+	
+	/**
+	 * Variable registering the expression whose sign has to be. 
+	 */
+	private Expression expression;
+	
+
+	public <T> T eval() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

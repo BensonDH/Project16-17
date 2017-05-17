@@ -33,12 +33,20 @@ public class SetThrustStatement extends ActionStatement {
 	
 	@Override
 	public void execute(Program parentProgram) {
+		// If this SetThrustStatement has already been executed, we don't have to do anything
+		if (isFinished())
+			return;
+		
 		if (parentProgram == null || parentProgram.getAssociatedShip() == null)
 			throw new NullPointerException("This DisableThrustStatement has to be associated with a program that is loaded on a ship.");
 		
 		handleExecutionTime(parentProgram);
-		parentProgram.getAssociatedShip().setThrust(getNewThrustMode());
 		
+		// If at this stage the parentProgram is not paused, we can execute this statement successfully
+		if (!(parentProgram.isPaused())) {
+			parentProgram.getAssociatedShip().setThrust(getNewThrustMode());
+			
+			setFinished(true);
+		}
 	}
-
 }

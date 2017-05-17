@@ -2,7 +2,6 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.lang.Math"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
-<fullyQualifiedTypeName name="asteroids.util.ModelException"/>
 <fullyQualifiedTypeName name="java.lang.AssertionError"/>
 <fullyQualifiedTypeName name="org.junit.Assert"/>
 <fullyQualifiedTypeName name="java.util.Set"/>
@@ -31,11 +30,8 @@
 <fullyQualifiedTypeName name="asteroids.programs.statements.Statement"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.Expression"/>
-<fullyQualifiedTypeName name="asteroids.part3.programs.SourceLocation"/>
 <fullyQualifiedTypeName name="java.lang.IndexOutOfBoundsException"/>
-<fullyQualifiedTypeName name="jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException"/>
 <fullyQualifiedTypeName name="asteroids.model.Ship"/>
-<fullyQualifiedTypeName name="asteroids.programs.Program"/>
 <fullyQualifiedTypeName name="asteroids.programs.ProgramFactory"/>
 <fullyQualifiedTypeName name="java.lang.IllegalAccessError"/>
 <fullyQualifiedTypeName name="java.lang.NullPointerException"/>
@@ -46,4 +42,8 @@
 <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
 <fullyQualifiedTypeName name="asteroids.model.Bullet"/>
 <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
+<fullyQualifiedTypeName name="jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException"/>
+<fullyQualifiedTypeName name="asteroids.util.ModelException"/>
+<fullyQualifiedTypeName name="asteroids.programs.Program"/>
+<fullyQualifiedTypeName name="asteroids.part3.programs.SourceLocation"/>
 </qualifiedTypeNameHistroy>

@@ -1,0 +1,11 @@
+package asteroids.programs.expressions;
+
+public class ChangeSignExpression extends Expression {
+
+	@Override
+	public Object eval() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

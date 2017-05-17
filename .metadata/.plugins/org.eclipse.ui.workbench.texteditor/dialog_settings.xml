@@ -19,6 +19,7 @@
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="i"/>
 			<item value="getWorld"/>
 			<item value="query"/>
 			<item value="self"/>
@@ -26,7 +27,6 @@
 			<item value="die"/>
 			<item value="planetoid"/>
 			<item value="asteroid"/>
-			<item value="Bullet"/>
 		</list>
 		<list key="replacehistory">
 		</list>

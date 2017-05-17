@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
 <typeInfo handle="=OGP1617-Asteroids/src-provided&lt;asteroids.part3.programs{IProgramFactory.java[IProgramFactory" modifiers="513" timestamp="1493398612698"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs{Program.java[Program" modifiers="1" timestamp="1494708286503"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.statements{Statement.java[Statement" modifiers="1025" timestamp="1494626037677"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs{Program.java[Program" modifiers="1" timestamp="1495020550509"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.statements{Statement.java[Statement" modifiers="1025" timestamp="1495014323484"/>
 <typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.statements{ActionStatement.java[ActionStatement" modifiers="1025" timestamp="1494708400010"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{Expression.java[Expression" modifiers="1025" timestamp="1494240780409"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{Expression.java[Expression" modifiers="1025" timestamp="1495042925389"/>
 </typeInfoHistroy>

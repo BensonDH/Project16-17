@@ -26,11 +26,20 @@ public class FireBulletStatement extends ActionStatement {
 
 	@Override
 	public void execute(Program parentProgram) {
+		// If this FireBulletStatement has already been executed, we don't have to do anything
+		if (isFinished())
+			return;
+		
 		if (parentProgram == null || parentProgram.getAssociatedShip() == null)
 			throw new NullPointerException("This FireBulletStatement has to be associated with a program that is loaded on a ship.");
 		
 		handleExecutionTime(parentProgram);
-		parentProgram.getAssociatedShip().fireBullet();
-	}
-
+		
+		// If at this stage the parentProgram is not paused, we can execute this statement successfully.
+		if (!(parentProgram.isPaused())){
+			parentProgram.getAssociatedShip().fireBullet();
+			
+			setFinished(true);
+		}
+	}	
 }

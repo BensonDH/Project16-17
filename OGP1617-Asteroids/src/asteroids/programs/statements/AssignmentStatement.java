@@ -67,8 +67,10 @@ public class AssignmentStatement extends Statement {
 	
 	@Override
 	public void execute(Program parentProgram) {
-		// TODO implementation!
-
+		// If this AssignmentStatement had already been executed, we can skip this.
+		if (isFinished())
+			return;
+		
+		// TODO implementation
 	}
-
 }
