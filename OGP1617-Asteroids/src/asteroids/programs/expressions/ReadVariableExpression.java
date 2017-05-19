@@ -2,8 +2,9 @@ package asteroids.programs.expressions;
 
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
+import asteroids.programs.exceptions.VariableException;
 
-public class ReadVariableExpression<T> extends Expression {
+public class ReadVariableExpression extends Expression implements ReturnTypeBoolean, ReturnTypeDouble, ReturnTypeEntity {
 	
 	public ReadVariableExpression(String variableName, SourceLocation sourceLocation) {
 		super(sourceLocation);
@@ -23,9 +24,13 @@ public class ReadVariableExpression<T> extends Expression {
 	private final String variableName;
 	
 	@Override
-	public T eval() {
-		// TODO implementation
-		return null;
+	public Literal eval(Program parentProgram) {
+		Variable<?> tempVar = parentProgram.findGlobalVariable(getVariableName());
+		
+		if (tempVar == null)
+			throw new VariableException(getVariableName());
+		
+		return tempVar.getValue();
 	}
 
 }

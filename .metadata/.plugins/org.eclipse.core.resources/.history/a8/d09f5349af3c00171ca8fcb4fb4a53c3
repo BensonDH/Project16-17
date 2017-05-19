@@ -1,0 +1,22 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	
+	String test = "asteroids.programs.Program";
+	String[] splitted = test.split(".");
+	
+	System.out.println(splitted);
+	
+	}
+}

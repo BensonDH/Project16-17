@@ -1,0 +1,30 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	Boolean testbool = true;
+	Double testdouble = Double.valueOf(2);
+	
+	Ship entity = new Ship(0,0,0,0, 20, 0);
+	Ship entity2 = new Ship(0,0,0,0, 20, 0);
+	
+	EntityLiteralExpression<Ship> shipLiteral = new EntityLiteralExpression<Ship>(entity);
+	EntityLiteralExpression<Ship> shipLiteral2 = new EntityLiteralExpression<Ship>(entity2);
+	
+	Variable<EntityLiteralExpression> testVar = new Variable<>(EntityLiteralExpression.class, "test", shipLiteral);
+	Variable<EntityLiteralExpression> testVar2 = new Variable<>(EntityLiteralExpression.class, "test2", shipLiteral2);
+	
+	System.out.println(testVar.getVariableType().equals(testVar2.getClass()));
+	
+	}
+}

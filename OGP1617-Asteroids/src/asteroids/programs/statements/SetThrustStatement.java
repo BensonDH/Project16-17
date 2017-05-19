@@ -38,7 +38,7 @@ public class SetThrustStatement extends ActionStatement {
 			return;
 		
 		if (parentProgram == null || parentProgram.getAssociatedShip() == null)
-			throw new NullPointerException("This DisableThrustStatement has to be associated with a program that is loaded on a ship.");
+			throw new NullPointerException("This SetThrustStatement has to be associated with a program that is loaded on a ship.");
 		
 		handleExecutionTime(parentProgram);
 		

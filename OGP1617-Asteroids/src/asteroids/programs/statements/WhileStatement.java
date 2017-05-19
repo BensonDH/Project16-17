@@ -1,9 +1,8 @@
 package asteroids.programs.statements;
 
-import java.util.*;
-
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
+import asteroids.programs.exceptions.IllegalTypeException;
 import asteroids.programs.expressions.*;
 
 
@@ -31,10 +30,8 @@ public class WhileStatement extends Statement{
 		super(sourceLocation);
 		if (expression == null || body == null)
 			throw new NullPointerException();
-		else if (!(expression instanceof LogicalExpression))
-			throw new IllegalArgumentException("The given expression cannot be evaluated logically, thus it does not belong in a WhileStatement's condition.");
 		
-		this.expression = expression;
+		changeExpression(expression);
 		this.body = body;
 	}
 	
@@ -44,7 +41,7 @@ public class WhileStatement extends Statement{
 	 * 									| true
 	 */
 	public WhileStatement() throws IllegalStateException{
-		super();
+		super(null);
 		throw new IllegalStateException("Cannot initialize a while statement without an expression and a body!");
 	}
 
@@ -60,6 +57,9 @@ public class WhileStatement extends Statement{
 	 * Change the while statement's expression to the given newExpression.
 	 */
 	public void changeExpression(Expression newExpression){
+		if (!(newExpression instanceof ReturnTypeBoolean))
+			throw new IllegalTypeException(ReturnTypeBoolean.class, newExpression.getClass());
+		
 		this.expression = newExpression;
 	}
 	
@@ -89,22 +89,28 @@ public class WhileStatement extends Statement{
 		// If this WhilseStatement has already been executed, we don't have to do anything.
 		if (isFinished())
 			return;
-		
+	
 		// First we add this whileLoop as a new activeLoop to the program
 		parentProgram.addActiveLoop(this);
 		
+		Literal evaluatedExpression = getExpression().eval(parentProgram); 
+		if (!(evaluatedExpression instanceof BooleanLiteralExpression))
+			throw new IllegalTypeException(BooleanLiteralExpression.class, evaluatedExpression.getClass());
+		
 		// A break statement might terminate this while loop
-		while ((boolean)getExpression().eval() && !isTerminated()){
+		while (((BooleanLiteralExpression)evaluatedExpression).getValue(parentProgram) && !isTerminated()){
 			getBody().execute(parentProgram);
+			
+			// we re-evaluate this WhileStatement's expression so it stays up-to-date
+			evaluatedExpression = getExpression().eval(parentProgram);
 			
 			// If the parentProgram was paused by the WhileStatement's body, we don't have to do anything anymore
 			if (parentProgram.isPaused()){
 				break;
 			}
 			// If we have to do another loop in this WhileStatement, we have to reset the WhileStatement's body again.
-			else if ((boolean)getExpression().eval() && !isTerminated())
+			else if (((BooleanLiteralExpression)evaluatedExpression).getValue(parentProgram) && !isTerminated())
 				getBody().reset();
-	
 		}
 		
 		// If the parentProgram is not paused, this WhileStatement was fully executed.
@@ -136,6 +142,7 @@ public class WhileStatement extends Statement{
 	public void reset(){
 		// Reset the WhileStatement itself
 		super.reset();
+		this.isTerminated = false;
 		
 		// Reset the WhileStatement's body
 		getBody().reset();

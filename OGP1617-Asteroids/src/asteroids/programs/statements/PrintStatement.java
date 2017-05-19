@@ -1,7 +1,5 @@
 package asteroids.programs.statements;
 
-import java.util.*;
-
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
 import asteroids.programs.expressions.*;
@@ -24,6 +22,7 @@ public class PrintStatement extends Statement {
 	 * 									| true
 	 */
 	public PrintStatement() throws IllegalStateException {
+		super(null);
 		throw new IllegalStateException("Cannot print nothing!");
 	}
 	
@@ -47,8 +46,12 @@ public class PrintStatement extends Statement {
 		if (isFinished())
 			return;
 		
-		Object result = getExpression().eval();
-		System.out.println(result.toString());
+		// TODO this might not work ( Double <-> double Boolean <-> boolean)
+		Object result = getExpression().eval(parentProgram).getValue(parentProgram);
+		if (result == null)
+			System.out.println("null");
+		else
+			System.out.println(result.toString());
 		parentProgram.addPrintedValues(result);
 		
 		// This PrintStatement is finished.

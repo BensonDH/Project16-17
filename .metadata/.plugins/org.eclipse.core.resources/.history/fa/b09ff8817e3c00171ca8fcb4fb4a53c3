@@ -1,0 +1,14 @@
+package asteroids.programs.expressions;
+
+public interface Literal {
+	
+	/**
+	 * Get the value of this Literal.
+	 */
+	public abstract Object getValue();
+	
+	/**
+	 * Get the type that this Literal represents.
+	 */
+	public abstract Class<?> getLiteralType();
+}

@@ -1,0 +1,28 @@
+package asteroids.programs.expressions;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.Program;
+import asteroids.programs.exceptions.IllegalTypeException;
+
+public class NotExpression extends UnaryExpression implements ReturnTypeBoolean {
+
+	public NotExpression(Expression expression, SourceLocation sourceLocation) {
+		super(expression, sourceLocation);
+		
+		if (!(expression instanceof ReturnTypeBoolean))
+				throw new IllegalTypeException(ReturnTypeBoolean.class, expression.getClass());
+	}
+	
+	
+	@Override
+	public Literal eval(Program parentProgram) {
+		Literal evaluatedExpression = getExpression().eval(parentProgram);
+		
+		if (!(evaluatedExpression instanceof BooleanLiteralExpression))
+			throw new IllegalTypeException(BooleanLiteralExpression.class, evaluatedExpression.getClass());
+		
+		Boolean result = ((BooleanLiteralExpression)evaluatedExpression).getValue();
+		return new BooleanLiteralExpression(!result);
+	}
+
+}

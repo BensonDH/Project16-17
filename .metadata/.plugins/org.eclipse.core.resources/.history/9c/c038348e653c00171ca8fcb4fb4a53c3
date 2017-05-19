@@ -1,0 +1,33 @@
+package asteroids.programs.expressions;
+
+import asteroids.model.Entity;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.Program;
+
+public class EntityLiteralExpression extends Expression implements Literal {
+
+	public EntityLiteralExpression(SourceLocation sourceLocation, Entity entity) {
+		super(sourceLocation);
+		this.entity = entity;
+	}
+	
+	public EntityLiteralExpression(Entity entity) {
+		super(null);
+		this.entity = entity;
+	}
+
+	@Override
+	public Entity getValue() {
+		return this.entity;
+	}
+
+	@Override
+	public Literal eval(Program parentProgram) {
+		return this;
+	}
+
+	/**
+	 * Variable registering this EntityLiteral's value.
+	 */
+	private final Entity entity;
+}

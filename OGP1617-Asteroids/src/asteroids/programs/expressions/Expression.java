@@ -18,5 +18,5 @@ public abstract class Expression {
 	
 	private final SourceLocation sourceLocation;
 	
-	public abstract Object eval(); 
+	public abstract Literal eval(Program parentProgram); 
 }

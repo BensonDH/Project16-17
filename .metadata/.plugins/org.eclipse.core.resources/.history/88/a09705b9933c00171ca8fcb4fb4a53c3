@@ -1,0 +1,25 @@
+package asteroids.programs.expressions;
+
+import asteroids.programs.Program;
+
+public class NullExpression extends Literal {
+
+	@Override
+	public Object getValue(Program parentProgram) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Class<?> getLiteralType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Literal eval(Program parentProgram) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

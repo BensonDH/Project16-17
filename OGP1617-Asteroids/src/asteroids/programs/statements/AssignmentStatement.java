@@ -1,10 +1,10 @@
 package asteroids.programs.statements;
 
-import java.util.*;
-
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
+import asteroids.programs.exceptions.SyntaxException;
 import asteroids.programs.expressions.*;
+
 
 public class AssignmentStatement extends Statement {
 	
@@ -35,6 +35,7 @@ public class AssignmentStatement extends Statement {
 	 * 			| true
 	 */
 	public AssignmentStatement(){
+		super(null);
 		throw new IllegalStateException("Cannot create an AssignmentStatement without any parameters.");
 	}
 	
@@ -71,6 +72,45 @@ public class AssignmentStatement extends Statement {
 		if (isFinished())
 			return;
 		
-		// TODO implementation
+		Literal evaluatedExpression = getValue().eval(parentProgram);
+		
+		Variable<? extends Literal> tempVar = parentProgram.findGlobalVariable(getVariableName());
+		
+		// Variable does not exist yet
+		if (tempVar == null){
+			if (evaluatedExpression instanceof BooleanLiteralExpression){
+				Variable<BooleanLiteralExpression> newVariable = new Variable<>(BooleanLiteralExpression.class, 
+												getVariableName(), (BooleanLiteralExpression) evaluatedExpression);
+				parentProgram.addGlobalVariable(newVariable);
+			} 
+			else if (evaluatedExpression instanceof DoubleLiteralExpression){
+				Variable<DoubleLiteralExpression> newVariable = new Variable<>(DoubleLiteralExpression.class,
+												getVariableName(), (DoubleLiteralExpression) evaluatedExpression);
+				parentProgram.addGlobalVariable(newVariable);
+			}
+			else if (evaluatedExpression instanceof EntityLiteralExpression){
+				Variable<EntityLiteralExpression> newVariable = new Variable<>(EntityLiteralExpression.class,
+												getVariableName(), (EntityLiteralExpression) evaluatedExpression);
+				parentProgram.addGlobalVariable(newVariable);
+			}
+		}
+		// Variable already exists
+		// When the new variable is not compatible with the old variable, we have to throw an exception
+		if (!(tempVar.getVariableType().equals(evaluatedExpression.getClass())))
+			throw new SyntaxException("Syntax exception: Cannot assign Type "+evaluatedExpression.getClass()+" to "+ tempVar.getValue().getLiteralType());
+		
+		if (evaluatedExpression instanceof BooleanLiteralExpression) {
+			((Variable<BooleanLiteralExpression>)tempVar).setValue((BooleanLiteralExpression)evaluatedExpression);	
+		}
+		else if (evaluatedExpression instanceof DoubleLiteralExpression) {
+			((Variable<DoubleLiteralExpression>)tempVar).setValue((DoubleLiteralExpression)evaluatedExpression);
+		}
+		else if (evaluatedExpression instanceof EntityLiteralExpression) {
+			// TODO !! Kan zijn dat de <?> erorrs geven !!
+			((Variable<EntityLiteralExpression<?>>)tempVar).setValue((EntityLiteralExpression<?>)evaluatedExpression);
+		}
+		
+		// If we made it this far, this Statement is finished.
+		setFinished(true);
 	}
 }

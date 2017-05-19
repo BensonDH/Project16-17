@@ -1,0 +1,21 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	Literal firstLiteral = new DoubleLiteralExpression(Double.valueOf(5));
+	Literal secondLiteral = new DoubleLiteralExpression(Double.valueOf(5));
+	
+	System.out.println();
+	
+	}
+}

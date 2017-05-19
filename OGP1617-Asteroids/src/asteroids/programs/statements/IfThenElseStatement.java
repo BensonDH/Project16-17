@@ -1,11 +1,9 @@
 package asteroids.programs.statements;
 
 import asteroids.programs.expressions.*;
-
-import java.util.*;
-
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
+import asteroids.programs.exceptions.IllegalTypeException;
 
 public class IfThenElseStatement extends Statement {
 
@@ -31,8 +29,9 @@ public class IfThenElseStatement extends Statement {
 		super(sourceLocation);
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
-		else if (!(expression instanceof LogicalExpression))
-			throw new IllegalArgumentException("The given expression cannot be evaluated logically and thus does not belong in an IfThenElseStatement's condition.");
+		
+		if (!(expression instanceof ReturnTypeBoolean))
+			throw new IllegalTypeException(ReturnTypeBoolean.class, expression.getClass());
 		
 		this.expression = expression;
 		this.ifBody = ifBody;
@@ -53,11 +52,14 @@ public class IfThenElseStatement extends Statement {
 	 * 			If the given parentProgram, printedValues, expression or ifBody is null
 	 * 			| if (expression == null || ifBody == null)
 	 */
-	public IfThenElseStatement(LogicalExpression expression, Statement ifBody,
+	public IfThenElseStatement(Expression expression, Statement ifBody,
 								SourceLocation sourceLocation) throws NullPointerException{
 		super(sourceLocation);
 		if (expression == null || ifBody == null)
 			throw new NullPointerException();
+		
+		if (!(expression instanceof ReturnTypeBoolean))
+			throw new IllegalTypeException(ReturnTypeBoolean.class, expression.getClass());
 		
 		this.expression = expression;
 		this.ifBody = ifBody;
@@ -71,13 +73,12 @@ public class IfThenElseStatement extends Statement {
 	 * 									| true
 	 */
 	public IfThenElseStatement(){
-		super();
+		super(null);
 		throw new IllegalStateException("Cannot create an IfThenElseStatement withouth an expression and ifBody!");
 	}
 	
 	/**
-	 * Get the expression that comes after the
-	 * if statement
+	 * Get the condition of this IfThenElseStatement.
 	 */
 	public Expression getExpression(){
 		return this.expression;
@@ -121,7 +122,11 @@ public class IfThenElseStatement extends Statement {
 		if (isFinished())
 			return;
 		
-		if ((boolean)getExpression().eval())
+		Literal evaluatedExpression = getExpression().eval(parentProgram);
+		if (!(evaluatedExpression instanceof BooleanLiteralExpression))
+			throw new IllegalTypeException(BooleanLiteralExpression.class, evaluatedExpression.getClass());
+		
+		if (((BooleanLiteralExpression)getExpression().eval(parentProgram)).getValue(parentProgram))
 			getIfBody().execute(parentProgram);
 		
 		else if (getElseBody() != null)

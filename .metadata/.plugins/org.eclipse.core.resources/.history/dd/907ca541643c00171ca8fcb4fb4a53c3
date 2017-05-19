@@ -1,0 +1,33 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	Boolean testbool = true;
+	Double testdouble = Double.valueOf(2);
+	
+	Variable<Boolean> boolvar = new Variable<>(Boolean.class, "boolvar", true);
+	Variable<Double> doublevar = new Variable<>(Double.class, "doublevar", testdouble);
+	
+	Map<String, Variable<? extends Object>> runTimeVariables= new HashMap<String, Variable<? extends Object>>();
+	
+	runTimeVariables.put("boolvar", boolvar);
+	runTimeVariables.put("doublevar", doublevar);
+	
+	Variable<? extends Object> testvar = runTimeVariables.get("testbool");
+	
+	testvar.setValue(Boolean.FALSE);
+	
+	System.out.println(runTimeVariables);
+	
+	}
+}

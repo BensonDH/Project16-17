@@ -1,0 +1,51 @@
+package asteroids.programs.expressions;
+
+public class Variable<Type> {
+	
+	/**
+	 * Create a  new Variable with the given variableName and value.
+	 * 
+	 * @param variableName
+	 * 		The name of this Variable.
+	 * @param value
+	 * 		The value that this variable has to recall.
+	 */
+	public Variable(String variableName, Type value){
+		this.variableName = variableName;
+		setValue(value);
+	}
+	
+	/**
+	 * Return the name of this Variable.
+	 */
+	public String getName(){
+		return this.variableName;
+	}
+	
+	/**
+	 * Variable registering the name of this Variable.
+	 */
+	private final String variableName;
+	
+	/**
+	 * Return the value of this Variable.
+	 */
+	public Type getValue(){
+		return this.variableValue;
+	}
+	
+	/**
+	 * Set this Variable's value to the given newValue.
+	 * 
+	 * @param newValue
+	 * 		The new value of this Variable.
+	 */
+	public void setValue(Type newValue){
+		this.variableValue = newValue;
+	}
+	
+	/**
+	 * Variable registering the value of this Variable.
+	 */
+	private Type variableValue;
+}

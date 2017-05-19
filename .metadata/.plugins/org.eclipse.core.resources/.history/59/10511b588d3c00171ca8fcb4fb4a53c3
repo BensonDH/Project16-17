@@ -1,0 +1,50 @@
+package asteroids.programs.expressions;
+
+import asteroids.model.Entity;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+
+public class Equals extends BinaryExpression implements ReturnTypeBoolean{
+
+	/**
+	 * Initialize this comparison with a given leftHandOperator and rightHandOperator.
+	 * This comparison is represented as:
+	 * 		leftHandOperator == rightHandOperator
+	 * 
+	 * @param leftHandOperator
+	 * 			The left hand operator of this comparison.
+	 * @param rightHandOperator
+	 * 			The right hand operator of this comparison.
+	 */
+	public Equals(Expression leftHandOperator, Expression rightHandOperator, SourceLocation sourceLocation){
+		super(leftHandOperator, rightHandOperator, sourceLocation);
+	}
+	
+	/**
+	 * This constructor should not be used.
+	 * @throws IllegalStateException
+	 * 			Always
+	 * 			| true
+	 */
+	public Equals(){
+		super(null, null, null);
+		throw new IllegalStateException("Cannot create an equals expression without any operants.");
+	}
+	
+	
+	@Override
+	public Literal eval(Program parentProgram) {
+		Literal leftHandEvaluated = getLeftHandSide().eval(parentProgram);
+		Literal rightHandEvaluated = getRightHandSide().eval(parentProgram);
+		
+		// If both literals are not of the same type, they can never be equal.
+		if (!(leftHandEvaluated.getClass().equals(rightHandEvaluated.getClass())))
+			return new BooleanLiteralExpression(false);
+		// If both sides are Entities, we have to use reference semantics
+		else if (leftHandEvaluated.getLiteralType().equals(Entity.class)){
+			Boolean result = leftHandEvaluated.getValue().equ
+		}
+			
+	}
+
+}

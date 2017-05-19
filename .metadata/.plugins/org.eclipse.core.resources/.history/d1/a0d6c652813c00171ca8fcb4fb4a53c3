@@ -1,0 +1,5 @@
+package asteroids.exceptions;
+
+public class IllegalWhileConditionException extends RuntimeException {
+
+}

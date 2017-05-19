@@ -1,0 +1,22 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	Entity ship1 = new Ship(0,0,0,0,20,0);
+	Entity ship2 = new Ship(0,0,0,0,20,0);
+	
+	Boolean result = ship1.equals(ship1);
+	System.out.println(result);
+	
+	}
+}

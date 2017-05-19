@@ -76,36 +76,44 @@ public class Program {
 		
 		// If this program isn't paused, then it was executed successfully, meaning we can
 		// reset it's body again for further use.
-		if (!isPaused())
+		if (!isPaused()){
 			getBody().reset();
-		
-		// Return all values that were printed so far.
-		return getPrintedValues();
+			return getPrintedValues();
+		}
+		// Else the program has been paused so we don't return anything.
+		else 
+			return null;
 	}
 	
 	/**
 	 * Add global variables that exist during the runtime of this program.
 	 */
-	public void addGlobalVariables(Expression... variables) throws IllegalArgumentException {
-		for (Expression variable: variables){
-			if (!(variable instanceof ReadVariableExpression))
-				throw new IllegalArgumentException("The given expression is not a variable.");
-			runTimeVariables.put(((ReadVariableExpression)variable).getVariableName(), variable);
-		}
+	public void addGlobalVariable(Variable<? extends Object> variable) throws IllegalArgumentException {
+		String varName = variable.getName();
+		runTimeVariables.put(varName, variable);
+	}
+	
+	/**
+	 * Return the global variable within this program with the given variableName.
+	 * 
+	 * Returns null if no such variable exists.
+	 */
+	public Variable<? extends Literal> findGlobalVariable(String variableName){
+		return this.runTimeVariables.get(variableName);
 	}
 	
 	/**
 	 * Get the global variables that are present in this
 	 * program at this time.
 	 */
-	public Map<String, Expression> getGlobalVariables(){
+	public Map<String, Variable<? extends Literal>> getAllGlobalVariables(){
 		return this.runTimeVariables;
 	}
 	/**
 	 * List containing all the global variables that are present during
 	 * execution of this Program.
 	 */
-	private Map<String, Expression> runTimeVariables= new HashMap<String, Expression>();
+	private Map<String, Variable<? extends Literal>> runTimeVariables= new HashMap<String, Variable<? extends Literal>>();
 	
 	/**
 	 * Get the time that this program has left to run.
@@ -143,8 +151,13 @@ public class Program {
 	
 	/**
 	 * Returns the last active loop in the activeLoops list.
+	 * 
+	 * Returns null if there is no active loop.
 	 */
 	public WhileStatement getLastActiveLoop(){
+		if (this.activeLoops.size() == 0)
+			return null;
+		
 		return this.activeLoops.get(this.activeLoops.size()-1);
 	}
 	

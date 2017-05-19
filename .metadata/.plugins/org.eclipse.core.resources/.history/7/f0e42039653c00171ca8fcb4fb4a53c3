@@ -1,0 +1,19 @@
+package asteroids.programs.expressions;
+
+import asteroids.programs.Program;
+
+public class EntityLiteralExpression extends Expression implements Literal {
+
+	@Override
+	public Object getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Literal eval(Program parentProgram) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

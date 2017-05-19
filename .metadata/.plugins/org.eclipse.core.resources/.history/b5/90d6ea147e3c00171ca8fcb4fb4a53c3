@@ -1,0 +1,36 @@
+package asteroids.programs.expressions;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
+
+public class ReadVariableExpression extends Expression {
+	
+	public ReadVariableExpression(String variableName, SourceLocation sourceLocation) {
+		super(sourceLocation);
+		this.variableName = variableName;
+	}
+	
+	/**
+	 * Return the name of this ReadVariableExpression.
+	 */
+	public String getVariableName(){
+		return this.variableName;
+	}
+	
+	/**
+	 * Variable registering the name of this VariableExpression
+	 */
+	private final String variableName;
+	
+	@Override
+	public Literal eval(Program parentProgram) {
+		Variable<?> tempVar = parentProgram.findGlobalVariable(getVariableName());
+		
+		if (tempVar == null)
+			throw new SyntaxException("Syntax exception: variable "+getVariableName()+" is not defined");
+		
+		return tempVar.getValue();
+	}
+
+}

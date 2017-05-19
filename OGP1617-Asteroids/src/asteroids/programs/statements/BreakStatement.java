@@ -1,10 +1,10 @@
 package asteroids.programs.statements;
 
-import java.util.List;
 
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
+import asteroids.programs.exceptions.SyntaxException;
+
 
 public class BreakStatement extends Statement {
 
@@ -29,7 +29,7 @@ public class BreakStatement extends Statement {
 	 * 			| true
 	 */
 	public BreakStatement(){
-		super();
+		super(null);
 		throw new IllegalStateException();
 	}
 	
@@ -41,13 +41,13 @@ public class BreakStatement extends Statement {
 		if (isFinished())
 			return;
 		
-		try {
 		// All we have to do is terminate the last loop in the activeLoop list of the given program.
-		parentProgram.getLastActiveLoop().terminate();
-		} catch (IndexOutOfBoundsException e) {
+		WhileStatement lastActiveLoop = parentProgram.getLastActiveLoop();
+		if (lastActiveLoop == null){
 			assert (parentProgram.getActiveLoops().size() == 0);
 			throw new SyntaxException("Syntax error: break statement not in a while statement.");
 		}
+		lastActiveLoop.terminate();
 		
 		// This BreakStatement is finished
 		setFinished(true);

@@ -23,7 +23,7 @@ public class BlockStatement extends Statement {
 	 * 			| true
 	 */
 	public BlockStatement(){
-		super();
+		super(null);
 	}
 	
 	/**

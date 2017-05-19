@@ -1,0 +1,6 @@
+package asteroids.programs.expressions;
+
+public interface Literal {
+	
+
+}

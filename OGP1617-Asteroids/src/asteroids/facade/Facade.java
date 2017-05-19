@@ -6,11 +6,10 @@ import java.util.Set;
 
 import asteroids.model.*;
 import asteroids.programs.*;
-
+import asteroids.programs.exceptions.*;
 import asteroids.part2.CollisionListener;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.util.ModelException;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 public class Facade implements asteroids.part3.facade.IFacade{
 
@@ -1252,7 +1251,13 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		} catch (NullPointerException E){
 			throw new ModelException("NullPointerException");
 		} catch (IllegalStateException E){
-			throw new ModelException("IllegalStateException");}
+			throw new ModelException("IllegalStateException");
+		} catch (IllegalTypeException E) {
+			throw new ModelException("IllegalTypeException");
+		} catch (SyntaxException E) {
+			throw new ModelException("SyntaxException");
+		} catch (VariableException E) {
+			throw new ModelException("VariableException");}
 	}
 
 	@Override
@@ -1266,7 +1271,13 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		} catch (NullPointerException E){
 			throw new ModelException("NullPointerException");
 		} catch (IllegalStateException E){
-			throw new ModelException("IllegalStateException");}
+			throw new ModelException("IllegalStateException");
+		} catch (IllegalTypeException E) {
+			throw new ModelException("IllegalTypeException");
+		} catch (SyntaxException E) {
+			throw new ModelException("SyntaxException");
+		} catch (VariableException E) {
+			throw new ModelException("VariableException");}
 	}
 
 	@Override
@@ -1281,9 +1292,12 @@ public class Facade implements asteroids.part3.facade.IFacade{
 			throw new ModelException("NullPointerException");
 		} catch (IllegalStateException E){
 			throw new ModelException("IllegalStateException");
+		} catch (IllegalTypeException E) {
+			throw new ModelException("IllegalTypeException");
 		} catch (SyntaxException E) {
 			throw new ModelException("SyntaxException");
-		}
+		} catch (VariableException E) {
+			throw new ModelException("VariableException");}
 	}
 
 	@Override
@@ -1297,7 +1311,14 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		} catch (NullPointerException E){
 			throw new ModelException("NullPointerException");
 		} catch (IllegalStateException E){
-			throw new ModelException("IllegalStateException");}
+			throw new ModelException("IllegalStateException");
+		} catch (IllegalTypeException E) {
+			throw new ModelException("IllegalTypeException");
+		} catch (SyntaxException E) {
+			throw new ModelException("SyntaxException");
+		} catch (VariableException E) {
+			throw new ModelException("VariableException");
+		}
 	}
 }
 

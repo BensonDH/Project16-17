@@ -1,0 +1,30 @@
+package asteroids.programs.expressions;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+
+public class ChangeSignExpression extends Expression implements ReturnTypeDouble {
+	
+	public ChangeSignExpression(Expression expression, SourceLocation sourceLocation) {
+		super(sourceLocation);
+		this.expression = expression;
+	}
+	
+	/**
+	 * Return the expression whose sign has to be changed.
+	 */
+	public Expression getExpression(){
+		return this.expression;
+	}
+	
+	/**
+	 * Variable registering the expression whose sign has to be. 
+	 */
+	private final Expression expression;
+	
+	@Override
+	public Literal eval(Program parentProgram) {
+		return null;
+	}
+
+}

@@ -1,2 +1,10 @@
 1494877171939	Delete element
 1495043666919	Delete element
+1495178743688	Rename type 'BooleanLiteral'
+1495185288430	Delete element
+1495189970235	Delete element
+1495191243048	Rename package 'asteroids.exceptions'
+1495191805333	Rename type 'IllegalWhileConditionException'
+1495193123472	Rename field 'acutalClass'
+1495193131800	Rename field 'expectedClass'
+1495196546112	Rename type 'Equals'

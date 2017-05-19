@@ -1,0 +1,13 @@
+package asteroids.programs.expressions;
+
+import asteroids.programs.Program;
+
+public class SqrtExpression extends UnaryExpression implements ReturnTypeDouble {
+
+	@Override
+	public Literal eval(Program parentProgram) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

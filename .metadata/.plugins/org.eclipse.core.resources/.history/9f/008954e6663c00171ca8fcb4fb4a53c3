@@ -1,0 +1,26 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	Boolean testbool = true;
+	Double testdouble = Double.valueOf(2);
+	
+	Variable<Boolean> boolvar = new Variable<>(Boolean.class, "boolvar", true);
+	Variable<Double> doublevar = new Variable<>(Double.class, "doublevar", testdouble);
+	
+	BooleanLiteralExpression trueLiteral = new BooleanLiteralExpression(true);
+		
+	System.out.println(trueLiteral.getLiteralType().equals(Boolean.class));
+	
+	}
+}

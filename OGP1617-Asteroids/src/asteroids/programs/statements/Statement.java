@@ -1,7 +1,5 @@
 package asteroids.programs.statements;
 
-import java.util.*;
-
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
 
@@ -13,17 +11,6 @@ public abstract class Statement {
 	public Statement(SourceLocation sourceLocation){
 		this.sourceLocation = sourceLocation;
 	}
-	
-	/**
-	 * This Constructor should not be used
-	 * 
-	 * @throws IllegalStateException
-	 * 			Always
-	 * 			| true
-	 */
-	public Statement(){
-		throw new IllegalStateException("Cannot initialize this statement without a SourceLocation");
-	};
 	
 	/**
 	 * Get the position (row, column) of this statement in it's program.

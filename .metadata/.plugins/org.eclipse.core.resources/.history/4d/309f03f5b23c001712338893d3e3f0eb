@@ -1,0 +1,22 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+	
+	DoubleLiteralExpression testdouble = new DoubleLiteralExpression(Double.valueOf(10));
+	
+	
+	System.out.println(testdouble instanceof ReturnTypeDouble);
+	
+	}
+}

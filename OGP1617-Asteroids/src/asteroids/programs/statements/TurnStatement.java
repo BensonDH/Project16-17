@@ -1,8 +1,12 @@
 package asteroids.programs.statements;
 
+import javax.sql.rowset.spi.SyncFactoryException;
+
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
+import asteroids.programs.exceptions.IllegalTypeException;
 import asteroids.programs.expressions.*;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 public class TurnStatement extends ActionStatement {
 
@@ -11,8 +15,10 @@ public class TurnStatement extends ActionStatement {
 	 */
 	public TurnStatement(Expression angle, SourceLocation sourceLocation) {
 		super(sourceLocation);
-		if (!(angle.eval() instanceof Double))
-			throw new IllegalArgumentException("Evaluation of the given expression does not result in a number");
+		
+		if (!(angle instanceof ReturnTypeDouble))
+			throw new IllegalTypeException(ReturnTypeDouble.class, angle.getClass());
+		
 		this.angle = angle;
 	}
 
@@ -53,10 +59,17 @@ public class TurnStatement extends ActionStatement {
 		
 		// If at this stage the parentProgram is not paused, then this statement can be executed successfully
 		if (!(parentProgram.isPaused())) {
-		double newAngle = parentProgram.getAssociatedShip().getAngle() + (double)getAngle().eval();
-		parentProgram.getAssociatedShip().setAngle(newAngle%(2*Math.PI));
-		
-		setFinished(true);
+			Literal angle = getAngle().eval(parentProgram);
+			if (!(angle instanceof DoubleLiteralExpression))
+				throw new IllegalTypeException(DoubleLiteralExpression.class, angle.getClass());
+			
+			double newAngle = parentProgram.getAssociatedShip().getAngle() + ((DoubleLiteralExpression)angle).getValue(parentProgram);
+			
+			if (newAngle >= 0 && newAngle <= (Math.PI*2))
+				parentProgram.getAssociatedShip().setAngle(newAngle);
+			// If there is an illegal angle, we do nothing.
+			
+			setFinished(true);
 		}
 	}
 }
