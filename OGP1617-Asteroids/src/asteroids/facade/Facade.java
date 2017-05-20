@@ -766,7 +766,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
 		} catch (NullPointerException E){
-			throw new ModelException("NullPointerException");
+			return Double.POSITIVE_INFINITY;
 		} catch (IllegalStateException E){
 			throw new ModelException("IllegalStateException");}
 	}
@@ -780,7 +780,7 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		} catch (AssertionError E){
 			throw new ModelException("AssertionError");
 		} catch (NullPointerException E){
-			throw new ModelException("NullPointerException");
+			return null;
 		} catch (IllegalStateException E){
 			throw new ModelException("IllegalStateException");}
 	}

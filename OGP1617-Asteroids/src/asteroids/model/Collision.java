@@ -251,7 +251,7 @@ public class Collision{
 			entity.setVelocity(velocity.getX(), -velocity.getY());
 		}
 		// It's a vertical border
-		else {
+		if (gameWorld.apparentlyCollidesWithVerticalBorder(entity)) {
 			Vector velocity = entity.getVelocity();
 			// Flip the X-Component of the 
 			entity.setVelocity(-velocity.getX(), velocity.getY());
@@ -314,7 +314,7 @@ public class Collision{
 								firstVel.getY()+(J*deltaPos.getY())/(sigma*mi));
 		
 		secondEntity.setVelocity(secondVel.getX()-(J*deltaPos.getX())/(sigma*mj),
-								 secondVel.getX()-(J*deltaPos.getY())/(sigma*mj));
+								 secondVel.getY()-(J*deltaPos.getY())/(sigma*mj));
 	}
 	
 	private void resolveCollision(Ship ship, Asteroid asteroid){

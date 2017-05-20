@@ -391,6 +391,8 @@ public class World {
 			x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
 			y_time = (radius-current_pos.getY())/current_vel.getY();
 		}
+		x_time = Math.abs(x_time);
+		y_time = Math.abs(y_time);
 		if (x_time <= y_time)
 			return x_time;
 		else
@@ -412,60 +414,26 @@ public class World {
 		
 		// If the given entity is not moving or does not lie in this world,
 		// it will never collide with the boundaries.
-		if (!isInWorld(entity) || current_vel.getX() == 0 || current_vel.getY() == 0)
+		if (!isInWorld(entity) || (current_vel.getX() == 0 && current_vel.getY() == 0))
 			return null;
-		double x_time;
-		double y_time;
-		Vector extraPos;
-		// Upper-Right Quadrant
-		if (current_vel.getX() > 0 && current_vel.getY() > 0){
-			x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
-			y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
-			
-			if (x_time <= y_time){
-				extraPos= current_vel.multiply(x_time).add(new Vector(radius, 0));
-				return current_pos.add(extraPos);
-			}
-			extraPos= current_vel.multiply(y_time).add(new Vector(0, radius));
-			return current_pos.add(extraPos);
+		double collisionTime = getTimeToCollisionWithBoundaries(entity);
+		Vector position = entity.getPosition().add(current_vel.multiply(collisionTime));
+		double width = getWidth();
+		double height = getHeight();
+		double xRight = position.getX() + radius;
+		double xLeft = position.getX() - radius;
+		double yDown = position.getY() - radius;
+		if (xLeft == 0)
+			return new Vector(0, position.getY());
+		if (yDown == 0)
+			return new Vector(position.getX(),0);
+		if (xRight == width)
+			return new Vector(width, position.getY());
+		else
+			return new Vector(position.getX(),height);
+		
 		}
-		// Upper-Left Quadrant
-		else if (current_vel.getX() < 0 && current_vel.getY() > 0){
-			x_time = (radius-current_pos.getX())/current_vel.getX();
-			y_time = (getHeight()-(radius+current_pos.getY()))/current_vel.getY();
-			
-			if (x_time <= y_time){
-				extraPos= current_vel.multiply(x_time).add(new Vector(-radius, 0));
-				return current_pos.add(extraPos);
-			}
-			extraPos= current_vel.multiply(y_time).add(new Vector(0, radius));
-			return current_pos.add(extraPos);
-		}
-		// Lower-Left Quadrant
-		else if (current_vel.getX() < 0 && current_vel.getY() < 0){
-			x_time = (radius-current_pos.getX())/current_vel.getX();
-			y_time = (radius-current_pos.getY())/current_vel.getY();
-			
-			if (x_time <= y_time){
-				extraPos= current_vel.multiply(x_time).add(new Vector(-radius, 0));
-				return current_pos.add(extraPos);
-			}
-			extraPos= current_vel.multiply(y_time).add(new Vector(0, -radius));
-			return current_pos.add(extraPos);
-		}
-		// Lower-Right Quadrant
-		else {
-			x_time = (getWidth()-(radius+current_pos.getX()))/current_vel.getX();
-			y_time = (radius-current_pos.getY())/current_vel.getY();
-			
-			if (x_time <= y_time){
-				extraPos= current_vel.multiply(x_time).add(new Vector(radius, 0));
-				return current_pos.add(extraPos);
-			}
-			extraPos= current_vel.multiply(y_time).add(new Vector(0, -radius));
-			return current_pos.add(extraPos);
-		}
-	}
+	
 	
 	/**
 	 * No Documentation required.
@@ -582,6 +550,25 @@ public class World {
 	
 	/**
 	 * Check whether the given entity apparently collides with a horizontal border.
+	 * 
+	 * An entity apparently collides with a border if and only if the distance
+	 * between the border and the center of the entity is between 99% and 101%
+	 * of the entity's radius.
+	 * 
+	 * @param entity
+	 * 			The entity that has to be verified.
+	 * @See implementation
+	 */
+	public boolean apparentlyCollidesWithVerticalBorder(Entity entity){
+		double radius = entity.getRadius();
+		double posX = entity.getPosition().getX();
+		
+		return ((0.99*radius <= posX) && (posX <= 1.01*radius))
+				|| ((0.99*radius <= Math.abs(getHeight()-posX)) && (Math.abs(getHeight())-posX) <= 1.01*radius);
+	}
+	
+	/**
+	 * Check whether the given entity apparently collides with a vertical border.
 	 * 
 	 * An entity apparently collides with a border if and only if the distance
 	 * between the border and the center of the entity is between 99% and 101%

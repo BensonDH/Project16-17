@@ -1,0 +1,23 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+		World world = new World(5000, 5000);
+	    Ship ship = new Ship(100, 50, 0, -50, 25, 0, 1.0E22);
+	    world.addEntity(ship);
+	    double timeToCollision = world.getTimeToCollisionWithBoundaries(ship);
+	    System.out.println(timeToCollision);
+	    
+	
+	}
+}

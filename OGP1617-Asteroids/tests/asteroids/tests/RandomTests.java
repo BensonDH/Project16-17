@@ -12,12 +12,9 @@ import asteroids.programs.expressions.*;
 public class RandomTests {
 	@Test
 	public void test(){
-	double test = 10.0;
-	
-	double test2;
-	
-	test2 = 10.0%(2*Math.PI);
-	System.out.println(test2);
-	
+		Planetoid planetoid = new Planetoid(0,0,1000,0,50, 0);
+		planetoid.move(50);
+		System.out.println(planetoid.getDistanceTravelled());
+		System.out.println(planetoid.getRadius());
 	}
 }

@@ -1,0 +1,23 @@
+package asteroids.tests;
+
+import static org.junit.Assert.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.*;
+import asteroids.model.*;
+import asteroids.programs.expressions.*;
+
+public class RandomTests {
+	@Test
+	public void test(){
+		Ship ship = new Ship(100, 120, 10, 5, 500, 0, 1.0E20);
+	    Bullet bullet = new Bullet(560, 120, 10, 5, 50);
+	    double distanceBetweenCenters = ship.getDistanceBetweenCenters(bullet);
+		double radius = ship.getRadius();
+		double result = distanceBetweenCenters + bullet.getRadius();
+	    System.out.println(result);
+	
+	}
+}

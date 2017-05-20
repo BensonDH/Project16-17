@@ -392,6 +392,23 @@ public abstract class Entity {
    	
    	
    	// ------- Other functions --------
+   	
+   	
+   	/**
+	 * Checks whether an entity lies completely within another entity
+	 * 
+	 * @param entity
+	 * 			The entity that has to be verified.
+	 * @return
+	 * 			|True if (distanceBetweenCenters + entity.getRadius() <= totalRadius);
+	 */
+	public boolean contains(Entity entity){
+		double distanceBetweenCenters = getDistanceBetweenCenters(entity);
+		double radius = getRadius();
+		return (distanceBetweenCenters + entity.getRadius() <= radius);
+	}
+	
+	
    	/**
    	 * Get the distance between this Entity and the given other Entity.
    	 * 

@@ -137,6 +137,7 @@ public class Part3TestFull {
     score += 3;
   }
 
+  @Test
   public void testCreateShipRadiusNan() throws ModelException {
     try {
       max_score += 1;
@@ -296,6 +297,7 @@ public class Part3TestFull {
       Planetoid planetoid = facade.createPlanetoid(100, 120, 1000, 0, 50, 0);
       facade.addPlanetoidToWorld(world, planetoid);
       facade.evolve(world, 50, null);
+      assertEquals(50000,facade.getPlanetoidTotalTraveledDistance(planetoid),EPSILON);
       assertEquals(50 - 1000 * 50 * 0.000001, facade.getPlanetoidRadius(planetoid), EPSILON);
       score += 10;
     }
@@ -1221,7 +1223,7 @@ public class Part3TestFull {
     World world = facade.createWorld(1000, 1000);
     Ship ship1 = facade.createShip(100, 100, -10, -10, 50, 0, 1.0E20);
     facade.addShipToWorld(world, ship1);
-    // collision after 15 seconds
+    // collision after 5 seconds
     facade.evolve(world, 15, null);
     assertEquals(1, facade.getWorldShips(world).size());
     assertEquals(150, facade.getShipPosition(ship1)[0], EPSILON);
@@ -1345,7 +1347,7 @@ public class Part3TestFull {
     assertNull(facade.getBulletWorld(bullet1));
     score += 7;
   }
-
+/**
   // Assignment Statement
 
   @Test
@@ -2895,5 +2897,5 @@ public class Part3TestFull {
       score += 5;
     }
   }
-
+*/
 }
