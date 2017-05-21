@@ -3,20 +3,45 @@ package asteroids.programs.expressions;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
 
-public abstract class Literal extends Expression {
+public class Literal<T> extends Expression<T>{
 
-	public Literal(SourceLocation sourceLocation) {
+	public Literal(Class<T> typeClassName, T value, SourceLocation sourceLocation) {
 		super(sourceLocation);
+		this.typeClassName = typeClassName;
+		this.value = value;
 	}
 
+	public Literal(Class<T> typeClassName, T value){
+		this(typeClassName, value, null);
+	}
+	
 	/**
 	 * Get the value of this Literal.
 	 */
-	public abstract Object getValue(Program parentProgram);
+	public T getValue(Program parentProgram){
+		return this.value;
+	}
 	
 	/**
-	 * Get the type that this Literal represents.
+	 * Variable registering the value that this Literal represents.
 	 */
-	public abstract Class<?> getLiteralType();
+	private final T value;
+	
+	/**
+	 * Get the className of this Literal's Type T.
+	 */
+	public Class<T> getLiteralType(){
+		return this.typeClassName;
+	}
+
+	/**
+	 * Variable registering the className of T.
+	 */
+	private final Class<T> typeClassName;
+	
+	@Override
+	public Literal<T> eval(Program parentProgram) {
+		return this;
+	}
 
 }

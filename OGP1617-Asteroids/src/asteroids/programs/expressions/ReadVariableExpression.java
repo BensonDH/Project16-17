@@ -4,7 +4,7 @@ import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
 import asteroids.programs.exceptions.VariableException;
 
-public class ReadVariableExpression extends Expression implements ReturnTypeBoolean, ReturnTypeDouble, ReturnTypeEntity {
+public class ReadVariableExpression extends Expression<Object> {
 	
 	public ReadVariableExpression(String variableName, SourceLocation sourceLocation) {
 		super(sourceLocation);
@@ -24,13 +24,13 @@ public class ReadVariableExpression extends Expression implements ReturnTypeBool
 	private final String variableName;
 	
 	@Override
-	public Literal eval(Program parentProgram) {
+	public Literal<Object> eval(Program parentProgram) {
 		Variable<?> tempVar = parentProgram.findGlobalVariable(getVariableName());
 		
 		if (tempVar == null)
 			throw new VariableException(getVariableName());
 		
-		return tempVar.getValue();
+		return (Literal<Object>) tempVar.getValue();
 	}
 
 }

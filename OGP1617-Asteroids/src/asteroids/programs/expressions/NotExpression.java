@@ -4,16 +4,17 @@ import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
 import asteroids.programs.exceptions.IllegalTypeException;
 
-public class NotExpression extends UnaryExpression implements ReturnTypeBoolean {
+public class NotExpression extends UnaryExpression<Boolean>{
 
 	/**
 	 * Create an expression that represents the logical not operation.
 	 */
-	public NotExpression(Expression expression, SourceLocation sourceLocation) {
+	public NotExpression(Expression<Boolean> expression, SourceLocation sourceLocation) {
 		super(expression, sourceLocation);
-		
-		if (!(expression instanceof ReturnTypeBoolean))
-				throw new IllegalTypeException(ReturnTypeBoolean.class, expression.getClass());
+	}
+	
+	public NotExpression(Expression<Boolean> expression) {
+		super(expression, null);
 	}
 	
 	/**
@@ -26,14 +27,16 @@ public class NotExpression extends UnaryExpression implements ReturnTypeBoolean 
 	}
 	
 	@Override
-	public Literal eval(Program parentProgram) {
-		Literal evaluatedExpression = getExpression().eval(parentProgram);
+	public Literal<Boolean> eval(Program parentProgram) {
+		Literal<?> evaluatedExpression = getExpression().eval(parentProgram);
 		
-		if (!(evaluatedExpression instanceof BooleanLiteralExpression))
-			throw new IllegalTypeException(BooleanLiteralExpression.class, evaluatedExpression.getClass());
+		if (evaluatedExpression instanceof NullType)
+			throw new IllegalTypeException(Boolean.class, NullType.class);
+		if (!(evaluatedExpression.getLiteralType().equals(Boolean.class)))
+			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getClass());
 		
-		Boolean result = ((BooleanLiteralExpression)evaluatedExpression).getValue(parentProgram);
-		return new BooleanLiteralExpression(!result);
+		Boolean result = (Boolean)evaluatedExpression.getValue(parentProgram);
+		return new Literal<Boolean>(Boolean.class, !result);
 	}
 
 }

@@ -1,10 +1,9 @@
 package asteroids.programs.expressions;
 
-import asteroids.model.Entity;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
 
-public class EqualityExpression extends BinaryExpression implements ReturnTypeBoolean{
+public class EqualityExpression extends BinaryExpression<Boolean>{
 
 	/**
 	 * Initialize this comparison with a given leftHandOperator and rightHandOperator.
@@ -16,8 +15,12 @@ public class EqualityExpression extends BinaryExpression implements ReturnTypeBo
 	 * @param rightHandOperator
 	 * 			The right hand operator of this comparison.
 	 */
-	public EqualityExpression(Expression leftHandOperator, Expression rightHandOperator, SourceLocation sourceLocation){
+	public EqualityExpression(Expression<?> leftHandOperator, Expression<?> rightHandOperator, SourceLocation sourceLocation){
 		super(leftHandOperator, rightHandOperator, sourceLocation);
+	}
+	
+	public EqualityExpression(Expression<?> leftHandOperator, Expression<?> rightHandOperator){
+		super(leftHandOperator, rightHandOperator, null);
 	}
 	
 	/**
@@ -33,18 +36,24 @@ public class EqualityExpression extends BinaryExpression implements ReturnTypeBo
 	
 	
 	@Override
-	public Literal eval(Program parentProgram) {
-		Literal leftHandEvaluated = getLeftHandSide().eval(parentProgram);
-		Literal rightHandEvaluated = getRightHandSide().eval(parentProgram);
+	public Literal<Boolean> eval(Program parentProgram) {
+		Literal<?> leftHandEvaluated = getLeftHandSide().eval(parentProgram);
+		Literal<?> rightHandEvaluated = getRightHandSide().eval(parentProgram);
+		
+		if (leftHandEvaluated instanceof NullType) {
+			if (rightHandEvaluated instanceof NullType)
+				return new Literal<Boolean>(Boolean.class, true);
+			else
+				return new Literal<Boolean>(Boolean.class, false);
+		}
 		
 		// If both literals are not of the same type, they can never be equal.
-		if (!(leftHandEvaluated.getClass().equals(rightHandEvaluated.getClass())))
-			return new BooleanLiteralExpression(false);
-
+		if (!(leftHandEvaluated.getLiteralType().equals(rightHandEvaluated.getLiteralType())))
+			return new Literal<Boolean>(Boolean.class, false);
+		
 		Boolean result = leftHandEvaluated.getValue(parentProgram).equals(rightHandEvaluated.getValue(parentProgram));
-		return new BooleanLiteralExpression(result);
-
-			
+		
+		return new Literal<Boolean>(Boolean.class, result);
 	}
 
 }

@@ -1,0 +1,34 @@
+package asteroids.programs.expressions;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.Program;
+import asteroids.programs.exceptions.IllegalTypeException;
+
+public class AdditionExpression<T> extends BinaryExpression<Double> {
+
+	public AdditionExpression(Expression<Double> leftHandSide, Expression<Double> rightHandSide, SourceLocation sourceLocation) {
+		super(leftHandSide, rightHandSide, sourceLocation);
+		
+	}
+	
+	public AdditionExpression(Expression<Double> leftHandSide, Expression<Double> rightHandSide) {
+		this(leftHandSide, rightHandSide, null);
+	}
+
+	@Override
+	public Literal<Double> eval(Program parentProgram) {
+		Literal<?> leftHandEvaluated = getLeftHandSide().eval(parentProgram);
+		Literal<?> rightHandEvaluated = getRightHandSide().eval(parentProgram);
+		
+		if (!(leftHandEvaluated.getLiteralType().equals(Double.class)))
+			throw new IllegalTypeException(Double.class, leftHandEvaluated.getLiteralType());
+		if (!(rightHandEvaluated.getLiteralType().equals(Double.class)))
+			throw new IllegalTypeException(DoubleLiteralExpression.class, rightHandEvaluated.getClass());
+		
+		Double leftValue = (Double)leftHandEvaluated.getValue(parentProgram);
+		Double rightValue = (Double)rightHandEvaluated.getValue(parentProgram);
+		
+		return new Literal<Double>(Double.class, Double.valueOf(leftValue+rightValue));
+	}
+
+}

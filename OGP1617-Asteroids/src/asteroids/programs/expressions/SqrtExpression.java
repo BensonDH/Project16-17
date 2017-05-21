@@ -4,25 +4,22 @@ import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
 import asteroids.programs.exceptions.IllegalTypeException;
 
-public class SqrtExpression extends UnaryExpression implements ReturnTypeDouble {
+public class SqrtExpression extends UnaryExpression<Double>{
 
-	public SqrtExpression(Expression expression, SourceLocation sourceLocation) {
+	public SqrtExpression(Expression<Double> expression, SourceLocation sourceLocation) {
 		super(expression, sourceLocation);
-		
-		if (!(expression instanceof ReturnTypeDouble))
-			throw new IllegalTypeException(ReturnTypeDouble.class, expression.getClass());
 	}
 
 	@Override
-	public Literal eval(Program parentProgram) {
-		Literal evaluatedExpression = getExpression().eval(parentProgram);
+	public Literal<Double> eval(Program parentProgram) {
+		Literal<?> evaluatedExpression = getExpression().eval(parentProgram);
 		
-		if (!(evaluatedExpression instanceof DoubleLiteralExpression))
-			throw new IllegalTypeException(DoubleLiteralExpression.class, evaluatedExpression.getClass());
+		if (!(evaluatedExpression.getLiteralType().equals(Double.class)))
+			throw new IllegalTypeException(Double.class, evaluatedExpression.getLiteralType());
 		
-		Double expressionValue = ((DoubleLiteralExpression)evaluatedExpression).getValue(parentProgram);
+		Double expressionValue = (Double)evaluatedExpression.getValue(parentProgram);
 		
-		return new DoubleLiteralExpression(Math.sqrt(expressionValue));
+		return new Literal<Double>(Double.class, Math.sqrt(expressionValue));
 	}
 
 }

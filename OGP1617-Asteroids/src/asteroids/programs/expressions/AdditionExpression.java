@@ -4,35 +4,36 @@ import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
 import asteroids.programs.exceptions.IllegalTypeException;
 
-public class AdditionExpression extends BinaryExpression implements ReturnTypeDouble {
+public class AdditionExpression extends BinaryExpression<Double>{
 
-	public AdditionExpression(Expression leftHandSide, Expression rightHandSide, SourceLocation sourceLocation) {
+	public AdditionExpression(Expression<Double> leftHandSide, Expression<Double> rightHandSide, SourceLocation sourceLocation) {
 		super(leftHandSide, rightHandSide, sourceLocation);
 		
-		if (!(leftHandSide instanceof ReturnTypeDouble))
-			throw new IllegalTypeException(ReturnTypeDouble.class, leftHandSide.getClass());
-		if (!(rightHandSide instanceof ReturnTypeDouble))
-			throw new IllegalTypeException(ReturnTypeDouble.class, rightHandSide.getClass());
 	}
 	
-	public AdditionExpression(Expression leftHandSide, Expression rightHandSide) {
+	public AdditionExpression(Expression<Double> leftHandSide, Expression<Double> rightHandSide) {
 		this(leftHandSide, rightHandSide, null);
 	}
 
 	@Override
-	public Literal eval(Program parentProgram) {
-		Literal leftHandEvaluated = getLeftHandSide().eval(parentProgram);
-		Literal rightHandEvaluated = getRightHandSide().eval(parentProgram);
+	public Literal<Double> eval(Program parentProgram) {
+		Literal<?> leftHandEvaluated = getLeftHandSide().eval(parentProgram);
+		Literal<?> rightHandEvaluated = getRightHandSide().eval(parentProgram);
 		
-		if (!(leftHandEvaluated instanceof DoubleLiteralExpression))
-			throw new IllegalTypeException(DoubleLiteralExpression.class, leftHandEvaluated.getClass());
-		if (!(rightHandEvaluated instanceof DoubleLiteralExpression))
-			throw new IllegalTypeException(DoubleLiteralExpression.class, rightHandEvaluated.getClass());
+		// Check if one of the two represents an NullLiteral
+		if (leftHandEvaluated instanceof NullType || rightHandEvaluated instanceof NullType) {
+			throw new IllegalTypeException(Double.class, NullType.class);
+		}
 		
-		Double leftValue = ((DoubleLiteralExpression)leftHandEvaluated).getValue(parentProgram);
-		Double rightValue = ((DoubleLiteralExpression)rightHandEvaluated).getValue(parentProgram);
+		if (!(leftHandEvaluated.getLiteralType().equals(Double.class)))
+			throw new IllegalTypeException(Double.class, leftHandEvaluated.getLiteralType());
+		if (!(rightHandEvaluated.getLiteralType().equals(Double.class)))
+			throw new IllegalTypeException(Double.class, rightHandEvaluated.getLiteralType());
 		
-		return new DoubleLiteralExpression(leftValue+rightValue);
+		Double leftValue = (Double)leftHandEvaluated.getValue(parentProgram);
+		Double rightValue = (Double)rightHandEvaluated.getValue(parentProgram);
+		
+		return new Literal<Double>(Double.class, Double.valueOf(leftValue+rightValue));
 	}
 
 }

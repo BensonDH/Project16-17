@@ -6,14 +6,18 @@ import asteroids.model.*;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
 
-public class AnyExpression extends Literal implements ReturnTypeEntity {
+public class AnyExpression extends Literal<Entity>{
 
 	public AnyExpression(SourceLocation sourceLocation) {
-		super(sourceLocation);
+		super(Entity.class, null, sourceLocation);
+	}
+	
+	public AnyExpression() {
+		super(Entity.class, null, null);
 	}
 
 	@Override
-	public Object getValue(Program parentProgram) {
+	public Entity getValue(Program parentProgram) {
 		if (parentProgram == null)
 			return null;
 		
@@ -31,21 +35,16 @@ public class AnyExpression extends Literal implements ReturnTypeEntity {
 		Random rand = new Random();
 		int randInt = rand.nextInt(amountOfEntities);
 		
-		// Keep chosing another entity when the chosen entitiy is the ship itself.
+		// Keep choosing another entity when the chosen entitiy is the ship itself.
 		while (presentEntities[randInt] == executingShip){
 			randInt = rand.nextInt(amountOfEntities);
 		}
 		
-		return presentEntities[randInt];
+		return (Entity)presentEntities[randInt];
 	}
 
 	@Override
-	public Class<?> getLiteralType() {
-		return Entity.class;
-	}
-
-	@Override
-	public Literal eval(Program parentProgram) {
+	public Literal<Entity> eval(Program parentProgram) {
 		return this;
 	}
 

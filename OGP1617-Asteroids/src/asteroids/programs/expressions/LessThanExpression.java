@@ -4,35 +4,33 @@ import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
 import asteroids.programs.exceptions.IllegalTypeException;
 
-public class LessThanExpression extends BinaryExpression implements ReturnTypeBoolean {
+public class LessThanExpression extends BinaryExpression<Boolean>{
 
-	public LessThanExpression(Expression leftHandSide, Expression rightHandSide, SourceLocation sourceLocation) {
+	public LessThanExpression(Expression<Double> leftHandSide, Expression<Double> rightHandSide, SourceLocation sourceLocation) {
 		super(leftHandSide, rightHandSide, sourceLocation);
-	
-		if (!(leftHandSide instanceof ReturnTypeDouble))
-			throw new IllegalTypeException(ReturnTypeDouble.class, leftHandSide.getClass());
-		else if (!(rightHandSide instanceof ReturnTypeDouble))
-			throw new IllegalTypeException(ReturnTypeDouble.class, rightHandSide.getClass());
 	}
 
-	public LessThanExpression(Expression leftHandSide, Expression rightHandSide) {
+	public LessThanExpression(Expression<Double> leftHandSide, Expression<Double> rightHandSide) {
 			this(leftHandSide, rightHandSide, null);
 	}
 	
 	@Override
-	public Literal eval(Program parentProgram) {
-		Literal leftHandEvaluated = getLeftHandSide().eval(parentProgram);
-		Literal RightHandEvaluated = getRightHandSide().eval(parentProgram);
+	public Literal<Boolean> eval(Program parentProgram) {
+		Literal<?> leftHandEvaluated = getLeftHandSide().eval(parentProgram);
+		Literal<?> rightHandEvaluated = getRightHandSide().eval(parentProgram);
 		
-		if (!(leftHandEvaluated instanceof DoubleLiteralExpression))
-			throw new IllegalTypeException(DoubleLiteralExpression.class, leftHandEvaluated.getClass());
-		if (!(RightHandEvaluated instanceof DoubleLiteralExpression))
-			throw new IllegalTypeException(DoubleLiteralExpression.class, RightHandEvaluated.getClass());
+		if (leftHandEvaluated instanceof NullType || rightHandEvaluated instanceof NullType)
+			throw new IllegalTypeException(Double.class, NullType.class);
 		
-		Double leftValue = ((DoubleLiteralExpression)leftHandEvaluated).getValue(parentProgram);
-		Double rightValue = ((DoubleLiteralExpression)RightHandEvaluated).getValue(parentProgram);
+		if (!(leftHandEvaluated.getLiteralType().equals(Double.class)))
+			throw new IllegalTypeException(Double.class, leftHandEvaluated.getLiteralType());
+		if (!(rightHandEvaluated.getLiteralType().equals(Double.class)))
+			throw new IllegalTypeException(Double.class, rightHandEvaluated.getLiteralType());
 		
-		return new BooleanLiteralExpression(leftValue < rightValue);
+		Double leftValue = (Double)leftHandEvaluated.getValue(parentProgram);
+		Double rightValue = (Double)rightHandEvaluated.getValue(parentProgram);
+		
+		return new Literal<Boolean>(Boolean.class, leftValue < rightValue);
 	}
 
 }

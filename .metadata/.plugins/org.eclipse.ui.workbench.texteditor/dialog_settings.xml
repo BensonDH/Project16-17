@@ -13,20 +13,20 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="getWorld" key="selection"/>
+		<item value="Para" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="pare"/>
+			<item value="para"/>
+			<item value="Object"/>
 			<item value="i"/>
 			<item value="getWorld"/>
 			<item value="query"/>
 			<item value="self"/>
 			<item value="updateCoordMap"/>
-			<item value="die"/>
-			<item value="planetoid"/>
-			<item value="asteroid"/>
 		</list>
 		<list key="replacehistory">
 		</list>

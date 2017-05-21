@@ -2,7 +2,6 @@ package asteroids.programs.statements;
 
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
-import asteroids.programs.exceptions.IllegalTypeException;
 import asteroids.programs.expressions.*;
 
 
@@ -25,7 +24,7 @@ public class WhileStatement extends Statement{
 	 * 			If expression or body is null
 	 * 			| if (expression == null || body == null)
 	 */
-	public WhileStatement(Expression expression, Statement body,
+	public WhileStatement(Expression<Boolean> expression, Statement body,
 						  SourceLocation sourceLocation) throws NullPointerException{
 		super(sourceLocation);
 		if (expression == null || body == null)
@@ -49,17 +48,14 @@ public class WhileStatement extends Statement{
 	 * Get the expression that has to be evaluated at the beginning
 	 * of every new cycle of this while statement.
 	 */
-	public Expression getExpression(){
+	public Expression<Boolean> getExpression(){
 		return this.expression;
 	}
 	
 	/**
 	 * Change the while statement's expression to the given newExpression.
 	 */
-	public void changeExpression(Expression newExpression){
-		if (!(newExpression instanceof ReturnTypeBoolean))
-			throw new IllegalTypeException(ReturnTypeBoolean.class, newExpression.getClass());
-		
+	public void changeExpression(Expression<Boolean> newExpression){
 		this.expression = newExpression;
 	}
 	
@@ -67,7 +63,7 @@ public class WhileStatement extends Statement{
 	 * The expression that has to be evaluated in every cycle of
 	 * this while statement.
 	 */
-	private Expression expression;
+	private Expression<Boolean> expression;
 	
 	/**
 	 * Get the body of this while statement represented
@@ -93,12 +89,10 @@ public class WhileStatement extends Statement{
 		// First we add this whileLoop as a new activeLoop to the program
 		parentProgram.addActiveLoop(this);
 		
-		Literal evaluatedExpression = getExpression().eval(parentProgram); 
-		if (!(evaluatedExpression instanceof BooleanLiteralExpression))
-			throw new IllegalTypeException(BooleanLiteralExpression.class, evaluatedExpression.getClass());
+		Literal<Boolean> evaluatedExpression = getExpression().eval(parentProgram); 
 		
 		// A break statement might terminate this while loop
-		while (((BooleanLiteralExpression)evaluatedExpression).getValue(parentProgram) && !isTerminated()){
+		while (evaluatedExpression.getValue(parentProgram) && !isTerminated()){
 			getBody().execute(parentProgram);
 			
 			// we re-evaluate this WhileStatement's expression so it stays up-to-date
@@ -109,7 +103,7 @@ public class WhileStatement extends Statement{
 				break;
 			}
 			// If we have to do another loop in this WhileStatement, we have to reset the WhileStatement's body again.
-			else if (((BooleanLiteralExpression)evaluatedExpression).getValue(parentProgram) && !isTerminated())
+			else if (evaluatedExpression.getValue(parentProgram) && !isTerminated())
 				getBody().reset();
 		}
 		

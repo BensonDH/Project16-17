@@ -1,24 +1,17 @@
 package asteroids.programs.statements;
 
-import javax.sql.rowset.spi.SyncFactoryException;
 
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.Program;
-import asteroids.programs.exceptions.IllegalTypeException;
 import asteroids.programs.expressions.*;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 public class TurnStatement extends ActionStatement {
 
 	/**
 	 * Create a new TurnStatement with the given angle and sourceLocation
 	 */
-	public TurnStatement(Expression angle, SourceLocation sourceLocation) {
+	public TurnStatement(Expression<Double> angle, SourceLocation sourceLocation) {
 		super(sourceLocation);
-		
-		if (!(angle instanceof ReturnTypeDouble))
-			throw new IllegalTypeException(ReturnTypeDouble.class, angle.getClass());
-		
 		this.angle = angle;
 	}
 
@@ -37,14 +30,14 @@ public class TurnStatement extends ActionStatement {
 	/**
 	 * Return the angle of this TurnStatement.
 	 */
-	public Expression getAngle(){
+	public Expression<Double> getAngle(){
 		return this.angle;
 	}
 	
 	/**
 	 * Variable registering the angle of this TurnStatement.
 	 */
-	private final Expression angle;
+	private final Expression<Double> angle;
 	
 	@Override
 	public void execute(Program parentProgram) {
@@ -59,11 +52,9 @@ public class TurnStatement extends ActionStatement {
 		
 		// If at this stage the parentProgram is not paused, then this statement can be executed successfully
 		if (!(parentProgram.isPaused())) {
-			Literal angle = getAngle().eval(parentProgram);
-			if (!(angle instanceof DoubleLiteralExpression))
-				throw new IllegalTypeException(DoubleLiteralExpression.class, angle.getClass());
+			Literal<Double> angle = getAngle().eval(parentProgram);
 			
-			double newAngle = parentProgram.getAssociatedShip().getAngle() + ((DoubleLiteralExpression)angle).getValue(parentProgram);
+			double newAngle = parentProgram.getAssociatedShip().getAngle() + angle.getValue(parentProgram);
 			
 			if (newAngle >= 0 && newAngle <= (Math.PI*2))
 				parentProgram.getAssociatedShip().setAngle(newAngle);

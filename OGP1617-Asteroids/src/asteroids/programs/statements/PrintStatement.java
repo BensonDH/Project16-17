@@ -9,7 +9,7 @@ public class PrintStatement extends Statement {
 	/**
 	 * Only this constructor should be used.
 	 */
-	public PrintStatement(Expression E, SourceLocation sourceLocation){
+	public PrintStatement(Expression<?> E, SourceLocation sourceLocation){
 		super(sourceLocation);
 		this.expression = E;
 	}
@@ -29,14 +29,14 @@ public class PrintStatement extends Statement {
 	/**
 	 * Get the expression that will be printed out.
 	 */
-	public Expression getExpression(){
+	public Expression<?> getExpression(){
 		return this.expression;
 	}
 	
 	/**
 	 * Variable registering the printed expression.
 	 */
-	private Expression expression;
+	private Expression<?> expression;
 	
 	/**
 	 * Print and return the evaluation of this PrintStatement's expression.
@@ -46,7 +46,6 @@ public class PrintStatement extends Statement {
 		if (isFinished())
 			return;
 		
-		// TODO this might not work ( Double <-> double Boolean <-> boolean)
 		Object result = getExpression().eval(parentProgram).getValue(parentProgram);
 		if (result == null)
 			System.out.println("null");

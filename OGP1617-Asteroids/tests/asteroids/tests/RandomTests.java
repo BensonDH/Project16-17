@@ -12,12 +12,16 @@ import asteroids.programs.expressions.*;
 public class RandomTests {
 	@Test
 	public void test(){
-	double test = 10.0;
+		
+	Literal<Double> testLit = new Literal<>(Double.class, Double.valueOf(5));
+	Literal<Boolean> testLit2 = new Literal<>(Boolean.class, true);
 	
-	double test2;
+	Map<String, Literal<?>> testMap = new HashMap<String, Literal<?>>();
 	
-	test2 = 10.0%(2*Math.PI);
-	System.out.println(test2);
+	testMap.put("test", testLit);
+	testMap.put("test2", testLit2);
 	
+	
+	System.out.println(testMap);
 	}
 }

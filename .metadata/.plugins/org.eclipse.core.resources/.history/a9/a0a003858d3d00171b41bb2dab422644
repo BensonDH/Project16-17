@@ -1,0 +1,216 @@
+package asteroids.programs;
+
+import java.util.List;
+
+import asteroids.model.Asteroid;
+import asteroids.model.Bullet;
+import asteroids.model.Entity;
+import asteroids.model.MinorPlanet;
+import asteroids.model.Planetoid;
+import asteroids.model.Ship;
+import asteroids.part3.programs.IProgramFactory;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.expressions.*;
+import asteroids.programs.statements.*;
+
+public class ProgramFactory implements IProgramFactory<Expression<? extends Object>, Statement, Function, Program> {
+
+	@Override
+	public Program createProgram(List<Function> functions, Statement main) {
+		return new Program(functions, main);
+	}
+
+	@Override
+	public Function createFunctionDefinition(String functionName, Statement body, SourceLocation sourceLocation) {
+		return new Function(functionName, body, sourceLocation);
+	}
+
+	@Override
+	public Statement createAssignmentStatement(String variableName, Expression<? extends Object> value, SourceLocation sourceLocation) {
+		return new AssignmentStatement(variableName, value, sourceLocation);
+	}
+
+	@Override
+	public Statement createWhileStatement(Expression<? extends Object> condition, Statement body, SourceLocation sourceLocation) {
+		return new WhileStatement(condition, body, sourceLocation);
+	}
+
+	@Override
+	public Statement createBreakStatement(SourceLocation sourceLocation) {
+		return new BreakStatement(sourceLocation);
+	}
+
+	@Override
+	public Statement createReturnStatement(Expression<? extends Object> value, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Statement createIfStatement(Expression<? extends Object> condition, Statement ifBody, Statement elseBody, SourceLocation sourceLocation) {
+		return new IfThenElseStatement(condition, ifBody, elseBody, sourceLocation);
+	}
+
+	@Override
+	public Statement createPrintStatement(Expression<? extends Object> value, SourceLocation sourceLocation) {
+		return new PrintStatement(value, sourceLocation);
+	}
+
+	@Override
+	public Statement createSequenceStatement(List<Statement> statements, SourceLocation sourceLocation) {
+		return new BlockStatement(statements, sourceLocation);
+	}
+
+	@Override
+	public Expression<? extends Object> createReadVariableExpression(String variableName, SourceLocation sourceLocation) {
+		return new ReadVariableExpression(variableName, sourceLocation);
+	}
+
+	@Override
+	public Expression<? extends Object> createReadParameterExpression(String parameterName, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression<? extends Object> createFunctionCallExpression(String functionName, List<Expression<? extends Object>> actualArgs, SourceLocation sourceLocation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Expression<? extends Object> createChangeSignExpression(Expression<? extends Object> expression, SourceLocation sourceLocation) {
+		return new ChangeSignExpression((Expression<Double>)expression, sourceLocation);
+	}
+
+	@Override
+	public Expression<? extends Object> createNotExpression(Expression<? extends Object> expression, SourceLocation sourceLocation) {
+		return new NotExpression((Expression<Boolean>)expression, sourceLocation);
+	}
+
+	@Override
+	public Expression<? extends Object> createDoubleLiteralExpression(double value, SourceLocation location) {
+		return new Literal<Double>(Double.class, Double.valueOf(value), location);
+	}
+
+	@Override
+	public Expression<? extends Object> createNullExpression(SourceLocation location) {
+		return new NullExpression(location);
+	}
+
+	@Override
+	public Expression<? extends Object> createSelfExpression(SourceLocation location) {
+		return new SelfExpression(location);
+	}
+
+	@Override
+	public Expression<? extends Object> createShipExpression(SourceLocation location) {
+		return new EntityLiteral<Ship>(Ship.class, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createAsteroidExpression(SourceLocation location) {
+		return new EntityLiteral<Asteroid>(Asteroid.class, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createPlanetoidExpression(SourceLocation location) {
+		return new EntityLiteral<Planetoid>(Planetoid.class, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createBulletExpression(SourceLocation location) {
+		return new EntityLiteral<Bullet>(Bullet.class, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createPlanetExpression(SourceLocation location) {
+		return new EntityLiteral<MinorPlanet>(MinorPlanet.class, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createAnyExpression(SourceLocation location) {
+		return new AnyExpression(location);
+	}
+
+	@Override
+	public Expression<? extends Object> createGetXExpression(Expression<? extends Object> e, SourceLocation location) {
+		return new GetXExpression((Expression<Entity>) e, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createGetYExpression(Expression<? extends Object> e, SourceLocation location) {
+		return new GetYExpression((Expression<Entity>) e, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createGetVXExpression(Expression<? extends Object> e, SourceLocation location) {
+		return new GetVXExpression((Expression<Entity>) e, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createGetVYExpression(Expression<? extends Object> e, SourceLocation location) {
+		return new GetVYExpression((Expression<Entity>) e, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createGetRadiusExpression(Expression<? extends Object> e, SourceLocation location) {
+		return new GetRadiusExpression((Expression<Entity>) e, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createLessThanExpression(Expression<? extends Object> e1, Expression<? extends Object> e2, SourceLocation location) {
+		return new LessThanExpression((Expression<Double>) e1, (Expression<Double>) e2, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createEqualityExpression(Expression<? extends Object> e1, Expression<? extends Object> e2, SourceLocation location) {
+		return new EqualityExpression(e1, e2, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createAdditionExpression(Expression<? extends Object> e1, Expression<? extends Object> e2, SourceLocation location) {
+		return new AdditionExpression((Expression<Double>)e1, (Expression<Double>)e2, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createMultiplicationExpression(Expression<? extends Object> e1, Expression<? extends Object> e2, SourceLocation location) {
+		return new MultiplicationExpression((Expression<Double>)e1, (Expression<Double>)e2, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createSqrtExpression(Expression<? extends Object> e, SourceLocation location) {
+		return new SqrtExpression((Expression<Double>)e, location);
+	}
+
+	@Override
+	public Expression<? extends Object> createGetDirectionExpression(SourceLocation location) {
+		return new GetDirectionExpression(location);
+	}
+
+	@Override
+	public Statement createThrustOnStatement(SourceLocation location) {
+		return new SetThrustStatement(true, location);
+	}
+
+	@Override
+	public Statement createThrustOffStatement(SourceLocation location) {
+		return new SetThrustStatement(false, location);
+	}
+
+	@Override
+	public Statement createFireStatement(SourceLocation location) {
+		return new FireBulletStatement(location);
+	}
+
+	@Override
+	public Statement createTurnStatement(Expression<? extends Object> angle, SourceLocation location) {
+		return new TurnStatement(angle, location);
+	}
+
+	@Override
+	public Statement createSkipStatement(SourceLocation location) {
+		return new SkipStatement(location);
+	}
+
+}

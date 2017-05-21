@@ -1,6 +1,6 @@
 package asteroids.programs.expressions;
 
-public class Variable<T extends Literal> {
+public class Variable<T extends Literal<?>> {
 	
 	/**
 	 * Create a  new Variable with the given variableName and value.
@@ -10,10 +10,9 @@ public class Variable<T extends Literal> {
 	 * @param value
 	 * 		The value that this variable has to recall.
 	 */
-	public Variable(Class<T> variableType, String variableName, T value){
-		this.variableType = variableType;
+	public Variable(String variableName, Literal<?> value){
 		this.variableName = variableName;
-		setValue(value);
+		this.variableValue= value;
 	}
 	
 	/**
@@ -31,34 +30,16 @@ public class Variable<T extends Literal> {
 	/**
 	 * Return the value of this Variable.
 	 */
-	public Literal getValue(){
+	public Literal<?> getValue(){
 		return this.variableValue;
 	}
 	
-	/**
-	 * Set this Variable's value to the given newValue.
-	 * 
-	 * @param newValue
-	 * 		The new value of this Variable.
-	 */
-	public void setValue(T newValue){
-		this.variableValue = newValue;
+	public Class<?> getLiteralType(){
+		return getValue().getLiteralType();
 	}
 	
 	/**
 	 * Variable registering the value of this Variable.
 	 */
-	private T variableValue;
-	
-	/**
-	 * Return the Type of this variable.
-	 */
-	public Class<T> getVariableType() {
-		return this.variableType;
-	}
-	
-	/**
-	 * Variable registering the Type T of this class
-	 */
-	private final Class<T> variableType;
+	private final Literal<?> variableValue;
 }

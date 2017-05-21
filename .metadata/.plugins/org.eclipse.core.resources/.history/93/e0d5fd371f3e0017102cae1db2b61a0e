@@ -1,0 +1,54 @@
+package asteroids.programs.expressions;
+
+public class Variable<T> {
+	
+	/**
+	 * Create a  new Variable with the given variableName and value.
+	 * 
+	 * @param variableName
+	 * 		The name of this Variable.
+	 * @param value
+	 * 		The value that this variable has to recall.
+	 */
+	public Variable(String variableName, Literal<T> value){
+		//this.variableType = variableType;
+		this.variableName = variableName;
+		this.variableValue= value;
+	}
+	
+	/**
+	 * Return the name of this Variable.
+	 */
+	public String getName(){
+		return this.variableName;
+	}
+	
+	/**
+	 * Variable registering the name of this Variable.
+	 */
+	private final String variableName;
+	
+	/**
+	 * Return the value of this Variable.
+	 */
+	public Literal<T> getValue(){
+		return this.variableValue;
+	}
+	
+	/**
+	 * Variable registering the value of this Variable.
+	 */
+	private final Literal<T> variableValue;
+	
+	/**
+	 * Return the Type of this variable.
+	 */
+	//public Class<T> getVariableType() {
+	//	return this.variableType;
+	//}
+	
+	/**
+	 * Variable registering the Type T of this class
+	 */
+	//private final Class<T> variableType;
+}

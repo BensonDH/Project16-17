@@ -3,6 +3,7 @@ package asteroids.programs;
 import java.util.*;
 
 import asteroids.model.Ship;
+import asteroids.programs.exceptions.IllegalTypeException;
 import asteroids.programs.expressions.*;
 import asteroids.programs.statements.*;
 
@@ -88,9 +89,17 @@ public class Program {
 	/**
 	 * Add global variables that exist during the runtime of this program.
 	 */
-	public void addGlobalVariable(Variable<? extends Object> variable) throws IllegalArgumentException {
+	public void addGlobalVariable(Variable<? extends Literal<?>> variable) throws IllegalArgumentException {
 		String varName = variable.getName();
+		
+		// If the variable is already present in this map, we have to check that the new variable's type
+		// is compatible with the old variable's type.
+		if (runTimeVariables.containsKey(varName))
+			if (!(runTimeVariables.get(varName).getLiteralType() == variable.getLiteralType()))
+					throw new IllegalTypeException(runTimeVariables.get(varName).getLiteralType(), variable.getLiteralType());
+		
 		runTimeVariables.put(varName, variable);
+
 	}
 	
 	/**
@@ -98,7 +107,7 @@ public class Program {
 	 * 
 	 * Returns null if no such variable exists.
 	 */
-	public Variable<? extends Literal> findGlobalVariable(String variableName){
+	public Variable<? extends Literal<?>> findGlobalVariable(String variableName){
 		return this.runTimeVariables.get(variableName);
 	}
 	
@@ -106,14 +115,14 @@ public class Program {
 	 * Get the global variables that are present in this
 	 * program at this time.
 	 */
-	public Map<String, Variable<? extends Literal>> getAllGlobalVariables(){
+	public Map<String, Variable<? extends Literal<?>>> getAllGlobalVariables(){
 		return this.runTimeVariables;
 	}
 	/**
 	 * List containing all the global variables that are present during
 	 * execution of this Program.
 	 */
-	private Map<String, Variable<? extends Literal>> runTimeVariables= new HashMap<String, Variable<? extends Literal>>();
+	private Map<String, Variable<? extends Literal<?>>> runTimeVariables= new HashMap<String, Variable<? extends Literal<?>>>();
 	
 	/**
 	 * Get the time that this program has left to run.
