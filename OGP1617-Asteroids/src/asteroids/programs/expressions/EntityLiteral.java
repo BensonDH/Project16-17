@@ -33,7 +33,18 @@ public class EntityLiteral<T extends Entity> extends Literal<T>{
 		
 		Set<T> entities = (Set<T>) gameWorld.query(getLiteralType());
 		
-		return getClosestEntity(entities, executingShip);
+		if (getLiteralType() == Bullet.class)
+			return getFiredBullet(entities, executingShip);
+		else
+			return getClosestEntity(entities, executingShip);
+	}
+	
+	private T getFiredBullet(Set<T> bullets, Ship ship){
+		for (T bullet: bullets){
+			if (((Bullet)bullet).getSourceShip() == ship)
+				return bullet;
+		}
+		return null;
 	}
 	
 	private T getClosestEntity(Set<T> entities, Ship ship){

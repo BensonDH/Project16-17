@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="asteroids.model.FirstCollision"/>
 <fullyQualifiedTypeName name="asteroids.model.Vector"/>
 <fullyQualifiedTypeName name="java.util.Objects"/>
@@ -41,7 +40,6 @@
 <fullyQualifiedTypeName name="java.lang.Boolean"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.BooleanLiteralExpression"/>
 <fullyQualifiedTypeName name="asteroids.programs.Program"/>
-<fullyQualifiedTypeName name="asteroids.programs.exceptions.VariableException"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.SelfExpression"/>
 <fullyQualifiedTypeName name="java.lang.Math"/>
 <fullyQualifiedTypeName name="asteroids.model.Asteroid"/>
@@ -59,5 +57,7 @@
 <fullyQualifiedTypeName name="asteroids.model.Ship"/>
 <fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
 <fullyQualifiedTypeName name="asteroids.util.ModelException"/>
+<fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="asteroids.programs.exceptions.VariableException"/>
 <fullyQualifiedTypeName name="asteroids.programs.exceptions.IllegalTypeException"/>
 </qualifiedTypeNameHistroy>

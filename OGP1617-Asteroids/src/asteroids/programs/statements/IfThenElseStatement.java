@@ -3,6 +3,7 @@ package asteroids.programs.statements;
 import asteroids.programs.expressions.*;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
+import asteroids.programs.exceptions.IllegalTypeException;
 
 public class IfThenElseStatement extends Statement {
 
@@ -115,7 +116,11 @@ public class IfThenElseStatement extends Statement {
 		if (isFinished())
 			return;
 		
-		if (getExpression().eval(parentProgram).getValue(parentProgram))
+		Literal<?> evaluatedExpression = getExpression().eval(parentProgram); 
+		if (!(evaluatedExpression.getLiteralType() == Boolean.class))
+			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getLiteralType());
+		
+		if ((Boolean)evaluatedExpression.getValue(parentProgram))
 			getIfBody().execute(parentProgram);
 		
 		else if (getElseBody() != null)

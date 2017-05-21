@@ -35,11 +35,6 @@ public class AnyExpression extends Literal<Entity>{
 		Random rand = new Random();
 		int randInt = rand.nextInt(amountOfEntities);
 		
-		// Keep choosing another entity when the chosen entitiy is the ship itself.
-		while (presentEntities[randInt] == executingShip){
-			randInt = rand.nextInt(amountOfEntities);
-		}
-		
 		return (Entity)presentEntities[randInt];
 	}
 

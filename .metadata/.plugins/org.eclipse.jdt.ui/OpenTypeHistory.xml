@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
 <typeInfo handle="=OGP1617-Asteroids/src-provided&lt;asteroids.part3.programs{IProgramFactory.java[IProgramFactory" modifiers="513" timestamp="1493398612698"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs{Program.java[Program" modifiers="1" timestamp="1495364017632"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs{Program.java[Program" modifiers="1" timestamp="1495370548528"/>
 <typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.statements{Statement.java[Statement" modifiers="1025" timestamp="1495193879119"/>
 <typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.statements{ActionStatement.java[ActionStatement" modifiers="1025" timestamp="1494708400010"/>
 <typeInfo handle="=OGP1617-Asteroids/C:\/Program Files\/Java\/jre1.8.0_131\/lib\/jsse.jar&lt;sun.security.ssl(EphemeralKeyManager.class[EphemeralKeyManager" modifiers="48" timestamp="1494625533860"/>
 <typeInfo handle="=OGP1617-Asteroids/C:\/Program Files\/Java\/jre1.8.0_131\/lib\/rt.jar&lt;java.lang(RuntimeException.class[RuntimeException" modifiers="33" timestamp="1494625533824"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{Expression.java[Expression" modifiers="1025" timestamp="1495361118625"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{BinaryExpression.java[BinaryExpression" modifiers="1025" timestamp="1495361852557"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{UnaryExpression.java[UnaryExpression" modifiers="1025" timestamp="1495361094490"/>
-<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{Literal.java[Literal" modifiers="1" timestamp="1495364086340"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{Expression.java[Expression" modifiers="1025" timestamp="1495370548545"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{BinaryExpression.java[BinaryExpression" modifiers="1025" timestamp="1495370548538"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{UnaryExpression.java[UnaryExpression" modifiers="1025" timestamp="1495370548580"/>
+<typeInfo handle="=OGP1617-Asteroids/src&lt;asteroids.programs.expressions{Literal.java[Literal" modifiers="1" timestamp="1495370548562"/>
 </typeInfoHistroy>

@@ -2,6 +2,7 @@ package asteroids.programs.statements;
 
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
+import asteroids.programs.exceptions.IllegalTypeException;
 import asteroids.programs.expressions.*;
 
 
@@ -89,10 +90,12 @@ public class WhileStatement extends Statement{
 		// First we add this whileLoop as a new activeLoop to the program
 		parentProgram.addActiveLoop(this);
 		
-		Literal<Boolean> evaluatedExpression = getExpression().eval(parentProgram); 
+		Literal<?> evaluatedExpression = getExpression().eval(parentProgram); 
+		if (!(evaluatedExpression.getLiteralType() == Boolean.class))
+			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getLiteralType());
 		
 		// A break statement might terminate this while loop
-		while (evaluatedExpression.getValue(parentProgram) && !isTerminated()){
+		while ((Boolean)evaluatedExpression.getValue(parentProgram) && !isTerminated()){
 			getBody().execute(parentProgram);
 			
 			// we re-evaluate this WhileStatement's expression so it stays up-to-date
@@ -103,7 +106,7 @@ public class WhileStatement extends Statement{
 				break;
 			}
 			// If we have to do another loop in this WhileStatement, we have to reset the WhileStatement's body again.
-			else if (evaluatedExpression.getValue(parentProgram) && !isTerminated())
+			else if ((Boolean)evaluatedExpression.getValue(parentProgram) && !isTerminated())
 				getBody().reset();
 		}
 		

@@ -4,6 +4,7 @@ import java.util.*;
 
 import asteroids.model.Ship;
 import asteroids.programs.exceptions.IllegalTypeException;
+import asteroids.programs.exceptions.VariableException;
 import asteroids.programs.expressions.*;
 import asteroids.programs.statements.*;
 
@@ -14,20 +15,27 @@ public class Program {
 	 */
 	public Program(List<Function> functions, Statement body){
 		this.body = body;
-		this.functions = functions;
+		addFunctions(functions);
 	}
 	
 	/**
 	 * Get all the functions that are defined within this Program.
 	 */
 	public List<Function> getFunctions(){
-		return this.functions;
+		return new ArrayList<Function>(functions.values());
+	}
+	
+	private void addFunctions(List<Function> programFunctions){
+		
+		for (Function function: programFunctions){
+			functions.put(function.getFunctionName(), function);
+		}
 	}
 	
 	/**
 	 * A List containing all the functions defined in this Program
 	 */
-	private List<Function> functions;
+	private Map<String, Function> functions= new HashMap<String, Function>();
 	
 	/**
 	 * Get the body of this Program.
@@ -92,6 +100,8 @@ public class Program {
 	public void addGlobalVariable(Variable<? extends Literal<?>> variable) throws IllegalArgumentException {
 		String varName = variable.getName();
 		
+		if (!isValidVariableName(varName))
+			throw new VariableException(varName);
 		// If the variable is already present in this map, we have to check that the new variable's type
 		// is compatible with the old variable's type.
 		if (runTimeVariables.containsKey(varName))
@@ -230,4 +240,20 @@ public class Program {
 	 * Variable registering whether this programs is paused.
 	 */
 	private boolean paused = false;
-}
+	
+	public static boolean isValidVariableName(String toBeChecked){
+		// TODO kijken of de toBeChecked een functionName is
+		if (toBeChecked.matches("[a-zA-Z0-9]*") && !invalidVariableNames.contains(toBeChecked))
+			return true;
+		else
+			return false;
+	}
+	
+	public static List<String> getInvalidVariableNames(){
+		return Program.invalidVariableNames;
+	}
+	
+	private static List<String> invalidVariableNames = Arrays.asList("while","break","return","if","else","print","turn","fire","thrust_on","thrust_off","skip",
+													"def","sqrt","null", "self", "getx", "gety", "getvx", "getvy","getradius","getdir",
+													"ship","asteroid","planetoid","bullet","planet","any");
+	}
