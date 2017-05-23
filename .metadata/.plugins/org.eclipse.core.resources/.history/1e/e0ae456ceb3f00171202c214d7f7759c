@@ -536,13 +536,9 @@ public class World {
 	 * 			|			ship.thrust(deltaT)
 	 */
 	public void advanceEntities(double deltaT){
-		// We make a copy of the set containing all entities that are currently
-		// in this world, we do this because a ship's program might add a bullet
-		// in this world while we are Iterating trough the list containing all 
-		// entities. This will result in a concurrentModificationException
-		Set<Entity> copiedSet = getAllEntities();
-	 
-		for (Entity entity: copiedSet){
+		Iterator<Entity> iter = linkedEntities.iterator(); 
+		while (iter.hasNext()) {
+			Entity entity = iter.next();
 			// If this entity is a Ship and its thruster is active, update its velocity
 			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive())
 				((Ship)entity).thrust(deltaT);

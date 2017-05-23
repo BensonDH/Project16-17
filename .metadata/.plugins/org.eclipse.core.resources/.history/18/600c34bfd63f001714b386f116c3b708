@@ -125,12 +125,12 @@ public class AsteroidsFrame3 extends AsteroidsFrame2<IFacade> {
 		Ship playerHuman, playerAI;
 		try {
 			world = facade.createWorld(width, height);
-			playerHuman = facade.createShip(width / 5 * 4, height / 2., 0, 0, 40, Math.PI, 0);
+			playerHuman = facade.createShip(width / 5 * 4, height / 2., 0, 0, 40, Math.PI, 3.9e17);
 			facade.addShipToWorld(world, playerHuman);
-			playerAI = facade.createShip(width / 5, height / 2., 0, 0, 40, 0, 0);
+			playerAI = facade.createShip(width / 5, height / 2., 0, 0, 40, 0, 5E15);
 			facade.addShipToWorld(world, playerAI);
 			
-			for (int i = 1; i < 50; i++) {
+			for (int i = 1; i < 20; i++) {
 				try {
 					Bullet bullet = facade.createBullet(width / 5 * 4, height / 2., 0, 0, Math.random() + 2);
 					facade.loadBulletOnShip(playerHuman, bullet);

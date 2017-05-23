@@ -153,7 +153,29 @@ public class Ship extends Entity {
 
    	
    	// Position DEFENSIVE
-
+	/**
+	 * Change the position of this Ship based on the current position, velocity 
+	 * and given duration and execute it's program for the same given duration 
+	 * (if any program is loaded).
+	 * 
+	 * @param duration
+	 * 				The considered duration of the movement.
+	 * @post		The position of this Ship will be set to the position it has after the
+	 * 				considered amount of time.
+	 * 				| setPosition(getPosition().getX()+duration*getVelocity().getX(), 
+	 * 						  	  getPosition().getY()+duration*getVelocity().getY())
+	 * @post		If there is any program loaded onto the ship, this Program will be executed 
+	 * 				for the considered amount of time.
+	 * @throws	IllegalArgumentException
+	 * 				The given duration is equal to NaN.
+	 * 				| duration == Double.NaN
+	 */
+   	@Override
+   	public void move(double duration){
+   		super.move(duration);
+   		if (!(getLoadedProgram() == null))
+   			executeProgram(duration);
+   	}
 	// Velocity TOTAL
 	/**
 	 * Cancels the ship's velocity setting it to 0

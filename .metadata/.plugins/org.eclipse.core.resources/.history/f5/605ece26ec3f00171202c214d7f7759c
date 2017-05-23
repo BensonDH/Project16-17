@@ -130,7 +130,7 @@ public class AsteroidsFrame3 extends AsteroidsFrame2<IFacade> {
 			playerAI = facade.createShip(width / 5, height / 2., 0, 0, 40, 0, 0);
 			facade.addShipToWorld(world, playerAI);
 			
-			for (int i = 1; i < 50; i++) {
+			for (int i = 1; i < 20; i++) {
 				try {
 					Bullet bullet = facade.createBullet(width / 5 * 4, height / 2., 0, 0, Math.random() + 2);
 					facade.loadBulletOnShip(playerHuman, bullet);
@@ -138,7 +138,7 @@ public class AsteroidsFrame3 extends AsteroidsFrame2<IFacade> {
 					handleError(e);
 				}
 			}
-			for (int i = 1; i < 50; i++) {
+			for (int i = 1; i < 20; i++) {
 				try {
 					Bullet bullet = facade.createBullet(width / 5, height / 2., 0, 0, Math.random() + 2);
 					facade.loadBulletOnShip(playerAI, bullet);
