@@ -66,17 +66,20 @@ public class AssignmentStatement extends Statement {
 	private final Expression<?> assignmentValue;
 
 	@Override
-	public void execute(Program parentProgram) {
+	public void execute(Executable parentExecutor) {
 		// If this AssignmentStatement had already been executed, we can skip this.
 		if (isFinished())
 			return;
 		
-		Literal<?> evaluatedExpression = getValue().eval(parentProgram);
-		Variable<Literal<?>> newVariable = new Variable<Literal<?>>(getVariableName(), evaluatedExpression);
-		
-		parentProgram.addGlobalVariable(newVariable);
+		Literal<?> evaluatedExpression = getValue().eval(parentExecutor);
+		parentExecutor.addVariable(getVariableName(), evaluatedExpression);
 		
 		// If we made it this far, this Statement is finished.
-		setFinished(true);
+		terminate();
+	}
+	
+	@Override
+	public Statement clone(){
+		return new AssignmentStatement(getVariableName(), getValue(), getSourceLocation());
 	}
 }

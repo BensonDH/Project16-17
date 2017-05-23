@@ -1,7 +1,8 @@
 package asteroids.programs.statements;
 
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.*;
+import asteroids.programs.exceptions.IllegalTypeException;
 
 public class SetThrustStatement extends ActionStatement {
 
@@ -32,11 +33,15 @@ public class SetThrustStatement extends ActionStatement {
 	private final boolean newThrustMode;
 	
 	@Override
-	public void execute(Program parentProgram) {
+	public void execute(Executable parentExecutor) {
 		// If this SetThrustStatement has already been executed, we don't have to do anything
 		if (isFinished())
 			return;
 		
+		if (!(parentExecutor instanceof Program))
+			throw new IllegalTypeException(Program.class, parentExecutor.getClass());
+		
+		Program parentProgram = (Program)parentExecutor;
 		if (parentProgram == null || parentProgram.getAssociatedShip() == null)
 			throw new NullPointerException("This SetThrustStatement has to be associated with a program that is loaded on a ship.");
 		
@@ -46,7 +51,12 @@ public class SetThrustStatement extends ActionStatement {
 		if (!(parentProgram.isPaused())) {
 			parentProgram.getAssociatedShip().setThrust(getNewThrustMode());
 			
-			setFinished(true);
+			terminate();
 		}
+	}
+	
+	@Override
+	public Statement clone(){
+		return new SetThrustStatement(getNewThrustMode(), getSourceLocation());
 	}
 }

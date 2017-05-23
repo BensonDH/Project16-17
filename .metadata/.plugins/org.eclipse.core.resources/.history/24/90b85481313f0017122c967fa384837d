@@ -1,0 +1,139 @@
+package asteroids.programs;
+
+import java.util.*;
+
+import asteroids.programs.statements.*;
+import asteroids.model.Ship;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.expressions.*;
+
+
+/**
+ * A class representing a function definition
+ */
+public class Function extends Executable {
+	
+	/**
+	 * Create a new Function with the given functionName and body.
+	 * @param functionName
+	 * 			The name of this function.
+	 * @param body
+	 * 			The body of this function.
+	 */
+	public Function(String functionName, Statement body, SourceLocation sourceLocation){
+		super(body);
+		this.functionName = functionName;
+		this.sourceLocation = sourceLocation;
+	}
+	
+	/**
+	 * Get the name of this function.
+	 */
+	public String getFunctionName(){
+		return this.functionName;
+	}
+	
+	/**
+	 * A String representing the name of this Function.
+	 */
+	private final String functionName;
+	
+	/**
+	 * Get the location where this function is located in the program.
+	 */
+	public SourceLocation getSourceLocation(){
+		return this.sourceLocation;
+	}
+	
+	/**
+	 * Variable registering where this function is located in the program.
+	 */
+	private SourceLocation sourceLocation;
+
+	/**
+	 * Returns the parameter present in this function
+	 * 
+	 * Returns null if no such parameter is defined.
+	 */
+	public Variable<? extends Literal<?>> findFunctionParameter(String parameterName){
+		return parameters.get(parameterName);
+	}
+	
+	private Map<String, Variable<? extends Literal<?>>> parameters = new HashMap<String, Variable<? extends Literal<?>>>();
+	
+	
+	public void execute(){
+		
+		getBody().execute(this);
+		
+	}
+	
+	public void setFunctionReturnValue(Literal<?> value){
+		this.returnValue = value;
+	}
+	
+	public Literal<?> getFunctionReturnValue(){
+		return this.returnValue;
+	}
+	
+	private Literal<?> returnValue;
+
+	@Override
+	public Ship getAssociatedShip(){
+		return getAssociatedProgram().getAssociatedShip();
+	}
+	
+	public void setAssociatedProgram(Program associatedProgram) {
+		this.associatedProgram = associatedProgram;
+	}
+
+	public Program getAssociatedProgram(){
+		return this.associatedProgram;
+	}
+	
+	private Program associatedProgram;
+	
+	/**
+	 * Check whether this function has been terminated.
+	 */
+	public boolean isTerminated(){
+		return this.terminated;
+	}
+	
+	/**
+	 * Terminate this Function.
+	 */
+	public void terminate(){
+		this.terminated = true;
+	}
+	
+	/**
+	 * Variable registering whether this function has been terminated.
+	 */
+	private boolean terminated = false;
+	
+	@Override
+	public void addVariable(Variable<? extends Literal<?>> variable){
+		// The variable is a local variable (it does not exist in the parentProgram)
+		if (getAssociatedProgram().findVariable(variable.getName()) == null)
+			super.addVariable(variable);
+		// it's a global variable, overwrite it in the executing program.
+		else
+			getAssociatedProgram().addVariable(variable);
+	}
+	
+	@Override
+	public Variable<? extends Literal<?>> findVariable(String variableName){
+		// First We check if there is a local variable with the given name
+		if (!(super.findVariable(variableName) == null))
+			return super.findVariable(variableName);
+		// The searched variable might be a global one 
+		else
+			return getAssociatedProgram().findVariable(variableName);
+	}
+	
+	public boolean isValidVariableName(String varName){
+		//TODO implementation
+		return true;
+	}
+}

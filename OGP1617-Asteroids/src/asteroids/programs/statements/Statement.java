@@ -1,12 +1,12 @@
 package asteroids.programs.statements;
 
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.*;
+import asteroids.programs.Executable;
 
 /**
  * A class representing a statement
  */
-public abstract class Statement {
+public abstract class Statement implements Cloneable {
 	
 	public Statement(SourceLocation sourceLocation){
 		this.sourceLocation = sourceLocation;
@@ -32,13 +32,12 @@ public abstract class Statement {
 		return this.isFinished;
 	}
 	
-	/**
-	 * Set the isFinished status of this statement on the given status.
-	 * - true meaning this statement was executed.
-	 * - false meaning this statement hasn't been executed yet. 
-	 */
-	public void setFinished(boolean status){
-		this.isFinished = status;
+	public void reset(){
+		this.isFinished = false;
+	}
+	
+	public void terminate(){
+		this.isFinished = true;
 	}
 	
 	/**
@@ -47,10 +46,9 @@ public abstract class Statement {
 	private boolean isFinished = false;
 	
 	
-	public void reset(){
-		setFinished(false);
-	}
+	public abstract void execute(Executable parentProgram);
 	
-	public abstract void execute(Program parentProgram);
+	@Override
+	public abstract Statement clone();
 
 }

@@ -4,13 +4,13 @@ import asteroids.part3.programs.SourceLocation;
 
 public abstract class UnaryExpression<T> extends Expression<T> {
 
-	public UnaryExpression(Expression<?> expression, SourceLocation sourceLocation) {
-		super(sourceLocation);
+	public UnaryExpression(Class<T> returnType, Expression<?> expression, SourceLocation sourceLocation) {
+		super(returnType, sourceLocation);
 		this.expression = expression;
 	}
 
-	public UnaryExpression(Expression<?> expression){
-		super(null);
+	public UnaryExpression(Class<T> returnType, Expression<?> expression){
+		super(returnType, null);
 		this.expression = expression;
 	}
 	

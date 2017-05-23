@@ -1,0 +1,35 @@
+package asteroids.programs.statements;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+import asteroids.programs.exceptions.SyntaxException;
+import asteroids.programs.expressions.*;
+
+public class ReturnStatement extends Statement {
+	
+	
+	public ReturnStatement(Expression<?> returnExpression, SourceLocation sourceLocation) {
+		super(sourceLocation);
+		this.returnExpression = returnExpression;
+	}
+	
+	public Expression<?> getReturnExpression(){
+		return this.returnExpression;
+	}
+	
+	private final Expression<?> returnExpression;
+	
+	@Override
+	public void execute(Executable parentExecutable) {
+		// We do not have to check whether this statement has been finished or not, 
+		// because a return statement can only occur within a function body and functions
+		// cannot pause.
+		if (!(parentExecutable instanceof Function))
+			throw new SyntaxException("Syntax exception: Return statement outside a function body.");
+		
+		Literal<?> evaluatedReturnexpression = getReturnExpression().eval(parentExecutable);
+		
+		((Function)parentExecutable).setFunctionReturnValue((Literal<Object>) evaluatedReturnexpression);
+		// TODO Functie stoppen na break statement.
+	}
+}

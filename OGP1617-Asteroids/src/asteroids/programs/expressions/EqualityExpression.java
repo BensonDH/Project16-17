@@ -16,11 +16,11 @@ public class EqualityExpression extends BinaryExpression<Boolean>{
 	 * 			The right hand operator of this comparison.
 	 */
 	public EqualityExpression(Expression<?> leftHandOperator, Expression<?> rightHandOperator, SourceLocation sourceLocation){
-		super(leftHandOperator, rightHandOperator, sourceLocation);
+		super(Boolean.class, leftHandOperator, rightHandOperator, sourceLocation);
 	}
 	
 	public EqualityExpression(Expression<?> leftHandOperator, Expression<?> rightHandOperator){
-		super(leftHandOperator, rightHandOperator, null);
+		super(Boolean.class, leftHandOperator, rightHandOperator, null);
 	}
 	
 	/**
@@ -30,15 +30,15 @@ public class EqualityExpression extends BinaryExpression<Boolean>{
 	 * 			| true
 	 */
 	public EqualityExpression(){
-		super(null, null, null);
+		super(null, null, null, null);
 		throw new IllegalStateException("Cannot create an equals expression without any operants.");
 	}
 	
 	
 	@Override
-	public Literal<Boolean> eval(Program parentProgram) {
-		Literal<?> leftHandEvaluated = getLeftHandSide().eval(parentProgram);
-		Literal<?> rightHandEvaluated = getRightHandSide().eval(parentProgram);
+	public Literal<Boolean> eval(Executable parentExecutor) {
+		Literal<?> leftHandEvaluated = getLeftHandSide().eval(parentExecutor);
+		Literal<?> rightHandEvaluated = getRightHandSide().eval(parentExecutor);
 		
 		if (leftHandEvaluated instanceof NullType) {
 			if (rightHandEvaluated instanceof NullType)
@@ -48,10 +48,10 @@ public class EqualityExpression extends BinaryExpression<Boolean>{
 		}
 		
 		// If both literals are not of the same type, they can never be equal.
-		if (!(leftHandEvaluated.getLiteralType().equals(rightHandEvaluated.getLiteralType())))
+		if (!(leftHandEvaluated.getReturnType().equals(rightHandEvaluated.getReturnType())))
 			return new Literal<Boolean>(Boolean.class, false);
 		
-		Boolean result = leftHandEvaluated.getValue(parentProgram).equals(rightHandEvaluated.getValue(parentProgram));
+		Boolean result = leftHandEvaluated.getValue(parentExecutor).equals(rightHandEvaluated.getValue(parentExecutor));
 		
 		return new Literal<Boolean>(Boolean.class, result);
 	}

@@ -1,13 +1,12 @@
 package asteroids.programs.expressions;
 
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.Executable;
 
 public class Literal<T> extends Expression<T>{
 
 	public Literal(Class<T> typeClassName, T value, SourceLocation sourceLocation) {
-		super(sourceLocation);
-		this.typeClassName = typeClassName;
+		super(typeClassName, sourceLocation);
 		this.value = value;
 	}
 
@@ -18,7 +17,7 @@ public class Literal<T> extends Expression<T>{
 	/**
 	 * Get the value of this Literal.
 	 */
-	public T getValue(Program parentProgram){
+	public T getValue(Executable parentExecutor){
 		return this.value;
 	}
 	
@@ -27,20 +26,8 @@ public class Literal<T> extends Expression<T>{
 	 */
 	private final T value;
 	
-	/**
-	 * Get the className of this Literal's Type T.
-	 */
-	public Class<T> getLiteralType(){
-		return this.typeClassName;
-	}
-
-	/**
-	 * Variable registering the className of T.
-	 */
-	private final Class<T> typeClassName;
-	
 	@Override
-	public Literal<T> eval(Program parentProgram) {
+	public Literal<T> eval(Executable parentExecutor) {
 		return this;
 	}
 

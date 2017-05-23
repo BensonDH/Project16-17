@@ -15,8 +15,8 @@ public abstract class BinaryExpression<T> extends Expression<T> {
 	 * @param RightHandSide
 	 * 			The right hand side of this BinaryExpression.
 	 */
-	public BinaryExpression(Expression<?> leftHandSide, Expression<?> rightHandSide, SourceLocation sourceLocation) {
-		super(sourceLocation);
+	public BinaryExpression(Class<T> returnType, Expression<?> leftHandSide, Expression<?> rightHandSide, SourceLocation sourceLocation) {
+		super(returnType, sourceLocation);
 		
 		this.leftHandExpression = leftHandSide;
 		this.rightHandExpression = rightHandSide;

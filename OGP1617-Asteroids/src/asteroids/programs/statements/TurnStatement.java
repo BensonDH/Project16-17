@@ -2,7 +2,8 @@ package asteroids.programs.statements;
 
 
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.*;
+import asteroids.programs.exceptions.IllegalTypeException;
 import asteroids.programs.expressions.*;
 
 public class TurnStatement extends ActionStatement {
@@ -40,16 +41,19 @@ public class TurnStatement extends ActionStatement {
 	private final Expression<Double> angle;
 	
 	@Override
-	public void execute(Program parentProgram) {
+	public void execute(Executable parentExecutor) {
 		// If this TurnStatement has already been executed, we don't have to do anything
 		if (isFinished())
 			return;
 		
+		if (!(parentExecutor instanceof Program))
+			throw new IllegalTypeException(Program.class, parentExecutor.getClass());
+		
+		Program parentProgram = (Program)parentExecutor;
 		if (parentProgram == null || parentProgram.getAssociatedShip() == null)
 			throw new NullPointerException("This TurnStatement has to be associated with a program that is loaded on a ship.");
 		
 		handleExecutionTime(parentProgram);
-		
 		// If at this stage the parentProgram is not paused, then this statement can be executed successfully
 		if (!(parentProgram.isPaused())) {
 			Literal<Double> angle = getAngle().eval(parentProgram);
@@ -60,7 +64,12 @@ public class TurnStatement extends ActionStatement {
 				parentProgram.getAssociatedShip().setAngle(newAngle);
 			// If there is an illegal angle, we do nothing.
 			
-			setFinished(true);
+			terminate();
 		}
+	}
+	
+	@Override
+	public Statement clone(){
+		return new TurnStatement(getAngle(), getSourceLocation());
 	}
 }

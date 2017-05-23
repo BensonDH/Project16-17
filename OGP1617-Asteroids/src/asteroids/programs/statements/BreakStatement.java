@@ -36,20 +36,24 @@ public class BreakStatement extends Statement {
 	/**
 	 * Execute this BreakStatement by terminating its rootWhileStatement.
 	 */
-	public void execute(Program parentProgram){
+	public void execute(Executable parentExecutor){
 		// if this BreakStatement has already been executed, we don't have to do anything.
 		if (isFinished())
 			return;
 		
 		// All we have to do is terminate the last loop in the activeLoop list of the given program.
-		WhileStatement lastActiveLoop = parentProgram.getLastActiveLoop();
+		WhileStatement lastActiveLoop = parentExecutor.getLastActiveLoop();
 		if (lastActiveLoop == null){
-			assert (parentProgram.getActiveLoops().size() == 0);
 			throw new SyntaxException("Syntax error: break statement not in a while statement.");
 		}
 		lastActiveLoop.terminate();
 		
 		// This BreakStatement is finished
-		setFinished(true);
+		terminate();
+	}
+	
+	@Override
+	public Statement clone(){
+		return new BreakStatement(getSourceLocation());
 	}
 }

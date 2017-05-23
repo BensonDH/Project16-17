@@ -12,9 +12,12 @@ import asteroids.programs.expressions.*;
 public class RandomTests {
 	@Test
 	public void test(){
-		Planetoid planetoid = new Planetoid(0,0,1000,0,50, 0);
-		planetoid.move(50);
-		System.out.println(planetoid.getDistanceTravelled());
-		System.out.println(planetoid.getRadius());
+		Literal<Double> twee = new Literal<Double>(Double.class, Double.valueOf(5));
+		Literal<Double> een = new Literal<Double>(Double.class, Double.valueOf(1));
+		
+		ChangeSignExpression minEen = new ChangeSignExpression(een);
+		AdditionExpression tweeMinEen = new AdditionExpression(twee, minEen);
+		
+		System.out.println(tweeMinEen.eval(null).getValue(null));
 	}
 }

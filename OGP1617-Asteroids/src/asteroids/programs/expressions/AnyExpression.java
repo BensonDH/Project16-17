@@ -4,7 +4,7 @@ import java.util.*;
 
 import asteroids.model.*;
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.*;
 
 public class AnyExpression extends Literal<Entity>{
 
@@ -17,11 +17,11 @@ public class AnyExpression extends Literal<Entity>{
 	}
 
 	@Override
-	public Entity getValue(Program parentProgram) {
-		if (parentProgram == null)
+	public Entity getValue(Executable parentExecutor) {
+		if (parentExecutor == null)
 			return null;
 		
-		Ship executingShip = parentProgram.getAssociatedShip();
+		Ship executingShip = parentExecutor.getAssociatedShip();
 		if (executingShip == null)
 			throw new IllegalStateException("The executing program is not loaded on a ship.");
 		
@@ -39,7 +39,7 @@ public class AnyExpression extends Literal<Entity>{
 	}
 
 	@Override
-	public Literal<Entity> eval(Program parentProgram) {
+	public Literal<Entity> eval(Executable parentExecutable) {
 		return this;
 	}
 

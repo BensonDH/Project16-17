@@ -1,0 +1,82 @@
+package asteroids.programs;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import asteroids.programs.exceptions.IllegalTypeException;
+import asteroids.programs.exceptions.VariableException;
+import asteroids.programs.expressions.Literal;
+import asteroids.programs.expressions.Variable;
+import asteroids.programs.statements.Statement;
+
+public abstract class Executable {
+	
+	public Executable(Statement body){
+		this.body = body;
+	}
+	
+	/**
+	 * Get the body of this Program.
+	 */
+	public Statement getBody(){
+		return this.body;
+	}
+	
+	/**
+	 * Variable representing the body of this Executable object.
+	 */
+	private final Statement body;
+	
+	/**
+	 * Add a variable that exist during the runtime of this program.
+	 */
+	public void addlVariable(Variable<? extends Literal<?>> variable) throws IllegalArgumentException {
+		String varName = variable.getName();
+		
+		if (!isValidVariableName(varName))
+			throw new VariableException(varName);
+		// If the variable is already present in this map, we have to check that the new variable's type
+		// is compatible with the old variable's type.
+		if (runTimeVariables.containsKey(varName))
+			if (!(runTimeVariables.get(varName).getLiteralType() == variable.getLiteralType()))
+					throw new IllegalTypeException(runTimeVariables.get(varName).getLiteralType(), variable.getLiteralType());
+		
+		runTimeVariables.put(varName, variable);
+
+	}
+	
+	/**
+	 * Return the variable within this program with the given variableName.
+	 * 
+	 * Returns null if no such variable exists.
+	 */
+	public Variable<? extends Literal<?>> findVariable(String variableName){
+		return this.runTimeVariables.get(variableName);
+	}
+	
+	/**
+	 * Get variables that are present in this
+	 * program at this time.
+	 */
+	public Map<String, Variable<? extends Literal<?>>> getAllVariables(){
+		return this.runTimeVariables;
+	}
+	/**
+	 * List containing all the variables that are present during
+	 * execution of this Program.
+	 */
+	private Map<String, Variable<? extends Literal<?>>> runTimeVariables= new HashMap<String, Variable<? extends Literal<?>>>();
+
+	public abstract boolean isValidVariableName(String varName);
+	
+	public static List<String> getInvalidVariableNames(){
+		return Executable.invalidVariableNames;
+	}
+	
+	private static List<String> invalidVariableNames = Arrays.asList("while","break","return","if","else","print","turn","fire","thrust_on","thrust_off","skip",
+													"def","sqrt","null", "self", "getx", "gety", "getvx", "getvy","getradius","getdir",
+													"ship","asteroid","planetoid","bullet","planet","any", "true", "false");
+
+}

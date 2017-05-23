@@ -82,66 +82,67 @@ public class WhileStatement extends Statement{
 	/**
 	 * Execute this while statement
 	 */
-	public void execute(Program parentProgram){
+	public void execute(Executable parentExecutor){
 		// If this WhilseStatement has already been executed, we don't have to do anything.
 		if (isFinished())
 			return;
 	
 		// First we add this whileLoop as a new activeLoop to the program
-		parentProgram.addActiveLoop(this);
+		parentExecutor.addActiveLoop(this);
 		
-		Literal<?> evaluatedExpression = getExpression().eval(parentProgram); 
-		if (!(evaluatedExpression.getLiteralType() == Boolean.class))
-			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getLiteralType());
+		// !! This might give an classCastException !!
+		Literal<Boolean> evaluatedExpression = getExpression().eval(parentExecutor); 
 		
-		// A break statement might terminate this while loop
-		while ((Boolean)evaluatedExpression.getValue(parentProgram) && !isTerminated()){
-			getBody().execute(parentProgram);
+		if (!(evaluatedExpression.getReturnType() == Boolean.class))
+			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getReturnType());
+		
+		while (evaluatedExpression.getValue(parentExecutor) && !isFinished()){
+			getBody().execute(parentExecutor);
 			
 			// we re-evaluate this WhileStatement's expression so it stays up-to-date
-			evaluatedExpression = getExpression().eval(parentProgram);
+			evaluatedExpression = getExpression().eval(parentExecutor);
 			
-			// If the parentProgram was paused by the WhileStatement's body, we don't have to do anything anymore
-			if (parentProgram.isPaused()){
+			// If the parentProgram was paused during the execution of the WhileStatement's body, we don't have to do anything anymore
+			if (parentExecutor.isPaused()){
 				break;
 			}
 			// If we have to do another loop in this WhileStatement, we have to reset the WhileStatement's body again.
-			else if ((Boolean)evaluatedExpression.getValue(parentProgram) && !isTerminated())
+			else if (evaluatedExpression.getValue(parentExecutor) && !isFinished())
 				getBody().reset();
 		}
 		
 		// If the parentProgram is not paused, this WhileStatement was fully executed.
-		if (!(parentProgram.isPaused()))
-			setFinished(true);
+		if (!(parentExecutor.isPaused()))
+			terminate();
 		
-		parentProgram.deleteActiveLoop(this);
+		parentExecutor.deleteActiveLoop(this);
 	}
 	
-	/**
-	 * Terminate this whileStatement.
-	 */
-	public void terminate(){
-		this.isTerminated = true;
-	}
-	
-	/**
-	 * Check whether this while statement is terminated.
-	 */
-	public boolean isTerminated(){
-		return this.isTerminated;
-	}
-	/**
-	 * A variable registering whether this while statement is terminated.
-	 */
-	private boolean isTerminated = false;
+
 	
 	@Override
 	public void reset(){
 		// Reset the WhileStatement itself
 		super.reset();
-		this.isTerminated = false;
 		
 		// Reset the WhileStatement's body
 		getBody().reset();
+	}
+	
+	/**
+	 * Terminate this whileStatement.
+	 */
+	@Override
+	public void terminate(){
+		// terminate the WhileStatement itself
+		super.terminate();
+		
+		// terminate the WhileStatement's body
+		getBody().terminate();
+	}
+	
+	@Override
+	public Statement clone(){
+		return new WhileStatement(getExpression(), getBody().clone(), getSourceLocation());
 	}
 }

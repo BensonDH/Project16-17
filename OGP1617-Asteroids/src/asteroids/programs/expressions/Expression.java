@@ -8,16 +8,11 @@ import asteroids.programs.*;
  */
 public abstract class Expression<T> {
 	
-	public Expression(SourceLocation sourceLocation) {
+	public Expression(Class<T> className, SourceLocation sourceLocation) {
 		//this.classType = classType;
 		this.sourceLocation = sourceLocation;
+		this.className = className;
 	}
-
-	//public Class<T> getType(){
-	//	return this.classType;
-	//}
-	
-	//private final Class<T> classType;
 	
 	public SourceLocation getSourceLocation(){
 		return this.sourceLocation;
@@ -25,5 +20,11 @@ public abstract class Expression<T> {
 	
 	private final SourceLocation sourceLocation;
 	
-	public abstract Literal<T> eval(Program parentProgram); 
+	public Class<T> getReturnType(){
+		return this.className;
+	}
+	
+	private final Class<T> className;
+	
+	public abstract Literal<T> eval(Executable parentExecutable); 
 }

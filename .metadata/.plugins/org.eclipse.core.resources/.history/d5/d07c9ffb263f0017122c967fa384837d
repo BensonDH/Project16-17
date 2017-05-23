@@ -1,0 +1,105 @@
+package asteroids.programs;
+
+import java.util.*;
+
+import asteroids.programs.statements.*;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.expressions.*;
+
+
+/**
+ * A class representing a function definition
+ */
+public class Function extends Executable {
+	
+	/**
+	 * Create a new Function with the given functionName and body.
+	 * @param functionName
+	 * 			The name of this function.
+	 * @param body
+	 * 			The body of this function.
+	 */
+	public Function(String functionName, Statement body, SourceLocation sourceLocation){
+		super(body);
+		this.functionName = functionName;
+		this.sourceLocation = sourceLocation;
+	}
+	
+	/**
+	 * Get the name of this function.
+	 */
+	public String getFunctionName(){
+		return this.functionName;
+	}
+	
+	/**
+	 * A String representing the name of this Function.
+	 */
+	private final String functionName;
+	
+	/**
+	 * Get the location where this function is located in the program.
+	 */
+	public SourceLocation getSourceLocation(){
+		return this.sourceLocation;
+	}
+	
+	/**
+	 * Variable registering where this function is located in the program.
+	 */
+	private SourceLocation sourceLocation;
+
+	
+	private List<Variable<? extends Literal<?>>> parameters = new ArrayList<Variable<? extends Literal<?>>>();
+	
+	
+	public void execute(){
+		
+		getBody().execute(this);
+		
+	}
+	
+	public void setAssociatedProgram(Program associatedProgram) {
+		this.associatedProgram = associatedProgram;
+	}
+
+	public Program getAssociatedProgram(){
+		return this.associatedProgram;
+	}
+	
+	private Program associatedProgram;
+	
+	/**
+	 * Check whether this function has been terminated.
+	 */
+	public boolean isTerminated(){
+		return this.terminated;
+	}
+	
+	/**
+	 * Terminate this Function.
+	 */
+	public void terminate(){
+		this.terminated = true;
+	}
+	
+	/**
+	 * Variable registering whether this function has been terminated.
+	 */
+	private boolean terminated = false;
+	
+	@Override
+	public void addVariable(Variable<? extends Literal<?>> variable){
+		// The variable is a local variable (it does not exist in the parentProgram)
+		if (getAssociatedProgram().findVariable(variable.getName()) == null)
+			super.addVariable(variable);
+		// it's a global variable, overwrite it in the executing program.
+		else
+			getAssociatedProgram().addVariable(variable);
+	}
+	
+	public boolean isValidVariableName(String varName){
+		//TODO implementation
+		return true;
+	}
+}

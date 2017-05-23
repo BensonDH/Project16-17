@@ -111,24 +111,26 @@ public class IfThenElseStatement extends Statement {
 	private final Statement elseBody;
 	
 	@Override
-	public void execute(Program parentProgram){
+	public void execute(Executable parentExecutor){
 		// If this IfThenElseStatement has already been executed, we don't have to do anything.
 		if (isFinished())
 			return;
 		
-		Literal<?> evaluatedExpression = getExpression().eval(parentProgram); 
-		if (!(evaluatedExpression.getLiteralType() == Boolean.class))
-			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getLiteralType());
+		// !! This might give a classCastException !!
+		Literal<Boolean> evaluatedExpression = getExpression().eval(parentExecutor);
 		
-		if ((Boolean)evaluatedExpression.getValue(parentProgram))
-			getIfBody().execute(parentProgram);
+		if (!(evaluatedExpression.getReturnType() == Boolean.class))
+			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getReturnType());
+		
+		if (evaluatedExpression.getValue(parentExecutor))
+			getIfBody().execute(parentExecutor);
 		
 		else if (getElseBody() != null)
-			getElseBody().execute(parentProgram);
+			getElseBody().execute(parentExecutor);
 		
 		// If at this stage the parentProgram isn't paused, then this IfThenElseStatement was executed successfully.
-		if (!(parentProgram.isPaused()))
-			setFinished(true);
+		if (!(parentExecutor.isPaused()))
+			super.terminate();
 	}
 	
 	@Override
@@ -141,5 +143,25 @@ public class IfThenElseStatement extends Statement {
 		
 		if (!(getElseBody() == null))
 			getElseBody().reset();
+	}
+	
+	@Override
+	public void terminate(){
+		// Terminate the IfThenElseStatement itself
+		super.terminate();
+		
+		// Terminate the ifBody and elseBody (if any)
+		getIfBody().terminate();
+		
+		if (!(getElseBody() == null))
+			getElseBody().terminate();
+	}
+	
+	@Override
+	public Statement clone(){
+		if (getElseBody() == null)
+			return new IfThenElseStatement(getExpression(), getIfBody().clone(), null, getSourceLocation());
+		else
+			return new IfThenElseStatement(getExpression(), getIfBody().clone(), getElseBody().clone(), getSourceLocation());
 	}
 }

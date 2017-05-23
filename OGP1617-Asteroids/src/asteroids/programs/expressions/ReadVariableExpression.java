@@ -7,7 +7,7 @@ import asteroids.programs.exceptions.VariableException;
 public class ReadVariableExpression extends Expression<Object> {
 	
 	public ReadVariableExpression(String variableName, SourceLocation sourceLocation) {
-		super(sourceLocation);
+		super(Object.class, sourceLocation);
 		this.variableName = variableName;
 	}
 	
@@ -24,13 +24,13 @@ public class ReadVariableExpression extends Expression<Object> {
 	private final String variableName;
 	
 	@Override
-	public Literal<Object> eval(Program parentProgram) {
-		Variable<?> tempVar = parentProgram.findGlobalVariable(getVariableName());
+	public Literal<Object> eval(Executable parentExecutor) {
+		Literal<?> tempVar = parentExecutor.findVariable(getVariableName());
 		
 		if (tempVar == null)
 			throw new VariableException(getVariableName());
 		
-		return (Literal<Object>) tempVar.getValue();
+		return (Literal<Object>) tempVar;
 	}
 
 }

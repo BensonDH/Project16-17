@@ -1,7 +1,7 @@
 package asteroids.programs.expressions;
 
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.Executable;
 import asteroids.programs.exceptions.IllegalTypeException;
 
 public class NotExpression extends UnaryExpression<Boolean>{
@@ -10,11 +10,11 @@ public class NotExpression extends UnaryExpression<Boolean>{
 	 * Create an expression that represents the logical not operation.
 	 */
 	public NotExpression(Expression<Boolean> expression, SourceLocation sourceLocation) {
-		super(expression, sourceLocation);
+		super(Boolean.class, expression, sourceLocation);
 	}
 	
 	public NotExpression(Expression<Boolean> expression) {
-		super(expression, null);
+		this(expression, null);
 	}
 	
 	/**
@@ -27,15 +27,15 @@ public class NotExpression extends UnaryExpression<Boolean>{
 	}
 	
 	@Override
-	public Literal<Boolean> eval(Program parentProgram) {
-		Literal<?> evaluatedExpression = getExpression().eval(parentProgram);
+	public Literal<Boolean> eval(Executable parentExecutor) {
+		Literal<?> evaluatedExpression = getExpression().eval(parentExecutor);
 		
 		if (evaluatedExpression instanceof NullType)
 			throw new IllegalTypeException(Boolean.class, NullType.class);
-		if (!(evaluatedExpression.getLiteralType().equals(Boolean.class)))
+		if (!(evaluatedExpression.getReturnType().equals(Boolean.class)))
 			throw new IllegalTypeException(Boolean.class, evaluatedExpression.getClass());
 		
-		Boolean result = (Boolean)evaluatedExpression.getValue(parentProgram);
+		Boolean result = (Boolean)evaluatedExpression.getValue(parentExecutor);
 		return new Literal<Boolean>(Boolean.class, !result);
 	}
 

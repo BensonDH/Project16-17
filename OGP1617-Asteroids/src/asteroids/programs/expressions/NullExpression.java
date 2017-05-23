@@ -1,7 +1,7 @@
 package asteroids.programs.expressions;
 
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.Executable;
 
 public class NullExpression extends Literal<Object> implements NullType{
 
@@ -10,12 +10,12 @@ public class NullExpression extends Literal<Object> implements NullType{
 	}
 
 	@Override
-	public Object getValue(Program parentProgram) {
+	public Object getValue(Executable parentExecutor) {
 		return null;
 	}
 
 	@Override
-	public Literal<Object> eval(Program parentProgram) {
+	public Literal<Object> eval(Executable parentExecutable) {
 		return this;
 	}
 

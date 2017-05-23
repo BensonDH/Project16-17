@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="asteroids.model.FirstCollision"/>
-<fullyQualifiedTypeName name="asteroids.model.Vector"/>
-<fullyQualifiedTypeName name="java.util.Objects"/>
-<fullyQualifiedTypeName name="be.kuleuven.cs.som.annotate.Raw"/>
-<fullyQualifiedTypeName name="asteroids.model.Collision"/>
-<fullyQualifiedTypeName name="java.nio.channels.IllegalSelectorException"/>
 <fullyQualifiedTypeName name="asteroids.filters.EntityExtractor"/>
 <fullyQualifiedTypeName name="asteroids.filters.ShipExtractor"/>
 <fullyQualifiedTypeName name="java.lang.Double"/>
@@ -15,12 +9,10 @@
 <fullyQualifiedTypeName name="asteroids.filters.BulletExtractor"/>
 <fullyQualifiedTypeName name="asteroids.part3.facade.IFacade"/>
 <fullyQualifiedTypeName name="asteroids.programs.statements.Statement"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.lang.IndexOutOfBoundsException"/>
 <fullyQualifiedTypeName name="asteroids.programs.ProgramFactory"/>
 <fullyQualifiedTypeName name="java.lang.IllegalAccessError"/>
 <fullyQualifiedTypeName name="java.lang.NullPointerException"/>
-<fullyQualifiedTypeName name="asteroids.programs.statements.SkipStatement"/>
 <fullyQualifiedTypeName name="java.util.stream.Stream"/>
 <fullyQualifiedTypeName name="java.util.HashSet"/>
 <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
@@ -31,12 +23,8 @@
 <fullyQualifiedTypeName name="com.sun.corba.se.impl.io.TypeMismatchException"/>
 <fullyQualifiedTypeName name="java.io.InvalidClassException"/>
 <fullyQualifiedTypeName name="javax.sql.rowset.spi.SyncFactoryException"/>
-<fullyQualifiedTypeName name="jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException"/>
 <fullyQualifiedTypeName name="asteroids.exceptions.IllegalWhileConditionException"/>
-<fullyQualifiedTypeName name="asteroids.programs.expressions.Expression"/>
 <fullyQualifiedTypeName name="asteroids.programs.exceptions.IllegalWhileConditionException"/>
-<fullyQualifiedTypeName name="asteroids.programs.exceptions.SyntaxException"/>
-<fullyQualifiedTypeName name="asteroids.programs.expressions.ChangeSignExpression"/>
 <fullyQualifiedTypeName name="java.lang.Boolean"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.BooleanLiteralExpression"/>
 <fullyQualifiedTypeName name="asteroids.programs.Program"/>
@@ -54,10 +42,22 @@
 <fullyQualifiedTypeName name="asteroids.part3.programs.SourceLocation"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.ReturnTypeBoolean"/>
 <fullyQualifiedTypeName name="asteroids.programs.expressions.DoubleLiteralExpression"/>
-<fullyQualifiedTypeName name="asteroids.model.Ship"/>
 <fullyQualifiedTypeName name="java.lang.IllegalStateException"/>
 <fullyQualifiedTypeName name="asteroids.util.ModelException"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
-<fullyQualifiedTypeName name="asteroids.programs.exceptions.VariableException"/>
 <fullyQualifiedTypeName name="asteroids.programs.exceptions.IllegalTypeException"/>
+<fullyQualifiedTypeName name="asteroids.programs.Executable"/>
+<fullyQualifiedTypeName name="asteroids.programs.expressions.Expression"/>
+<fullyQualifiedTypeName name="asteroids.model.Ship"/>
+<fullyQualifiedTypeName name="asteroids.programs.Function"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="asteroids.programs.exceptions.VariableException"/>
+<fullyQualifiedTypeName name="java.lang.Class"/>
+<fullyQualifiedTypeName name="jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException"/>
+<fullyQualifiedTypeName name="asteroids.programs.exceptions.SyntaxException"/>
+<fullyQualifiedTypeName name="asteroids.programs.statements.SetThrustStatement"/>
+<fullyQualifiedTypeName name="asteroids.programs.statements.SkipStatement"/>
+<fullyQualifiedTypeName name="asteroids.programs.statements.TurnStatement"/>
+<fullyQualifiedTypeName name="asteroids.programs.expressions.ChangeSignExpression"/>
+<fullyQualifiedTypeName name="asteroids.programs.expressions.AdditionExpression"/>
 </qualifiedTypeNameHistroy>

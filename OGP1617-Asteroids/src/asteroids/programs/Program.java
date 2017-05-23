@@ -8,16 +8,16 @@ import asteroids.programs.exceptions.VariableException;
 import asteroids.programs.expressions.*;
 import asteroids.programs.statements.*;
 
-public class Program {
+public class Program extends Executable {
 	
 	/**
 	 * Create a new program with the given functions and body.
 	 */
 	public Program(List<Function> functions, Statement body){
-		this.body = body;
+		super(body);
 		addFunctions(functions);
 	}
-	
+
 	/**
 	 * Get all the functions that are defined within this Program.
 	 */
@@ -26,28 +26,26 @@ public class Program {
 	}
 	
 	private void addFunctions(List<Function> programFunctions){
-		
 		for (Function function: programFunctions){
+			function.setAssociatedProgram(this);
 			functions.put(function.getFunctionName(), function);
 		}
+	}
+	
+	/**
+	 * Returns a function with the given functionName that is defined within this program
+	 * 
+	 * Returns null if no such function exists.
+	 */
+	@Override
+	public Function findDefinedFunction(String functionName){
+		return functions.get(functionName);
 	}
 	
 	/**
 	 * A List containing all the functions defined in this Program
 	 */
 	private Map<String, Function> functions= new HashMap<String, Function>();
-	
-	/**
-	 * Get the body of this Program.
-	 */
-	public Statement getBody(){
-		return this.body;
-	}
-	
-	/**
-	 * Variable representing the body of this Program.
-	 */
-	private Statement body;
 	
 	/**
 	 * Set the associated ship of this program to the given ship.
@@ -94,45 +92,7 @@ public class Program {
 			return null;
 	}
 	
-	/**
-	 * Add global variables that exist during the runtime of this program.
-	 */
-	public void addGlobalVariable(Variable<? extends Literal<?>> variable) throws IllegalArgumentException {
-		String varName = variable.getName();
-		
-		if (!isValidVariableName(varName))
-			throw new VariableException(varName);
-		// If the variable is already present in this map, we have to check that the new variable's type
-		// is compatible with the old variable's type.
-		if (runTimeVariables.containsKey(varName))
-			if (!(runTimeVariables.get(varName).getLiteralType() == variable.getLiteralType()))
-					throw new IllegalTypeException(runTimeVariables.get(varName).getLiteralType(), variable.getLiteralType());
-		
-		runTimeVariables.put(varName, variable);
 
-	}
-	
-	/**
-	 * Return the global variable within this program with the given variableName.
-	 * 
-	 * Returns null if no such variable exists.
-	 */
-	public Variable<? extends Literal<?>> findGlobalVariable(String variableName){
-		return this.runTimeVariables.get(variableName);
-	}
-	
-	/**
-	 * Get the global variables that are present in this
-	 * program at this time.
-	 */
-	public Map<String, Variable<? extends Literal<?>>> getAllGlobalVariables(){
-		return this.runTimeVariables;
-	}
-	/**
-	 * List containing all the global variables that are present during
-	 * execution of this Program.
-	 */
-	private Map<String, Variable<? extends Literal<?>>> runTimeVariables= new HashMap<String, Variable<? extends Literal<?>>>();
 	
 	/**
 	 * Get the time that this program has left to run.
@@ -153,46 +113,6 @@ public class Program {
 	 */
 	private double executionTimeLeft = 0;
 	
-	/**
-	 * Remove the loop positioned at the end of the activeLoop array.
-	 */
-	public void deleteActiveLoop(WhileStatement loop){
-		activeLoops.remove(loop);
-	}
-	
-	/**
-	 * Add a new active loop to this program.
-	 * The given newLoop will be added at the end of the ActiveLoops list.
-	 */
-	public void addActiveLoop(WhileStatement newLoop){
-		activeLoops.add(newLoop);
-	}
-	
-	/**
-	 * Returns the last active loop in the activeLoops list.
-	 * 
-	 * Returns null if there is no active loop.
-	 */
-	public WhileStatement getLastActiveLoop(){
-		if (this.activeLoops.size() == 0)
-			return null;
-		
-		return this.activeLoops.get(this.activeLoops.size()-1);
-	}
-	
-	/**
-	 * Get the loops that are currently active within this program
-	 */
-	public List<WhileStatement> getActiveLoops(){
-		return this.activeLoops;
-	}
-	
-	/**
-	 * A list keeping up the loops that are present right now.
-	 * This is used so that the break statements can find their parent
-	 * WhileStatement efficiently.
-	 */
-	private List<WhileStatement> activeLoops = new ArrayList<WhileStatement>();
 
 	/**
 	 * Add a value that was printed during this program's execution.
@@ -215,45 +135,9 @@ public class Program {
 	 */
 	private List<Object> printedValues = new ArrayList<Object>();
 	
-	/**
-	 * Resume this program.
-	 */
-	public void resume(){
-		this.paused = false;
+	public boolean isValidVariableName(String toBeChecked){
+		return (toBeChecked.matches("[a-zA-Z0-9]*") && 
+				!Executable.getInvalidVariableNames().contains(toBeChecked) &&
+				findDefinedFunction(toBeChecked) == null);
 	}
-	
-	/**
-	 * Pause this program
-	 */
-	public void pause(){
-		this.paused = true;
-	}
-	
-	/**
-	 * Check whether this program is paused.
-	 */
-	public boolean isPaused() {
-		return this.paused;
-	}
-	
-	/**
-	 * Variable registering whether this programs is paused.
-	 */
-	private boolean paused = false;
-	
-	public static boolean isValidVariableName(String toBeChecked){
-		// TODO kijken of de toBeChecked een functionName is
-		if (toBeChecked.matches("[a-zA-Z0-9]*") && !invalidVariableNames.contains(toBeChecked))
-			return true;
-		else
-			return false;
-	}
-	
-	public static List<String> getInvalidVariableNames(){
-		return Program.invalidVariableNames;
-	}
-	
-	private static List<String> invalidVariableNames = Arrays.asList("while","break","return","if","else","print","turn","fire","thrust_on","thrust_off","skip",
-													"def","sqrt","null", "self", "getx", "gety", "getvx", "getvy","getradius","getdir",
-													"ship","asteroid","planetoid","bullet","planet","any");
-	}
+}

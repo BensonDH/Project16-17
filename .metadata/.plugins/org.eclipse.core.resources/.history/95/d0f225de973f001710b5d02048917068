@@ -1,0 +1,23 @@
+package asteroids.programs.expressions;
+
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+
+/**
+ * A class representing an expression
+ */
+public abstract class Expression<T> {
+	
+	public Expression(SourceLocation sourceLocation) {
+		//this.classType = classType;
+		this.sourceLocation = sourceLocation;
+	}
+	
+	public SourceLocation getSourceLocation(){
+		return this.sourceLocation;
+	}
+	
+	private final SourceLocation sourceLocation;
+	
+	public abstract Literal<T> eval(Executable parentExecutable); 
+}

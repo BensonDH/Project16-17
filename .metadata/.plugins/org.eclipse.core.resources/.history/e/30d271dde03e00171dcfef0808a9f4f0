@@ -1,0 +1,109 @@
+package asteroids.programs;
+
+import java.util.*;
+
+import asteroids.programs.statements.*;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.expressions.*;
+
+
+/**
+ * A class representing a function definition
+ */
+public class Function extends Program{
+	
+	/**
+	 * Create a new Function with the given functionName and body.
+	 * @param functionName
+	 * 			The name of this function.
+	 * @param body
+	 * 			The body of this function.
+	 */
+	public Function(String functionName, Statement body, SourceLocation sourceLocation){
+		super(body);
+		this.functionName = functionName;
+		this.functionBody = body;
+		this.sourceLocation = sourceLocation;
+	}
+
+	/**
+	 * This constructor should not be used.
+	 * 
+	 * @throws IllegalStateException
+	 * 			Always
+	 * 			| true
+	 */
+	public Function(){
+		throw new IllegalStateException("Cannot create an empty function.");
+	}
+	
+	/**
+	 * Get the name of this function.
+	 */
+	public String getFunctionName(){
+		return this.functionName;
+	}
+	
+	/**
+	 * A String representing the name of this Function.
+	 */
+	private final String functionName;
+
+	/**
+	 * Get the body of this function.
+	 */
+	public Statement getFunctionBody(){
+		return this.functionBody;
+	}
+	
+	/**
+	 * A statement representing the body of this function.
+	 */
+	private Statement functionBody;
+	
+	/**
+	 * Get the location where this function is located in the program.
+	 */
+	public SourceLocation getSourceLocation(){
+		return this.sourceLocation;
+	}
+	
+	/**
+	 * Variable registering where this function is located in the program.
+	 */
+	private SourceLocation sourceLocation;
+	
+	/**
+	 * Get the local variables that are initialized within this function
+	 * at the time of invocation.
+	 */
+	public List<Variable<? extends Literal<?>>> getFunctionVariables(){
+		return this.variables;
+	}
+	
+	/**
+	 * A list representing the local variables used in this function.
+	 */
+	private List<Variable<? extends Literal<?>>> variables = new ArrayList<Variable<? extends Literal<?>>>();
+	
+	private List<Variable<? extends Literal<?>>> parameters = new ArrayList<Variable<? extends Literal<?>>>();
+	
+	/**
+	 * Check whether this function has been terminated.
+	 */
+	public boolean isTerminated(){
+		return this.terminated;
+	}
+	
+	/**
+	 * Terminate this Function.
+	 */
+	public void terminate(){
+		this.terminated = true;
+	}
+	
+	/**
+	 * Variable registering whether this function has been terminated.
+	 */
+	private boolean terminated = false;
+}

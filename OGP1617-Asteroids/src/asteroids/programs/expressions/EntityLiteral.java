@@ -5,7 +5,7 @@ import java.util.*;
 import asteroids.model.*;
 import asteroids.model.Vector;
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.*;
 
 public class EntityLiteral<T extends Entity> extends Literal<T>{
 
@@ -18,12 +18,11 @@ public class EntityLiteral<T extends Entity> extends Literal<T>{
 	}
 
 	@Override
-	public T getValue(Program parentProgram) {
-		if (parentProgram == null)
+	public T getValue(Executable parentExecutor) {
+		if (parentExecutor == null)
 			return null;
 		
-		Ship executingShip = parentProgram.getAssociatedShip();
-		
+		Ship executingShip = parentExecutor.getAssociatedShip();
 		if (executingShip == null)
 			throw new IllegalStateException("This program is not loaded on a ship.");
 		
@@ -31,9 +30,9 @@ public class EntityLiteral<T extends Entity> extends Literal<T>{
 		if (gameWorld == null)
 			return null;
 		
-		Set<T> entities = (Set<T>) gameWorld.query(getLiteralType());
+		Set<T> entities = (Set<T>) gameWorld.query(getReturnType());
 		
-		if (getLiteralType() == Bullet.class)
+		if (getReturnType() == Bullet.class)
 			return getFiredBullet(entities, executingShip);
 		else
 			return getClosestEntity(entities, executingShip);
@@ -72,7 +71,7 @@ public class EntityLiteral<T extends Entity> extends Literal<T>{
 	
 	@Override
 	public String toString(){
-		String classPath = getLiteralType().getName();
+		String classPath = getReturnType().getName();
 		String[] splittedClassPath = classPath.split("\\.");
 		
 		return splittedClassPath[splittedClassPath.length-1];

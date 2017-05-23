@@ -4,3 +4,14 @@
 1495364187816	Delete element
 1495364192523	Delete element
 1495364201912	Delete element
+1495452356652	Rename method 'addGlobalVariable'
+1495452415119	Rename method 'findGlobalVariable'
+1495452463631	Rename method 'getAllGlobalVariables'
+1495455119916	Delete element
+1495457016897	Rename local variable 'parentProgram'
+1495457236007	Rename local variable 'temp'
+1495457721971	Rename local variable 'parentProgram'
+1495458454719	Rename local variable 'parentProgram'
+1495483118833	Rename local variable 'parentExecutable'
+1495483170888	Rename local variable 'parentExecutable'
+1495530086132	Delete element

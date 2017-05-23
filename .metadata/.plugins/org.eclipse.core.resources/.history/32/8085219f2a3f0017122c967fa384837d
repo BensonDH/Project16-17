@@ -1,0 +1,35 @@
+package asteroids.programs.expressions;
+
+import asteroids.model.Ship;
+import asteroids.part3.programs.SourceLocation;
+import asteroids.programs.*;
+
+public class GetDirectionExpression extends Expression<Double>{
+
+	public GetDirectionExpression(SourceLocation sourceLocation) {
+		super(sourceLocation);		
+	}
+
+	public GetDirectionExpression() {
+		super(null);		
+	}
+	
+	@Override
+	public Literal<Double> eval(Executable parentExecutable) {
+		if (parentExecutable == null)
+			return null;
+		
+		Program parentProgram;
+		if (parentExecutable instanceof Function)
+			parentProgram = ((Function)parentExecutable).getAssociatedProgram();
+		else
+			parentProgram = (Program)parentExecutable;
+		
+		Ship executingShip= parentProgram.getAssociatedShip();
+		if (executingShip == null)
+			throw new IllegalStateException("The program is not loaded in any ship.");
+		
+		return new Literal<Double>(Double.class, executingShip.getAngle());
+	}
+
+}

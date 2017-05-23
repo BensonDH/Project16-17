@@ -32,23 +32,23 @@ public class BlockStatement extends Statement {
 	private List<Statement> statements;
 	
 	@Override
-	public void execute(Program parentProgram) {
+	public void execute(Executable parentExecutor) {
 		// If this BlockStatement had already been executed, we can skip this.
 		if (isFinished())
 			return;
 		
 		for (Statement statement: statements){
-			statement.execute(parentProgram);
+			statement.execute(parentExecutor);
 			
 			// If the parentProgram was paused by this statement, we don't have to do anything anymore.
-			if (parentProgram.isPaused())
+			if (parentExecutor.isPaused())
 				return;
 		}
 		
 		// If we executed all the statements within this BlockStatement and the
 		// parentProgram was not paused, then this BlockStatement is executed successfully.
-		if (!(parentProgram.isPaused()))
-			setFinished(true);
+		if (!(parentExecutor.isPaused()))
+			super.terminate();
 	}	
 	
 	@Override
@@ -60,5 +60,26 @@ public class BlockStatement extends Statement {
 		for (Statement statement: statements){
 			statement.reset();
 		}
+	}
+	
+	@Override
+	public void terminate(){
+		// Terminate the block statement itself
+		super.terminate();
+		
+		// terminate all the statements within this blockStatement
+		for (Statement statement: statements) {
+			statement.terminate();
+		}
+	}
+	
+	@Override
+	public Statement clone(){
+		List<Statement> newStatements = new ArrayList<Statement>();
+		for (Statement statement: statements){
+			newStatements.add(statement.clone());
+		}
+		
+		return new BlockStatement(newStatements, getSourceLocation());
 	}
 }

@@ -1,7 +1,8 @@
 package asteroids.programs.statements;
 
 import asteroids.part3.programs.SourceLocation;
-import asteroids.programs.Program;
+import asteroids.programs.*;
+import asteroids.programs.exceptions.IllegalTypeException;
 
 public class SkipStatement extends ActionStatement {
 
@@ -25,11 +26,14 @@ public class SkipStatement extends ActionStatement {
 	}
 
 	@Override
-	public void execute(Program parentProgram) {
+	public void execute(Executable parentExecutor) {
 		// If this SkipStatement has already been executed, we don't have to do anything
 		if (isFinished())
 			return;
+		if (!(parentExecutor instanceof Program))
+			throw new IllegalTypeException(Program.class, parentExecutor.getClass());
 		
+		Program parentProgram = (Program)parentExecutor;
 		if (parentProgram == null || parentProgram.getAssociatedShip() == null)
 			throw new NullPointerException("This SkipStatement has to be associated with a program that is loaded on a ship.");
 		
@@ -37,6 +41,11 @@ public class SkipStatement extends ActionStatement {
 		
 		// If at this stage the parentProgram isn't paused, this SkipStatement was executed successfully.
 		if (!(parentProgram.isPaused()))
-			setFinished(true);
+			terminate();
+	}
+	
+	@Override
+	public Statement clone(){
+		return new SkipStatement(getSourceLocation());
 	}
 }

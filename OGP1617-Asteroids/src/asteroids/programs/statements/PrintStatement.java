@@ -2,6 +2,7 @@ package asteroids.programs.statements;
 
 import asteroids.part3.programs.SourceLocation;
 import asteroids.programs.*;
+import asteroids.programs.exceptions.SyntaxException;
 import asteroids.programs.expressions.*;
 
 public class PrintStatement extends Statement {
@@ -41,19 +42,27 @@ public class PrintStatement extends Statement {
 	/**
 	 * Print and return the evaluation of this PrintStatement's expression.
 	 */
-	public void execute(Program parentProgram){
+	public void execute(Executable parentExecutable){
 		// If this PrintStatement has already been executed, we don't have to do anything.
 		if (isFinished())
 			return;
+		if (!(parentExecutable instanceof Program))
+			throw new SyntaxException("Syntax exception: Print statement in a function body.");
 		
-		Object result = getExpression().eval(parentProgram).getValue(parentProgram);
+		Object result = getExpression().eval(parentExecutable).getValue(parentExecutable);
 		if (result == null)
 			System.out.println("null");
 		else
 			System.out.println(result.toString());
-		parentProgram.addPrintedValues(result);
+		
+		((Program)parentExecutable).addPrintedValues(result);
 		
 		// This PrintStatement is finished.
-		setFinished(true);
+		terminate();
+	}
+	
+	@Override
+	public Statement clone(){
+		return new PrintStatement(getExpression(), getSourceLocation());
 	}
 }
