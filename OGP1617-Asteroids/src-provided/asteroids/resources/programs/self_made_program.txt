@@ -1,0 +1,22 @@
+while(1 < 2) {
+  x := getx self;
+  y := gety self;
+  r := getradius self;
+  randomEntity := any;
+  distance := 100;
+
+  if (! (nearestAsteroid == null)) {
+    ax := getx randomEntity;
+    ay := gety randomEntity;
+    ar := getradius randomEntity;
+    distance := sqrt((((x + (-ax)) * (x + (-ax))) +
+      ((y + (-ay)) * (y + (-ay)))));
+    print distance;
+  }
+  
+  if (distance < 200) { 
+    thrust;
+    fire;
+  }
+  skip;
+}

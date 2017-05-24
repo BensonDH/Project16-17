@@ -854,7 +854,13 @@ public class Facade implements asteroids.part3.facade.IFacade{
 		} catch (NullPointerException E){
 			throw new ModelException("NullPointerException");
 		} catch (IllegalStateException E){
-			throw new ModelException("IllegalStateException");}
+			throw new ModelException("IllegalStateException");
+		} catch (IllegalTypeException E) {
+			throw new ModelException("IllegalTypeException");
+		} catch (SyntaxException E) {
+			throw new ModelException("SyntaxException");
+		} catch (VariableException E) {
+			throw new ModelException("VariableException");}
 	}
 
 	@Override
